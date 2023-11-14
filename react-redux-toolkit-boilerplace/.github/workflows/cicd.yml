@@ -1,0 +1,59 @@
+name: deployment
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v4
+
+  analysis:
+    runs-on: ubuntu-latest
+    needs: [commitlint]
+
+    steps:
+      - name: Analyze with SonarCloud
+        uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
+        env:
+          TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: -Dsonar.projectKey=luxofonss_react-redux-toolkit-boilerplate
+            -Dsonar.organization=luxofonss
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [analysis]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t react-boilerplate .
+          docker tag react-boilerplate:latest luxofons/react-boilerplate:latest
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push luxofons/react-boilerplate:latest
+
+      - name: SSH into VPS and deploy
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_KEY }}
+          script: |
+            docker stop react-boilerplate || true
+            docker rm react-boilerplate || true
+            docker pull luxofons/react-boilerplate:latest
+            docker run -d --name react-boilerplate -p 3000:3000 luxofons/react-boilerplate:latest

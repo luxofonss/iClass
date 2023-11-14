@@ -1,0 +1,12 @@
+@import '@shared/styles/mixins';
+
+.emoji-picker {
+
+  .emoji-list {
+
+    span {
+      font-size: 18px;
+      cursor: pointer;
+    }
+  }
+}

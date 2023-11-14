@@ -1,0 +1,9 @@
+@use './reset/normalize';
+@use './reset/local';
+@use './reset/typography';
+@use 'mixins';
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+}

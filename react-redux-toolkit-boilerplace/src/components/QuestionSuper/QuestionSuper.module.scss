@@ -1,0 +1,21 @@
+@import '@shared/styles/mixins';
+
+.question-super {
+  @include card-wrapper;
+
+  .heading {
+    display: flex;
+    gap: 12px;
+
+    .title {
+      flex: 1;
+      font-size: 18px;
+      font-weight: 500;
+    }
+  }
+
+  .options {
+    display: flex;
+    gap: 24px;
+  }
+}

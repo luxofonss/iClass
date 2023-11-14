@@ -1,0 +1,17 @@
+@import '@shared/styles/mixins';
+
+.lecture-block {
+  @include card-wrapper;
+  padding: 12px;
+
+  .heading {
+    .title {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .description {
+      font-style: italic;
+    }
+  }
+}

@@ -1,0 +1,15 @@
+@import '@shared/styles/mixins';
+
+.simple-info {
+  display: flex;
+  justify-content: space-between;
+
+  .label {
+    font-size: 16px;
+  }
+
+  .value {
+    font-size: 16px;
+    font-weight: 500;
+  }
+}

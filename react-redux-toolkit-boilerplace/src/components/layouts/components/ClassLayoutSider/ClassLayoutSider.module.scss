@@ -1,0 +1,49 @@
+@import '@shared/styles/mixins';
+
+.sider {
+  padding: 12px;
+  position: fixed !important;
+  height: 100%;
+  width: 320px;
+  box-shadow:
+    6px -0 12px #f2f2f2,
+    -6px 0 12px #ffffff;
+
+  .menu-collapse {
+    position: absolute;
+    top: 0;
+    right: -24px;
+  }
+
+  .divider {
+    margin: 8px;
+  }
+
+  .class-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    .thumbnail {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+    }
+
+    .class-name {
+      font-weight: 500;
+      font-size: 18px;
+    }
+  }
+
+  .menu {
+    border-inline-end: none !important;
+    height: 100%;
+
+    li {
+      font-size: 16px;
+    }
+  }
+}

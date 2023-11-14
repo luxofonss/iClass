@@ -1,0 +1,16 @@
+@import '@shared/styles/mixins';
+
+.comment {
+  display: flex;
+  gap: 16px;
+
+  .content-wrapper {
+    .content {
+      padding: 4px;
+
+      .text {
+        font-size: 14px;
+      }
+    }
+  }
+}

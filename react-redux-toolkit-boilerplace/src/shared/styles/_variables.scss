@@ -1,0 +1,31 @@
+$background: 'rgba(0, 0, 0, 0.04)';
+$border-color: 'rgba(0, 0, 0, 0.15)';
+$divider: 'rgba(0, 0, 0, 0.06)';
+
+// text
+$text-black: '#000';
+$text-title: 'rgba(0, 0, 0, 0.85)';
+$text-primary: 'rgba(0, 0, 0, 0.85)';
+$text-secondary: 'rgba(0, 0, 0, 0.45)';
+$text-disabled: 'rgba(0, 0, 0, 0.25)';
+
+:root {
+  --background: $background;
+  --divider: $divider;
+  --border-color: $border-color;
+
+  // text
+  --text-black: $text-black;
+  --text-title: $text-title;
+  --text-primary: $text-primary;
+  --text-secondary: $text-secondary;
+  --text-disabled: $text-disabled;
+}
+
+// dark mode
+// @media (prefers-color-scheme: dark) {
+//   :root {
+//     --bg-color: $bg-color-dark;
+//     --text-black: $text-white;
+//   }
+// }

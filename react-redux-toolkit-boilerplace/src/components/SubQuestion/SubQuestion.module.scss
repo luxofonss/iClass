@@ -1,0 +1,32 @@
+@import '@shared/styles/mixins';
+
+.question {
+  @include card-wrapper;
+  margin-top: 12px;
+  
+  .heading {
+    display: flex;
+    gap: 12px;
+
+    .title {
+      flex: 1;
+      font-size: 18px;
+      font-weight: 500;
+    }
+  }
+
+  .options {
+    display: flex;
+    gap: 12px;
+  }
+
+  .answer {
+    margin-top: 12px;
+
+    .choice-wrapper {
+      .choice {
+        display: flex;
+      }
+    }
+  }
+}

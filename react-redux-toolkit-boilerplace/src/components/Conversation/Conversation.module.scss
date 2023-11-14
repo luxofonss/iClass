@@ -1,0 +1,28 @@
+@import '@shared/styles/mixins';
+
+.conversation {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+
+  .content-wrapper {
+    @include card-wrapper;
+    padding: 12px;
+
+    .content {
+      padding: 8px;
+      border-bottom: 1px solid #e3e3e3;
+
+      .text {
+        font-size: 14px;
+      }
+    }
+
+    .comments {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+  }
+}

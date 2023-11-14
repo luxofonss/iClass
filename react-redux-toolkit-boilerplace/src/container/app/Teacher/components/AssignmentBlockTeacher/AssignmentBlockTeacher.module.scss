@@ -1,0 +1,17 @@
+@import '@shared/styles/mixins';
+
+.assignment-block {
+  @include card-wrapper;
+  padding: 16px;
+
+  .title {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}

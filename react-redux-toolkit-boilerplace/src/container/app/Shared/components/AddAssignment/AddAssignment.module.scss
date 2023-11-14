@@ -1,0 +1,35 @@
+@import '@shared/styles/mixins';
+
+.add-assignment {
+  .assignment-info {
+    @include card-wrapper;
+    margin-top: 12px;
+    border: 1px solid rgb(141, 141, 255);
+
+    .title {
+      font-size: 24px;
+    }
+
+    .description {
+      font-size: 16px;
+    }
+  }
+
+  .questions {
+    margin-top: 12px;
+
+    .btn-add {
+      margin-top: 12px;
+    }
+  }
+
+  .btn-submit {
+    margin-top: 12px;
+  }
+
+  .btn-action {
+    margin-top: 12px;
+    display: flex;
+    gap: 12px;
+  }
+}

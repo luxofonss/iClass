@@ -1,0 +1,15 @@
+@import '@shared/styles/mixins';
+
+.app-layout {
+  min-height: 100vh;
+  position: relative;
+
+  .layout-content {
+    // position: relative;
+    display: flex;
+  }
+
+  .layout-header {
+    height: 100%;
+  }
+}

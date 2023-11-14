@@ -1,0 +1,9 @@
+@import '@shared/styles/mixins';
+
+.auth-layout {
+  @include flex-center;
+  @include background-image;
+
+  width: 100vw;
+  height: 100vh;
+}

@@ -1,0 +1,30 @@
+@import '@shared/styles/mixins';
+
+.sider {
+  padding: 3px 12px;
+  position: fixed !important;
+  top: 64px;
+  left: 0;
+  bottom: 0;
+  z-index: 90;
+
+  .menu-collapse {
+    position: absolute;
+    top: 0;
+    right: -24px;
+  }
+
+  .divider {
+    margin: 8px;
+  }
+
+  .menu {
+    margin-top: 24px;
+    height: 100%;
+    border-inline-end: none !important;
+
+    li {
+      font-size: 16px;
+    }
+  }
+}

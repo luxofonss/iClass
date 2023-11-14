@@ -1,0 +1,19 @@
+// :global(.ant-card-body) {
+//   padding: 12px !important;
+// }
+
+:global(.ant-modal-mask) {
+  background-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+:global(.ant-btn) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+:global(.ant-modal-footer) {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12;
+}

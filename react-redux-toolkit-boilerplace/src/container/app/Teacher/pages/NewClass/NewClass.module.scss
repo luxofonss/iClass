@@ -1,0 +1,68 @@
+@import '@shared/styles/mixins';
+
+.new-class {
+  position: relative;
+
+  .sider {
+    position: fixed;
+    // width: 100%;
+  }
+  .section {
+    @include card-wrapper;
+
+    &__title {
+      font-size: 22px;
+      font-weight: 500px;
+    }
+
+    &__description {
+      font-size: 14px;
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    &:not(:first-child) {
+      margin-top: 16px;
+    }
+
+    .info-block {
+      &__title {
+        font-size: 18px;
+        font-weight: 500;
+      }
+
+      &__description {
+        font-size: 14px;
+        font-style: italic;
+      }
+
+      &__question-list {
+        margin-top: 12px;
+        display: flex;
+        gap: 12px;
+
+        &__input {
+          flex: 1;
+        }
+      }
+    }
+
+    .curriculum {
+      @include card-wrapper;
+
+      &__section {
+        .inputs {
+          .list-items {
+            border: 1px solid #efefef;
+            border-radius: 4px;
+            padding: 12px;
+
+            &__item {
+              display: flex;
+            }
+          }
+        }
+      }
+    }
+  }
+}
