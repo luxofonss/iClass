@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react'
 import classNames from 'classnames/bind'
+import { useState } from 'react'
 
-import styles from './AddAssignment.module.scss'
 import Question from '@components/Question'
-import { DatePicker, Button, Form, Input, Select, Row, Col } from 'antd'
-import TextArea from 'antd/es/input/TextArea'
-import { TIME_OPTIONS } from '@shared/constants'
 import QuestionSuper from '@components/QuestionSuper'
-import { arrayMove, SortableContainer, SortableElement } from 'react-sortable-hoc'
+import { SimpleEditor } from '@components/Tiptap'
+import { TIME_OPTIONS } from '@shared/constants'
+import { Button, Col, DatePicker, Form, Row, Select } from 'antd'
+import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc'
+import styles from './AddAssignment.module.scss'
 
 const cx = classNames.bind(styles)
 const { RangePicker } = DatePicker
@@ -49,6 +49,8 @@ export default function AddAssignment() {
   const [timeType, setTimeType] = useState<string>('free')
   const [question, setQuestion] = useState<IQuestionType[]>([])
 
+  const [form] = Form.useForm()
+
   const onTimeTypeChange = (value: string) => {
     setTimeType(value)
   }
@@ -63,13 +65,25 @@ export default function AddAssignment() {
 
   return (
     <div className={cx('add-assignment')}>
-      <Form onFinish={onSubmit}>
+      <Form form={form} onFinish={onSubmit}>
         <div className={cx('assignment-info')}>
-          <Form.Item className={cx('title')} name={'title'}>
-            <Input style={{ fontWeight: 500 }} size='large' placeholder='Enter title' />
+          <Form.Item style={{ marginBottom: '0px !important' }} className={cx('title')} name={'title'}>
+            {/* <Input style={{ fontWeight: 500 }} size='large' placeholder='Enter title' /> */}
+            <SimpleEditor
+              onValueChange={(value) => {
+                form.setFieldValue('title', value)
+              }}
+              placeholder='Enter assignment title'
+            />
           </Form.Item>
-          <Form.Item className={cx('description')} name={'New description'}>
-            <TextArea placeholder='Enter description' />
+          <Form.Item style={{ marginBottom: '0px !important' }} className={cx('description')} name={'New description'}>
+            {/* <TextArea placeholder='Enter description' /> */}
+            <SimpleEditor
+              onValueChange={(value) => {
+                form.setFieldValue('description', value)
+              }}
+              placeholder='Enter assignment description'
+            />
           </Form.Item>
           <Row gutter={24}>
             <Col span={6}>

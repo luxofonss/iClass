@@ -2,16 +2,18 @@
 
 .lecture-block {
   @include card-wrapper;
+  margin-top: 12px;
   padding: 12px;
 
-  .heading {
-    .title {
-      font-size: 18px;
-      font-weight: 500;
-    }
+  .info {
+    margin-top: 8px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
 
-    .description {
-      font-style: italic;
+    .item {
+      display: flex;
+      gap: 12px;
     }
   }
 }

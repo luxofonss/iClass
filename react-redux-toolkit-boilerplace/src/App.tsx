@@ -19,7 +19,7 @@ const App: FC = () => {
       theme={{
         token: {
           fontFamily: 'Roboto, sans-serif',
-          fontSize: 16
+          fontSize: 14
         },
         components: {
           Divider: {

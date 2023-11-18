@@ -17,12 +17,13 @@
 }
 
 @mixin card-wrapper {
-  border: 1px solid hsl(0, 0%, 91%);
+  background-color: #fefefe;
+  border: 1px solid #ededed;
   border-radius: 16px;
   transition: all 0.2s ease-in-out;
   padding: 16px;
 
   &:hover {
-    box-shadow: 0 0 8px 0 hsl(0, 0%, 83%);
+    box-shadow: 0 0 6px 0 hsl(0, 0%, 83%);
   }
 }

@@ -9,6 +9,11 @@
     @include card-wrapper;
     padding: 12px;
 
+    .header {
+      display: flex;
+      gap: 16px;
+    }
+
     .content {
       padding: 8px;
       border-bottom: 1px solid #e3e3e3;

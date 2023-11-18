@@ -1,34 +1,34 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames/bind'
 
-import { Button, Menu, theme } from 'antd'
-import styles from './AppSider.module.scss'
-import Sider from 'antd/es/layout/Sider'
-import { useState } from 'react'
-import { BookText, Folder, GraduationCap, Calendar } from 'lucide-react'
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons'
+import { Button, Menu, theme } from 'antd'
+import Sider from 'antd/es/layout/Sider'
+import { BookText, Calendar, Folder, GraduationCap } from 'lucide-react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import styles from './AppSider.module.scss'
 const cx = classNames.bind(styles)
 
 const menuItems = [
   {
     key: '/classrooms',
-    icon: <GraduationCap size={16} />,
+    icon: <GraduationCap size={24} />,
     label: 'Classrooms'
   },
   {
     key: '/assignments',
-    icon: <BookText size={16} />,
+    icon: <BookText size={24} />,
     label: 'Assignments'
   },
   {
     key: '/calendar',
-    icon: <Calendar size={16} />,
+    icon: <Calendar size={24} />,
     label: 'Calendar'
   },
   {
     key: '/files',
-    icon: <Folder size={16} />,
+    icon: <Folder size={24} />,
     label: 'Files'
   }
 ]
@@ -74,7 +74,22 @@ export default function AppSider({ collapsed = false }: { collapsed: boolean }) 
         }}
       >
         {menuItems.map((item) => (
-          <Menu.Item key={item.key} icon={item.icon} style={{ fontWeight: 500 }}>
+          <Menu.Item
+            key={item.key}
+            icon={(() => (
+              <div
+                style={{
+                  width: isCollapsed ? '100%' : '',
+                  height: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                {item.icon}
+              </div>
+            ))()}
+          >
             {item.label}
           </Menu.Item>
         ))}

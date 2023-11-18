@@ -1,0 +1,14 @@
+@import '@shared/styles/mixins';
+
+.comment-reply {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  .send-btn {
+    &:hover {
+      cursor: pointer;
+      color: #6067f1;
+    }
+  }
+}

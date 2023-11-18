@@ -10,7 +10,12 @@ import styles from './TextEditor.module.scss'
 
 const cx = classNames.bind(styles)
 
-export default function TextEditor() {
+interface ITextEditor {
+  defaultText?: string
+  onValueChange: (value: string) => void
+}
+
+export default function TextEditor({ defaultText, onValueChange }: ITextEditor) {
   const editorWrapper = useRef<HTMLDivElement>(null)
 
   useOutsideClick(editorWrapper, () => {
@@ -46,7 +51,7 @@ export default function TextEditor() {
     <div ref={editorWrapper} className={cx('wrapper')}>
       <CKEditor
         editor={ClassicEditor}
-        data='<p>Hello from CKEditor&nbsp;5!</p>'
+        data={`<p>${defaultText}!</p>`}
         onReady={(editor) => {
           // You can store the "editor" and use when it is needed.
           console.log('Editor is ready to use!', editor)
@@ -56,6 +61,7 @@ export default function TextEditor() {
         }}
         onChange={(event, editor) => {
           const data = editor.getData()
+          onValueChange(data)
           console.log({ event, editor, data })
         }}
         onFocus={(event, editor) => {

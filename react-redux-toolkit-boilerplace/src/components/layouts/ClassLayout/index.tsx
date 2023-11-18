@@ -1,4 +1,3 @@
-import { theme } from 'antd'
 import { Content } from 'antd/es/layout/layout'
 import { Outlet } from 'react-router-dom'
 
@@ -10,9 +9,6 @@ const cx = classNames.bind(styles)
 
 function ClassLayout() {
   // const [siderCollapsed, setSiderCollapsed] = useState(false)
-  const {
-    token: { colorBgContainer }
-  } = theme.useToken()
 
   return (
     <div className={cx('class-layout')}>
@@ -21,7 +17,7 @@ function ClassLayout() {
         style={{
           padding: 24,
           minHeight: 280,
-          background: colorBgContainer
+          background: '#F2F2F2'
         }}
         className={cx('content')}
       >

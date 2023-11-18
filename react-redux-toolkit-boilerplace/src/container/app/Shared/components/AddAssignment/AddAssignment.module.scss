@@ -4,10 +4,16 @@
   .assignment-info {
     @include card-wrapper;
     margin-top: 12px;
-    border: 1px solid rgb(141, 141, 255);
 
     .title {
-      font-size: 24px;
+      // does not work
+      .ck .ck-editor__main > .ck-editor__editable {
+        border: none !important;
+      }
+
+      p {
+        font-size: 22px;
+      }
     }
 
     .description {

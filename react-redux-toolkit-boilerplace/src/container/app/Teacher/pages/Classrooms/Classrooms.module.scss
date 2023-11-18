@@ -1,0 +1,17 @@
+@import '@shared/styles/mixins';
+
+.classrooms {
+  .add-btn {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+
+    .link {
+      @include card-wrapper;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

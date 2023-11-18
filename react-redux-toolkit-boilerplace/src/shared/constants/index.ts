@@ -12,6 +12,11 @@ export const ROLE = {
 export const IMAGE =
   'https://images-platform.99static.com//VJULhRua27I6my6XqmWDTIUqCa4=/46x2045:959x2958/fit-in/500x500/99designs-contests-attachments/79/79121/attachment_79121110'
 
+export const AVATAR = 'https://techcrunch.com/wp-content/uploads/2015/12/screen-shot-2013-06-26-at-5-04-13-pm.png'
+
+export const AVATAR_2 =
+  'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg?size=626&ext=jpg&ga=GA1.1.44546679.1698969600&semt=ais'
+
 export const QUESTION_TYPE = [
   {
     value: 'single-choice',

@@ -3,7 +3,7 @@ import classNames from 'classnames/bind'
 
 // import greeting from '@assets/images/greeting.png'
 import Conversation from '@components/Conversation'
-import TextEditor from '@components/TextEditor'
+import { SimpleEditor } from '@components/Tiptap'
 import styles from './ClassHome.module.scss'
 
 const cx = classNames.bind(styles)
@@ -16,7 +16,8 @@ export default function ClassHome() {
         <img src={greeting} alt='greeting' />
       </div> */}
       <div className={cx('content')}>
-        <TextEditor />
+        {/* <TextEditor /> */}
+        <SimpleEditor />
 
         <Conversation />
         <Conversation />

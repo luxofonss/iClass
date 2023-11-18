@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames/bind'
 
-import { Button, Col, Row } from 'antd'
+import { Col, Row, Typography } from 'antd'
+import { Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ClassBlock from '../../components/ClassBlock'
 import styles from './Classrooms.module.scss'
@@ -10,9 +11,12 @@ const cx = classNames.bind(styles)
 export default function Classrooms() {
   return (
     <div className={cx('classrooms')}>
-      <Link to='/classroom/new'>
-        <Button type='primary'>Add new class</Button>
-      </Link>
+      <div className={cx('add-btn')}>
+        <Link className={cx('link')} to='/classroom/new'>
+          <Plus />
+          <Typography.Text strong>New class</Typography.Text>
+        </Link>
+      </div>
       <Row gutter={[24, 24]}>
         {[1, 2, 3, 4, 5, 6, 7].map((_, index) => {
           return (

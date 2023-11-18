@@ -10,7 +10,7 @@ export default function Lectures() {
   return (
     <div className={cx('lectures')}>
       <div>
-        <Button>New lecture</Button>
+        <Button type='primary'>New lecture</Button>
       </div>
       <Row gutter={[24, 24]}>
         <Col span={6}>

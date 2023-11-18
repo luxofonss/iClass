@@ -3,7 +3,7 @@ import classNames from 'classnames/bind'
 import { Header } from 'antd/es/layout/layout'
 
 import { LogoutOutlined } from '@ant-design/icons'
-import { Avatar, Badge, Button, Popover, theme } from 'antd'
+import { Avatar, Badge, Button, Popover, Typography, theme } from 'antd'
 import { Bell, MessageCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import styles from './AppHeader.module.scss'
@@ -44,10 +44,9 @@ export default function AppHeader() {
         <img
           alt='logo'
           src={
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png'
+            'https://www.learnify.com/wp-content/uploads/2019/02/xLearnify-Primary-2x.png.pagespeed.ic.k2waHY-min.png'
           }
         />
-        <p>iClass</p>
       </div>
 
       {/* {user && ( */}
@@ -72,8 +71,8 @@ export default function AppHeader() {
         </Popover>
 
         <div className={cx('info')}>
-          <div className={cx('name')}>Nguyen Van A</div>
-          <div className={cx('position')}>CEO</div>
+          <Typography.Text className={cx('name')}>Nguyen Van A</Typography.Text>
+          <Typography.Text className={cx('position')}>CEO</Typography.Text>
         </div>
       </div>
       {/* )} */}

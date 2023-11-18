@@ -16,19 +16,13 @@
     img {
       height: 50px;
     }
-
-    p {
-      font-size: 28px;
-      font-weight: 600;
-      color: #881123;
-    }
   }
 
   .user {
     height: 100%;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 
     .info {
       height: 100%;
@@ -38,11 +32,12 @@
 
       .name {
         line-height: normal;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 500;
       }
 
       .position {
+        font-size: 14px;
         line-height: normal;
         font-style: italic;
       }

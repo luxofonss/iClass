@@ -35,6 +35,10 @@ const appRoutes: RouteObject[] = [
         element: <Assignments />
       },
       {
+        path: '/classroom/:id/teacher/assignments',
+        element: <Assignments />
+      },
+      {
         path: '/calendar',
         element: <Calendar />
       },
@@ -80,10 +84,7 @@ const appRoutes: RouteObject[] = [
             path: '/classroom/:id/files',
             element: <ClassFiles />
           },
-          {
-            path: '/classroom/:id/teacher/assignments',
-            element: <Assignments />
-          },
+
           {
             path: '/classroom/:id/settings',
             element: <ClassSettings />
