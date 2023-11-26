@@ -9,6 +9,38 @@ $text-primary: 'rgba(0, 0, 0, 0.85)';
 $text-secondary: 'rgba(0, 0, 0, 0.45)';
 $text-disabled: 'rgba(0, 0, 0, 0.25)';
 
+// breakpoints
+$sm: 480px;
+$md: 576px;
+$lg: 768px;
+$xl: 992px;
+$xxl: 1600px;
+
+$primary-blue: #2a85ff;
+$primary-green: #83bf6e;
+$primary-red: #ff6a55;
+$primary-violet: #8e59ff;
+
+$secondary-orange: #ffbc99;
+$secondary-violet: #cabdff;
+$secondary-blue: #b1e5fc;
+$secondary-green: #b5e4ca;
+$secondary-yellow: #ffd88d;
+
+$shade-0: #9a9fa5;
+$shade-1: #6f767e;
+
+$neutral-0: #ffffff;
+$neutral-1: #fcfcfc;
+$neutral-2: #f4f4f4;
+$neutral-3: #efefef;
+$neutral-4: #6f767e;
+$neutral-5: #33383f;
+$neutral-6: #272b30;
+$neutral-7: #1a1d1f;
+$neutral-8: #111315;
+$neutral-9: #212529;
+
 :root {
   --background: $background;
   --divider: $divider;

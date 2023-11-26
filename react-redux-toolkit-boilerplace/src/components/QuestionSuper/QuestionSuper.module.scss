@@ -2,6 +2,8 @@
 
 .question-super {
   @include card-wrapper;
+  border-radius: 6px;
+  box-shadow: 0 0 6px 0 #e4e4e4;
 
   .heading {
     display: flex;

@@ -1,25 +1,9 @@
 @import '@shared/styles/mixins';
 
-.sider {
-  padding: 3px 12px;
-  position: relative;
-
-  .menu-collapse {
-    position: absolute;
-    top: 0;
-    right: -24px;
-  }
-
-  .divider {
-    margin: 8px;
-  }
-
-  .menu {
-    margin-top: 24px;
-    border: none;
-
-    li {
-      font-size: 16px;
-    }
+.class-setting-member {
+  .options {
+    display: flex;
+    margin-bottom: 12px;
+    gap: 12px;
   }
 }

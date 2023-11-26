@@ -7,13 +7,20 @@ import QuestionSuper from '@components/QuestionSuper'
 import { SimpleEditor } from '@components/Tiptap'
 import { TIME_OPTIONS } from '@shared/constants'
 import { Button, Col, DatePicker, Form, Row, Select } from 'antd'
-import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc'
+import { GripVertical } from 'lucide-react'
+import { SortableContainer, SortableElement, SortableHandle, arrayMove } from 'react-sortable-hoc'
 import styles from './AddAssignment.module.scss'
 
 const cx = classNames.bind(styles)
 const { RangePicker } = DatePicker
 
 type IQuestionType = 'question' | 'super-question'
+
+const DragHandle = SortableHandle(() => (
+  <Button className={cx('grip-btn')}>
+    <GripVertical size={14} />
+  </Button>
+))
 
 interface ISortableItemProps {
   type: IQuestionType
@@ -23,7 +30,7 @@ interface ISortableItemProps {
 const SortableItem = SortableElement<ISortableItemProps>(({ type, order }: ISortableItemProps) => {
   console.log('type:: ', type, order)
   if (type === 'question') {
-    return <Question field={{ key: order, name: 'questions' }} />
+    return <Question dragHandler={<DragHandle />} field={{ key: order, name: 'questions' }} />
   } else if (type === 'super-question') {
     return <QuestionSuper field={{ key: order, name: 'questions' }} />
   }
@@ -65,9 +72,9 @@ export default function AddAssignment() {
 
   return (
     <div className={cx('add-assignment')}>
-      <Form form={form} onFinish={onSubmit}>
+      <Form layout='vertical' form={form} onFinish={onSubmit}>
         <div className={cx('assignment-info')}>
-          <Form.Item style={{ marginBottom: '0px !important' }} className={cx('title')} name={'title'}>
+          <Form.Item style={{ marginBottom: '0px !important' }} className={cx('title')} name={'title'} label='Title'>
             {/* <Input style={{ fontWeight: 500 }} size='large' placeholder='Enter title' /> */}
             <SimpleEditor
               onValueChange={(value) => {
@@ -76,7 +83,12 @@ export default function AddAssignment() {
               placeholder='Enter assignment title'
             />
           </Form.Item>
-          <Form.Item style={{ marginBottom: '0px !important' }} className={cx('description')} name={'New description'}>
+          <Form.Item
+            style={{ marginBottom: '0px !important' }}
+            className={cx('description')}
+            name={'New description'}
+            label='Description'
+          >
             {/* <TextArea placeholder='Enter description' /> */}
             <SimpleEditor
               onValueChange={(value) => {
@@ -101,7 +113,7 @@ export default function AddAssignment() {
           </Row>
         </div>
         <div className={cx('questions')}>
-          <SortableList items={question} onSortEnd={onSortEnd} />
+          <SortableList useDragHandle items={question} onSortEnd={onSortEnd} />
         </div>
         <div className={cx('btn-action')}>
           <Button

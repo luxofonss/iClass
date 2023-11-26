@@ -17,6 +17,22 @@ export const AVATAR = 'https://techcrunch.com/wp-content/uploads/2015/12/screen-
 export const AVATAR_2 =
   'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg?size=626&ext=jpg&ga=GA1.1.44546679.1698969600&semt=ais'
 
+export const COLOR = {
+  CORE: {
+    BLUE: '#2A85FF',
+    GREEN: '#83BF6E',
+    RED: '#FF6A55',
+    VIOLET: '#8E59FF'
+  },
+  SECONDARY: {
+    ORANGE: '#FFBC99',
+    VIOLET: '#CABDFF',
+    BLUE: '#B1E5FC',
+    GREEN: '#B5E4CA',
+    YELLOW: '#FFD88D'
+  }
+}
+
 export const QUESTION_TYPE = [
   {
     value: 'single-choice',

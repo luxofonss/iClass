@@ -26,6 +26,10 @@ const App: FC = () => {
             marginLG: 12,
             margin: 8,
             marginXS: 4
+          },
+          Form: {
+            labelColor: 'rgb(51, 56, 63)',
+            marginLG: 12
           }
         }
       }}

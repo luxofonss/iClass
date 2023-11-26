@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames/bind'
 
-import styles from './ClassSettingMembers.module.scss'
 import { Button, Space, Table, Tag } from 'antd'
 import type { ColumnsType, TableProps } from 'antd/es/table'
+import styles from './ClassSettingMembers.module.scss'
 
 const cx = classNames.bind(styles)
 
@@ -132,6 +132,10 @@ const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter,
 export default function ClassSettingMembers() {
   return (
     <div className={cx('class-setting-member')}>
+      <div className={cx('options')}>
+        <Button>Add student</Button>
+        <Button>Get classroom code</Button>
+      </div>
       <Table pagination={false} columns={columns} dataSource={data} onChange={onChange} />
     </div>
   )

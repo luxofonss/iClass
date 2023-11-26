@@ -3,26 +3,28 @@
 import classNames from 'classnames/bind'
 import { useCallback, useRef, useState } from 'react'
 // => Tiptap packages
+import ModalUploadImage from '@components/ModalUploadImage'
 import Bold from '@tiptap/extension-bold'
 import Code from '@tiptap/extension-code'
 import Document from '@tiptap/extension-document'
 import History from '@tiptap/extension-history'
+import Image from '@tiptap/extension-image'
 import Italic from '@tiptap/extension-italic'
 import Link from '@tiptap/extension-link'
 import Paragraph from '@tiptap/extension-paragraph'
+import Placeholder from '@tiptap/extension-placeholder'
 import Strike from '@tiptap/extension-strike'
 import Text from '@tiptap/extension-text'
 import TextStyle from '@tiptap/extension-text-style'
 import Underline from '@tiptap/extension-underline'
 import type { JSONContent } from '@tiptap/react'
 import { BubbleMenu, Editor, EditorContent, useEditor } from '@tiptap/react'
-// Custom
-import Placeholder from '@tiptap/extension-placeholder'
 import useOutsideClick from '../../hooks/useClickOutside'
 import * as Icons from './Icons'
 import { LinkModal } from './LinkModal'
 import styles from './Tiptap.module.scss'
 import { FontSize } from './extensions/font-size'
+// Custom
 
 const cx = classNames.bind(styles)
 
@@ -49,6 +51,13 @@ export function SimpleEditor({ placeholder, onValueChange }: ISimpleEditor) {
       Link.configure({
         openOnClick: false
       }),
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+        HTMLAttributes: {
+          class: 'my-custom-image-class'
+        }
+      }),
       Bold,
       Underline,
       Italic,
@@ -59,25 +68,26 @@ export function SimpleEditor({ placeholder, onValueChange }: ISimpleEditor) {
       onValueChange(editor.getJSON())
     }
   }) as Editor
-  const [modalIsOpen, setIsOpen] = useState(false)
-  const [isToolbarOpen, setToolbarOpen] = useState(false)
+  const [modalIsOpen, setIsModalOpen] = useState(false)
+  const [isToolbarOpen, setIsToolbarOpen] = useState(false)
   const [url, setUrl] = useState<string>('')
 
+  const uploadImage = useRef(null)
   const editorWrapper = useRef<HTMLDivElement>(null)
 
   useOutsideClick(editorWrapper, () => {
     // alert('You clicked outside')
-    setToolbarOpen(false)
+    setIsToolbarOpen(false)
   })
 
   const openModal = useCallback(() => {
     console.log(editor.chain().focus())
     setUrl(editor.getAttributes('link').href)
-    setIsOpen(true)
+    setIsModalOpen(true)
   }, [editor])
 
   const closeModal = useCallback(() => {
-    setIsOpen(false)
+    setIsModalOpen(false)
     setUrl('')
   }, [])
 
@@ -115,6 +125,16 @@ export function SimpleEditor({ placeholder, onValueChange }: ISimpleEditor) {
     editor.chain().focus().toggleCode().run()
   }, [editor])
 
+  const addImage = useCallback(() => {
+    uploadImage.current?.openModal()
+  }, [])
+
+  const handleAddUrl = (url: string) => {
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run()
+    }
+  }
+
   if (!editor) {
     return null
   }
@@ -124,7 +144,7 @@ export function SimpleEditor({ placeholder, onValueChange }: ISimpleEditor) {
       ref={editorWrapper}
       onFocus={(e) => {
         e.stopPropagation()
-        setToolbarOpen(true)
+        setIsToolbarOpen(true)
       }}
       className={cx('editor-wrapper')}
     >
@@ -197,6 +217,9 @@ export function SimpleEditor({ placeholder, onValueChange }: ISimpleEditor) {
           onClick={toggleCode}
         >
           <Icons.Code />
+        </button>
+        <button className={cx('menu-button')} onClick={addImage}>
+          <ModalUploadImage handleOk={handleAddUrl} ref={uploadImage} />
         </button>
       </div>
 

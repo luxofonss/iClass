@@ -1,68 +1,93 @@
 @import '@shared/styles/mixins';
+@import '@shared/styles/variables';
 
 .new-class {
   position: relative;
 
   .sider {
-    position: fixed;
-    // width: 100%;
+    width: 100%;
+    background: white;
+    border-radius: 6px;
+    padding-top: 8px;
+
+    .submit-btn {
+      width: 100%;
+      margin: 0 auto;
+      margin-top: 12px;
+    }
   }
-  .section {
-    @include card-wrapper;
+  .content {
+    max-height: 85vh;
+    overflow-y: auto;
+    .section {
+      @include card-wrapper;
+      border-radius: 6px;
 
-    &__title {
-      font-size: 22px;
-      font-weight: 500px;
-    }
-
-    &__description {
-      font-size: 14px;
-      font-weight: 400;
-      font-style: italic;
-    }
-
-    &:not(:first-child) {
-      margin-top: 16px;
-    }
-
-    .info-block {
       &__title {
-        font-size: 18px;
-        font-weight: 500;
+        font-size: 22px;
+        font-weight: 500px;
+        display: flex;
+        gap: 6px;
       }
 
       &__description {
         font-size: 14px;
+        font-weight: 400;
         font-style: italic;
+        color: $neutral-4;
       }
 
-      &__question-list {
-        margin-top: 12px;
-        display: flex;
-        gap: 12px;
+      &:not(:first-child) {
+        margin-top: 16px;
+      }
 
-        &__input {
-          flex: 1;
+      .info-block {
+        &__title {
+          font-size: 18px;
+          font-weight: 500;
+        }
+
+        &__description {
+          font-size: 14px;
+          font-style: italic;
+        }
+
+        &__question-list {
+          margin-top: 12px;
+          display: flex;
+          gap: 12px;
+
+          &__input {
+            flex: 1;
+          }
         }
       }
-    }
 
-    .curriculum {
-      @include card-wrapper;
+      .curriculum {
+        @include card-wrapper;
 
-      &__section {
-        .inputs {
-          .list-items {
-            border: 1px solid #efefef;
-            border-radius: 4px;
-            padding: 12px;
+        &__section {
+          .inputs {
+            .list-items {
+              border: 1px solid #efefef;
+              border-radius: 4px;
+              padding: 12px;
 
-            &__item {
-              display: flex;
+              &__item {
+                display: flex;
+              }
             }
           }
         }
       }
     }
   }
+}
+
+.label {
+  font-weight: 500;
+}
+
+.detail-info {
+  @extend .section__description;
 }

@@ -9,13 +9,13 @@ import { QuestionField } from '../../types/question'
 
 const cx = classNames.bind(styles)
 
-export default function QuestionSuper({ field }: { field: QuestionField }) {
-  console.log('field:: ', field)
+export default function QuestionSuper(props: { field: QuestionField }) {
+  console.log('field:: ', props.field)
   return (
     <div className={cx('question-super')}>
       <div className={cx('heading')}>
         {/* <h2 className={cx('title')}>Question 1: How to abc</h2> */}
-        <Form.Item name={[field.name, field.key, 'title']} label={`Question ${field.key + 1}:`}>
+        <Form.Item name={[props.field.name, props.field.key, 'title']} label={`Question ${props.field.key + 1}:`}>
           <Input placeholder='Enter question' />
         </Form.Item>
         <Button
@@ -28,20 +28,20 @@ export default function QuestionSuper({ field }: { field: QuestionField }) {
         />
       </div>
       <div className={cx('options')}>
-        <Form.Item name={[field.name, field.key, 'image']} label='Image'>
+        <Form.Item name={[props.field.name, props.field.key, 'image']} label='Image'>
           <Input type='file' />
         </Form.Item>
-        <Form.Item name={[field.name, field.key, 'audio']} label='Audio'>
+        <Form.Item name={[props.field.name, props.field.key, 'audio']} label='Audio'>
           <Input type='file' />
         </Form.Item>
       </div>
-      <Form.List name={[field.name, field.key, 'questions']}>
+      <Form.List name={[props.field.name, props.field.key, 'questions']}>
         {(fields, action) => {
           return (
             <div className={cx('questions')}>
               {fields.map((field) => (
                 <div key={field.key}>
-                  <SubQuestion field={field} action={action} />
+                  <SubQuestion questionKey={props.field.key} field={field} action={action} />
                 </div>
               ))}
               <Button

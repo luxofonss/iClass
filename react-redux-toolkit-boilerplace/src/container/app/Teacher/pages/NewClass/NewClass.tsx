@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames/bind'
 
-import { MoneyCollectOutlined } from '@ant-design/icons'
+import ColorPrefix from '@components/ColorPrefix'
+import { COLOR } from '@shared/constants'
 import type { MenuProps } from 'antd'
-import { Button, Col, Divider, Empty, Form, Input, Menu, Row, Select } from 'antd'
+import { Button, Col, Divider, Empty, Form, Input, Menu, Row, Select, Typography } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { GitBranch, LucideAppWindow, MessageCircle, School } from 'lucide-react'
 import { useState } from 'react'
+import ClassBlock from '../../components/ClassBlock'
 import styles from './NewClass.module.scss'
 
 const cx = classNames.bind(styles)
@@ -17,34 +19,27 @@ const items: MenuItem[] = [
   {
     key: 'landing-page',
     label: 'Course landing page',
-    icon: <LucideAppWindow />
+    icon: <LucideAppWindow size={14} />
   },
   {
     key: 'intend-learners',
     label: 'Intend learners',
-    icon: <School />
+    icon: <School size={14} />
   },
   {
     key: 'curriculum',
     label: 'Curriculum',
-    icon: <GitBranch />
-  },
-
-  {
-    key: 'pricing',
-    label: 'Course pricing',
-    icon: <MoneyCollectOutlined />
+    icon: <GitBranch size={14} />
   },
   {
     key: 'message',
     label: 'Course message',
-    icon: <MessageCircle />
+    icon: <MessageCircle size={14} />
   }
 ]
 
 export default function NewClass() {
   const [openKeys, setOpenKeys] = useState(['landing-page '])
-
   const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1)
     setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
@@ -53,8 +48,8 @@ export default function NewClass() {
   return (
     <div className={cx('new-class')}>
       <Form layout='vertical'>
-        <Row gutter={24}>
-          <Col className={cx('sider')} span={6}>
+        <Row gutter={48}>
+          <Col className={cx('sider')} span={5}>
             <Menu
               mode='inline'
               openKeys={openKeys}
@@ -62,35 +57,38 @@ export default function NewClass() {
               style={{ width: '100%', fontSize: 14 }}
               items={items}
             />
-            <Button type='primary' htmlType='submit'>
+            <ClassBlock />
+            <Button className={cx('submit-btn')} type='primary' htmlType='submit'>
               Submit for Review
             </Button>
           </Col>
-          <Col span={6}></Col>
-          <Col span={18}>
-            <div className={cx('section')}>
-              <h1 className={cx('section__title')}>Course landing page</h1>
+          <Col span={19} className={cx('content')}>
+            <div id='landing-page' className={cx('section')}>
+              <div className={cx('section__title')}>
+                <ColorPrefix color={COLOR.SECONDARY.GREEN} />
+                <Typography.Title level={4}>Course landing page</Typography.Title>
+              </div>
               <Divider />
-              <Form.Item name='title' label='Class title'>
+              <Form.Item name='title' className={cx('label')} label='Class title'>
                 <Input />
               </Form.Item>
-              <Form.Item name='sub-title' label='Class subtitle'>
+              <Form.Item name='sub-title' className={cx('label')} label='Class subtitle'>
                 <Input />
               </Form.Item>
-              <Form.Item name='description' label='Class description'>
+              <Form.Item name='description' className={cx('label')} label='Class description'>
                 <TextArea />
               </Form.Item>
               <Row gutter={24}>
-                <Col span={8}>
-                  <Form.Item name='subject' label='Subject'>
+                <Col span={6}>
+                  <Form.Item name='subject' className={cx('label')} label='Subject'>
                     <Select placeholder='Subject'>
                       <Select.Option value='math'>Math</Select.Option>
                       <Select.Option value='english'>English</Select.Option>
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col span={8}>
-                  <Form.Item name='grade' label='Grade'>
+                <Col span={6}>
+                  <Form.Item name='grade' className={cx('label')} label='Grade'>
                     <Select placeholder='Grade'>
                       <Select.Option value='10'>10</Select.Option>
                       <Select.Option value='11'>11</Select.Option>
@@ -98,8 +96,8 @@ export default function NewClass() {
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col span={8}>
-                  <Form.Item name='level' label='Level'>
+                <Col span={6}>
+                  <Form.Item name='level' className={cx('label')} label='Level'>
                     <Select placeholder='Level'>
                       <Select.Option value='junior'>Junior</Select.Option>
                       <Select.Option value='middle'>Middle</Select.Option>
@@ -107,15 +105,21 @@ export default function NewClass() {
                     </Select>
                   </Form.Item>
                 </Col>
+                <Col span={6}>
+                  <Form.Item name='price' className={cx('label')} label='Price'>
+                    <Input type='number' addonAfter='VND' />
+                  </Form.Item>
+                </Col>
               </Row>
+
               <Divider />
               <Row gutter={24}>
                 <Col span={12}>
-                  <p>
+                  <Typography.Paragraph className={cx('detail-info')}>
                     Upload your course image here. It must meet our course image quality standards to be accepted.
                     Important guidelines: 750x422 pixels; .jpg, .jpeg,. gif, or .png. no text on the image.
-                  </p>
-                  <Form.Item name='image' label='Course image'>
+                  </Typography.Paragraph>
+                  <Form.Item name='image' className={cx('label')} label='Course image'>
                     <Input type='file' />
                   </Form.Item>
                 </Col>
@@ -126,11 +130,11 @@ export default function NewClass() {
               <Divider />
               <Row gutter={24}>
                 <Col span={12}>
-                  <p>
+                  <Typography.Paragraph className={cx('detail-info')}>
                     Your promo video is a quick and compelling way for students to preview what they’ll learn in your
                     course. Students considering your course are more likely to enroll if your promo video is well-made.
-                  </p>
-                  <Form.Item name='promotional-video' label='Promotional video'>
+                  </Typography.Paragraph>
+                  <Form.Item name='promotional-video' className={cx('label')} label='Promotional video'>
                     <Input type='file' />
                   </Form.Item>
                 </Col>
@@ -139,8 +143,11 @@ export default function NewClass() {
                 </Col>
               </Row>
             </div>
-            <div className={cx('section')}>
-              <h1 className={cx('section__title')}>Intend learners</h1>
+            <div id='intend-learner' className={cx('section')}>
+              <div className={cx('section__title')}>
+                <ColorPrefix color={COLOR.SECONDARY.VIOLET} />
+                <Typography.Title level={4}>Intend learners</Typography.Title>
+              </div>
               <Divider />
               <p className={cx('section__description')}>
                 The following descriptions will be publicly visible on your Course Landing Page and will have a direct
@@ -229,8 +236,11 @@ export default function NewClass() {
                 </Form.List>
               </div>
             </div>
-            <div className={cx('section')}>
-              <h1 className={cx('section__title')}>Curriculum</h1>
+            <div id='curriculum' className={cx('section')}>
+              <div className={cx('section__title')}>
+                <ColorPrefix color={COLOR.SECONDARY.BLUE} />
+                <Typography.Title level={4}>Curriculum</Typography.Title>
+              </div>
               <Divider />
               <p className={cx('section__description')}>
                 Start putting together your course by creating sections, lectures and practice (quizzes, coding
@@ -245,7 +255,7 @@ export default function NewClass() {
                     <div className={cx('curriculum__section')}>
                       {fields.map((field) => (
                         <div className={cx('inputs')} key={field.key}>
-                          <Form.Item name='section' label='Section'>
+                          <Form.Item name='section' className={cx('label')} label='Section'>
                             <Input />
                           </Form.Item>
                           <Form.List name='item' initialValue={['']}>
@@ -298,42 +308,21 @@ export default function NewClass() {
                 </Form.List>
               </div>
             </div>
-            <div className={cx('section')}>
-              <h1 className={cx('section__title')}>Pricing</h1>
-              <Divider />
-              <p className={cx('section__description')}>
-                Please select the currency and the price tier for your course. If you’d like to offer your course for
-                free, it must have a total video length of less than 2 hours. Also, courses with practice tests can not
-                be free
-              </p>
-              <Row gutter={24}>
-                <Col span={12}>
-                  <Form.Item name='currency' label='Currency'>
-                    <Select placeholder='Currency'>
-                      <Select.Option value='usd'>USD</Select.Option>
-                      <Select.Option value='vnd'>VND</Select.Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item name='price' label='Price'>
-                    <Input />
-                  </Form.Item>
-                </Col>
-              </Row>
-            </div>
-            <div className={cx('section')}>
-              <h1 className={cx('section__title')}>Course message</h1>
+            <div id='course-message' className={cx('section')}>
+              <div className={cx('section__title')}>
+                <ColorPrefix color={COLOR.SECONDARY.ORANGE} />
+                <Typography.Title level={4}>Course message</Typography.Title>
+              </div>
               <Divider />
               <p className={cx('section__description')}>
                 Write messages to your students (optional) that will be sent automatically when they join or complete
                 your course to encourage students to engage with course content. If you do not wish to send a welcome or
                 congratulations message, leave the text box blank.
               </p>
-              <Form.Item name='welcome-message' label='Welcome message'>
+              <Form.Item name='welcome-message' className={cx('label')} label='Welcome message'>
                 <TextArea />
               </Form.Item>
-              <Form.Item name='congratulations-message' label='Congratulations message'>
+              <Form.Item name='congratulations-message' className={cx('label')} label='Congratulations message'>
                 <TextArea />
               </Form.Item>
             </div>

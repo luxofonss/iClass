@@ -49,10 +49,10 @@ code {
 
 :global(.ProseMirror) {
   background-color: #fefefe;
-  // border: 1px solid #ededed;
+  border: 1px solid #ededed;
   padding: 8px 12px !important;
   border-radius: 8px;
-  transition: all 0.2s ese-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 :global(.ProseMirror-focused) {

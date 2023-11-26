@@ -2,7 +2,7 @@
 
 .wrapper {
   width: 100%;
-  
+
   .item {
     display: flex;
     align-items: center;
@@ -11,6 +11,10 @@
 
     .input {
       flex: 1;
+    }
+
+    .btn-remove {
+      @include flex-center;
     }
   }
 

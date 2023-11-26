@@ -1,19 +1,27 @@
-import { Button, Form, Input, Select } from 'antd'
+import { Button, Form, Input, Select, Tag } from 'antd'
 import classNames from 'classnames/bind'
 import { useState } from 'react'
 import styles from './Question.module.scss'
 
 import QuestionAnswer from '@components/QuestionAnswer'
 import { TypeQuestion } from '@components/QuestionTypeIcon/QuestionTypeIcon'
+import { SimpleEditor } from '@components/Tiptap'
 import { QUESTION_TYPE } from '@shared/constants'
-import TextArea from 'antd/es/input/TextArea'
+
 import { Trash } from 'lucide-react'
 import { QuestionField } from '../../types/question'
 
 const cx = classNames.bind(styles)
 
-export default function Question({ field }: { field: QuestionField }) {
+interface IQuestion {
+  field: QuestionField
+  dragHandler: JSX.Element
+}
+
+export default function Question({ field, dragHandler }: IQuestion) {
   const [type, setType] = useState<TypeQuestion>('single-choice')
+
+  const form = Form.useFormInstance()
 
   const onSelectType = (value: TypeQuestion) => {
     setType(value)
@@ -23,17 +31,23 @@ export default function Question({ field }: { field: QuestionField }) {
     <div className={cx('question')}>
       <div className={cx('heading')}>
         {/* <h2 className={cx('title')}>Question 1: How to abc</h2> */}
-        <Form.Item className={cx('title')} name={[field.name, field.key, 'title']} label={`Question ${field.key + 1}:`}>
-          <TextArea rows={2} placeholder='Enter question' />
-        </Form.Item>
-        <Form.Item name={[field.name, field.key, 'type']} initialValue={'single-choice'}>
-          <Select
-            className={cx('type')}
-            defaultValue='single-choice'
-            options={QUESTION_TYPE}
-            onSelect={(value) => onSelectType(value as TypeQuestion)}
-          />
-        </Form.Item>
+        <div className={cx('info')}>
+          {dragHandler}
+          <Tag className={cx('title')} color='green'>
+            Question {field.key + 1}
+          </Tag>
+          <Form.Item style={{ margin: 0 }} name={[field.name, field.key, 'type']} initialValue={'single-choice'}>
+            <Select
+              className={cx('type')}
+              defaultValue='single-choice'
+              options={QUESTION_TYPE}
+              onSelect={(value) => onSelectType(value as TypeQuestion)}
+            />
+          </Form.Item>
+          <Form.Item name={[field.name, field.key, 'point']}>
+            <Input type='number' placeholder="Enter question's point " addonAfter='Point' />
+          </Form.Item>
+        </div>
         <Button
           icon={<Trash size={14} />}
           className={cx('btn-remove')}
@@ -43,10 +57,15 @@ export default function Question({ field }: { field: QuestionField }) {
           danger
         />
       </div>
+      <Form.Item name={[field.name, field.key, 'title']}>
+        <SimpleEditor
+          onValueChange={(value) => {
+            form.setFieldValue('title', value)
+          }}
+          placeholder='Enter question'
+        />
+      </Form.Item>
       <div className={cx('options')}>
-        <Form.Item name={[field.name, field.key, 'point']} label='Point'>
-          <Input />
-        </Form.Item>
         <Form.Item name={[field.name, field.key, 'image']} label='Image'>
           <Input type='file' />
         </Form.Item>
@@ -57,6 +76,14 @@ export default function Question({ field }: { field: QuestionField }) {
       <div className={cx('answer')}>
         <QuestionAnswer field={field} type={type} />
       </div>
+      <Form.Item name={[field.name, field.key, 'explain']} label='Explain the answer'>
+        <SimpleEditor
+          onValueChange={(value) => {
+            form.setFieldValue('explain', value)
+          }}
+          placeholder='Explain the answer'
+        />
+      </Form.Item>
     </div>
   )
 }

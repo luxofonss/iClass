@@ -2,7 +2,7 @@
 import classNames from 'classnames/bind'
 
 import { IMAGE } from '@shared/constants'
-import { Divider, Menu } from 'antd'
+import { Divider, Menu, Typography } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import { BookCheck, BookText, Folder, GraduationCap, Settings } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -41,10 +41,18 @@ export default function ClassLayoutSider({ siderCollapsed }: { siderCollapsed: b
   const navigate = useNavigate()
 
   return (
-    <Sider className={cx('sider')} theme='light' trigger={null} collapsible collapsed={siderCollapsed} width={320}>
+    <Sider className={cx('sider')} theme='light' trigger={null} collapsible collapsed={siderCollapsed} width={240}>
       <div className={cx('class-info')}>
         <img className={cx('thumbnail')} src={IMAGE} alt='logo' />
-        {!siderCollapsed && <p className={cx('class-name')}>Khóa học tiếng Anh abc</p>}
+        {!siderCollapsed && (
+          <Typography.Title
+            level={4}
+            ellipsis={{ rows: 2, tooltip: 'DeepFakes & Voice Cloning: Machine Learning The Easy Way' }}
+            className={cx('class-name')}
+          >
+            DeepFakes & Voice Cloning: Machine Learning The Easy Way
+          </Typography.Title>
+        )}
       </div>
       <Divider />
       <Menu
@@ -57,7 +65,7 @@ export default function ClassLayoutSider({ siderCollapsed }: { siderCollapsed: b
         }}
       >
         {menuItems.map((item) => (
-          <Menu.Item key={item.key} icon={item.icon}>
+          <Menu.Item style={{ fontSize: 14 }} key={item.key} icon={item.icon}>
             {item.label}
           </Menu.Item>
         ))}

@@ -9,6 +9,10 @@ import styles from './ClassHome.module.scss'
 const cx = classNames.bind(styles)
 
 export default function ClassHome() {
+  function onValueChange(value: any) {
+    console.log(value)
+  }
+
   return (
     <div className={cx('class-home')}>
       {/* <div className={cx('greeting')}>
@@ -17,7 +21,7 @@ export default function ClassHome() {
       </div> */}
       <div className={cx('content')}>
         {/* <TextEditor /> */}
-        <SimpleEditor />
+        <SimpleEditor onValueChange={onValueChange} />
 
         <Conversation />
         <Conversation />

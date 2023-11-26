@@ -19,13 +19,13 @@ export default function ClassBlock() {
           <Tag color='cyan'>Advanced</Tag>
           <Tag color='geekblue'>Mrs.Test</Tag>
         </div>
-        <Typography.Title level={4} className={cx('name')}>
+        <Typography.Title level={5} className={cx('name')}>
           Khóa học tiếng anh trung hoc cơ bản lớp 10
         </Typography.Title>
         <div className={cx('info')}>
           <div className={cx('item')}>
             <div className={cx('label')}>
-              4.5 (193 review) <Rate disabled defaultValue={4.5} />
+              4.5 (193 reviews) <Rate disabled defaultValue={4.5} />
             </div>
           </div>
 

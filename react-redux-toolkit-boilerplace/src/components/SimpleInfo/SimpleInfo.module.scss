@@ -3,13 +3,14 @@
 .simple-info {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   .label {
-    font-size: 16px;
+    font-size: 12px;
   }
 
   .value {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 500;
   }
 }
