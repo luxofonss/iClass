@@ -9,7 +9,7 @@ import styles from './Assignments.module.scss'
 const cx = classNames.bind(styles)
 
 export default function Assignments() {
-  const [isAdding, setIsAdding] = useState(true)
+  const [isAdding, setIsAdding] = useState(false)
   return (
     <div className={cx('assignments')}>
       <div className={cx('heading')}>

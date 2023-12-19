@@ -33,6 +33,7 @@
     "prosemirror-schema-basic": "^1.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
     "react-modal": "^3.16.1",
     "react-player": "^2.13.0",
     "react-redux": "^8.1.3",
@@ -40,7 +41,8 @@
     "react-sortable-hoc": "^2.0.0",
     "redux-persist": "^6.0.0",
     "universal-cookie": "^6.1.1",
-    "use-prosemirror": "^1.3.0"
+    "use-prosemirror": "^1.3.0",
+    "uuid": "^9.0.1"
   },
   "scripts": {
     "dev": "webpack-dev-server --mode development",
@@ -67,6 +69,7 @@
     "@types/react-modal": "^3.16.3",
     "@types/redux-persist": "^4.3.1",
     "@types/universal-cookie": "^3.0.0",
+    "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
     "babel-jest": "^29.7.0",

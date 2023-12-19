@@ -84,3 +84,30 @@ export const QUESTION_INDEX = [
   'S',
   'T'
 ]
+
+export const COURSE_LEVEL_OPS = [
+  {
+    label: 'Beginner',
+    value: 'Beginner'
+  },
+  {
+    label: 'elementary',
+    value: 'elementary'
+  },
+  {
+    label: 'intermediate',
+    value: 'intermediate'
+  },
+  {
+    label: 'upper-intermediate',
+    value: 'Upper intermediate'
+  },
+  {
+    label: 'advanced',
+    value: 'Advanced'
+  },
+  {
+    label: 'proficiency',
+    value: 'Proficiency'
+  }
+]

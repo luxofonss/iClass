@@ -11,7 +11,7 @@ const cx = classNames.bind(styles)
 
 export default function AppHeader() {
   const {
-    token: { colorBgContainer, colorBorderSecondary }
+    token: { colorBorderSecondary }
   } = theme.useToken()
 
   const messagesBox = (
@@ -36,10 +36,7 @@ export default function AppHeader() {
   )
 
   return (
-    <Header
-      className={cx('header')}
-      style={{ background: colorBgContainer, borderBottom: `1px solid ${colorBorderSecondary}` }}
-    >
+    <Header className={cx('header')} style={{ borderBottom: `1px solid ${colorBorderSecondary}` }}>
       <div className={cx('logo')}>
         <img
           alt='logo'

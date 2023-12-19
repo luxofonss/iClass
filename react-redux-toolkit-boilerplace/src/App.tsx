@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import appRoutes from './routes/appRoutes'
 import authRoutes from './routes/authRoutes'
+import { Toaster } from 'react-hot-toast'
 
 const App: FC = () => {
   // const role = null
@@ -19,7 +20,8 @@ const App: FC = () => {
       theme={{
         token: {
           fontFamily: 'Roboto, sans-serif',
-          fontSize: 14
+          fontSize: 14,
+          colorPrimary: '#FC77A0'
         },
         components: {
           Divider: {
@@ -34,6 +36,7 @@ const App: FC = () => {
         }
       }}
     >
+      <Toaster />
       <RouterProvider router={router} />
     </ConfigProvider>
   )

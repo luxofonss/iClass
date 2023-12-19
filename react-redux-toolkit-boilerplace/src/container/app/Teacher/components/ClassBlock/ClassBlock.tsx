@@ -1,12 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames/bind'
 
+import { CourseViewSchema } from '@shared/schema/course.schema'
 import { Divider, Rate, Tag, Typography } from 'antd'
 import { BookCopy } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import styles from './ClassBlock.module.scss'
 const cx = classNames.bind(styles)
 
-export default function ClassBlock() {
+interface IClassBlockProps {
+  data: CourseViewSchema
+}
+
+export default function ClassBlock({ data }: IClassBlockProps) {
   return (
     <div className={cx('class-block')}>
       <div className={cx('thumbnail')}>
@@ -15,13 +21,15 @@ export default function ClassBlock() {
       <Divider />
       <div className={cx('info')}>
         <div className={cx('tags')}>
-          <Tag color='lime'>English</Tag>
-          <Tag color='cyan'>Advanced</Tag>
-          <Tag color='geekblue'>Mrs.Test</Tag>
+          <Tag color='lime'>{data?.subject?.name}</Tag>
+          <Tag color='cyan'>{data?.level}</Tag>
+          <Tag color='geekblue'>{data?.teacher?.last_name + ' ' + data?.teacher?.first_name}</Tag>
         </div>
-        <Typography.Title level={5} className={cx('name')}>
-          Khóa học tiếng anh trung hoc cơ bản lớp 10
-        </Typography.Title>
+        <Link to={`/classroom/${data?.id}/home`}>
+          <Typography.Title level={5} className={cx('name')}>
+            {data?.name}
+          </Typography.Title>
+        </Link>
         <div className={cx('info')}>
           <div className={cx('item')}>
             <div className={cx('label')}>
@@ -32,10 +40,10 @@ export default function ClassBlock() {
           <div className={cx('item')}>
             <div className={cx('price')}>
               <Typography.Text className={cx('new')} strong>
-                $199
+                {data?.price}
               </Typography.Text>
               <Typography.Text className={cx('old')} delete>
-                $249
+                {data?.price}
               </Typography.Text>
             </div>
             <div className={cx('nums-lecture')}>

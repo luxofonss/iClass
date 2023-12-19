@@ -1,5 +1,6 @@
 import AuthLayout from '@components/layouts/AuthLayout'
 import SignIn from '@container/authentication/SignIn'
+import SignUp from '@container/authentication/SignUp'
 import NotFound from '@container/common/NotFound'
 import ServerError from '@container/common/ServerError'
 import { Navigate } from 'react-router-dom'
@@ -15,6 +16,10 @@ const authRoutes: RouteObject[] = [
       {
         path: '/sign-in',
         element: <SignIn />
+      },
+      {
+        path: '/sign-up',
+        element: <SignUp />
       },
       {
         path: '/404',

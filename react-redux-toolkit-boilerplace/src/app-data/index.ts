@@ -1,18 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import counterReducer from './slices/counterSlice'
-import authReducer from './slices/authSlice'
-import storage from 'redux-persist/lib/storage'
 import persistReducer from 'redux-persist/es/persistReducer'
+import storage from 'redux-persist/lib/storage'
+import authReducer from './slices/authSlice'
+import counterReducer from './slices/counterSlice'
 
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
+import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import persistStore from 'redux-persist/es/persistStore'
+import { authApi } from './service/auth.service'
+import { courseApi } from './service/course.service'
+import { uploadApi } from './service/upload.service'
 
 const allReducers = combineReducers({
   counter: counterReducer,
-  auth: authReducer
+  auth: authReducer,
+  [authApi.reducerPath]: authApi.reducer,
+  [courseApi.reducerPath]: courseApi.reducer,
+  [uploadApi.reducerPath]: uploadApi.reducer
 })
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,6 +54,9 @@ export function configureAppStore(preloadedState: any) {
         immutableCheck: { warnAfter: 128 }
       }).concat([
         // loggerMiddleware,
+        authApi.middleware,
+        courseApi.middleware,
+        uploadApi.middleware
       ]),
     reducer: persistedReducer,
     preloadedState,

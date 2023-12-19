@@ -30,6 +30,10 @@
   }
 }
 
+@mixin white-shadow {
+  box-shadow: 0 0 6px 0 hsl(0, 0%, 83%);
+}
+
 @mixin mobile {
   @media (max-width: #{$sm - 1px}) {
     @content;

@@ -10,7 +10,6 @@ const cx = classNames.bind(styles)
 function AuthLayout() {
   return (
     <div className={cx('flex-center', 'auth-layout')} style={{ backgroundImage: `url(${auth_background})` }}>
-      <h1>AuthLayout</h1>
       <Outlet />
     </div>
   )

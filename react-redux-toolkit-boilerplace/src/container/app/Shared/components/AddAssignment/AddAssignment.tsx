@@ -110,6 +110,11 @@ export default function AddAssignment() {
                 </Form.Item>
               </Col>
             )}
+            <Col span={6}>
+              <Form.Item name='scope' label='Scope'>
+                <Select onChange={onTimeTypeChange} options={TIME_OPTIONS} />
+              </Form.Item>
+            </Col>
           </Row>
         </div>
         <div className={cx('questions')}>

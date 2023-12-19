@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames/bind'
 
-import { Button, Col, Row } from 'antd'
+import SectionBlock from '@components/SectionBlock'
+import ModalEditAddSection from '@container/app/Teacher/components/ModalEditAddSection'
+import { Collapse } from 'antd'
 import LectureBlock from '../../components/LectureBlock'
 import styles from './Lectures.module.scss'
 const cx = classNames.bind(styles)
@@ -9,29 +11,18 @@ const cx = classNames.bind(styles)
 export default function Lectures() {
   return (
     <div className={cx('lectures')}>
-      <div>
-        <Button type='primary'>New lecture</Button>
-      </div>
-      <Row gutter={[24, 24]}>
-        <Col span={6}>
+      <ModalEditAddSection />
+      <Collapse defaultActiveKey={['1']}>
+        <Collapse.Panel header={<SectionBlock />} key='1'>
           <LectureBlock />
-        </Col>
-        <Col span={6}>
           <LectureBlock />
-        </Col>
-        <Col span={6}>
           <LectureBlock />
-        </Col>
-        <Col span={6}>
           <LectureBlock />
-        </Col>
-        <Col span={6}>
+        </Collapse.Panel>
+        <Collapse.Panel header={<SectionBlock />} key='1'>
           <LectureBlock />
-        </Col>
-        <Col span={6}>
-          <LectureBlock />
-        </Col>
-      </Row>
+        </Collapse.Panel>
+      </Collapse>
     </div>
   )
 }

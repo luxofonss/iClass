@@ -10,7 +10,7 @@ import styles from './ModalUploadImage.module.scss'
 const cx = classNames.bind(styles)
 
 interface IModalUploadImageProps {
-  handleOk: (url: string) => void
+  handleOk: (url: UploadFile<unknown>[]) => void
 }
 
 const ModalUploadImage = forwardRef((props: IModalUploadImageProps, ref) => {
@@ -18,6 +18,8 @@ const ModalUploadImage = forwardRef((props: IModalUploadImageProps, ref) => {
   const { openModal, closeModal, visible } = useModal()
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [src, setSrc] = useState<string>('')
+
+  console.log('src:: ', src)
 
   const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setFileList(newFileList)
@@ -52,21 +54,15 @@ const ModalUploadImage = forwardRef((props: IModalUploadImageProps, ref) => {
         open={visible}
         title='Upload image'
         onOk={() => {
-          if (src !== '') {
-            handleOk(src)
+          if (fileList.length > 0) {
+            handleOk(fileList)
             closeModal()
           }
         }}
         onCancel={closeModal}
       >
         <ImgCrop rotationSlider>
-          <Upload
-            action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
-            listType='picture-card'
-            fileList={fileList}
-            onChange={onChange}
-            onPreview={onPreview}
-          >
+          <Upload listType='picture-card' fileList={fileList} onChange={onChange} onPreview={onPreview}>
             {fileList.length < 1 && '+ Upload'}
           </Upload>
         </ImgCrop>

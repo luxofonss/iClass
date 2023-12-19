@@ -11,6 +11,9 @@ const Dotenv = require('dotenv-webpack')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const webpack = require('webpack')
 
+const env = require('dotenv').config({ path: `./.env` })
+const mode = env.parsed.NODE_ENV
+
 // Cái dòng này giúp Editor gợi ý được các giá trị cho dòng code config ngay phía dưới nó
 // (giống như đang dùng Typescript vậy đó 😉)
 /** @type {(env: any, arg: {mode: string}) => import('webpack').Configuration} **/
@@ -109,7 +112,9 @@ module.exports = (env, argv) => {
         filename: isProduction ? 'static/css/[name].[contenthash:6].css' : '[name].css'
       }),
       // Dùng biến môi trường env trong dự án
-      new Dotenv(),
+      new Dotenv({
+        path: `./.env.${mode}`
+      }),
       // Copy mọi files trong folder public trừ file index.html
       new CopyWebpackPlugin({
         patterns: [
