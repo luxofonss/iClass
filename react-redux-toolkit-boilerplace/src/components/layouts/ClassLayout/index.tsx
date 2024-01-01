@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Content } from 'antd/es/layout/layout'
 import { Outlet, useParams } from 'react-router-dom'
 

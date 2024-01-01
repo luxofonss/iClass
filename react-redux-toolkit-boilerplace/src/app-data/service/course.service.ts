@@ -47,6 +47,15 @@ export const courseApi = createApi({
           credentials: 'include'
         }
       }
+    }),
+    getAllSectionInCourse: build.query<any, { id: string }>({
+      query: ({ id }) => {
+        return {
+          url: `/courses/${id}/sections`,
+          method: 'GET',
+          credentials: 'include'
+        }
+      }
     })
   })
 })

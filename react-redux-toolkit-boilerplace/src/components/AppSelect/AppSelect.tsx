@@ -38,12 +38,10 @@ export default function AppSelect(props: IAppSelectProps) {
       value={value}
       onChange={(value) => {
         if (value && value.length && value.includes('all')) {
-          console.log('in')
           if (value.length === data.length + 1) {
             onChange?.([])
           }
           const values = data.map((item: any) => item[valueField])
-          console.log('values:: ', values)
           onChange?.(values)
         } else {
           onChange?.(value)
@@ -67,7 +65,6 @@ export default function AppSelect(props: IAppSelectProps) {
                   type='dashed'
                   style={{ margin: '0 auto' }}
                   onClick={() => {
-                    console.log('getting apps')
                     getData()
                   }}
                 >

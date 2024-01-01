@@ -17,7 +17,6 @@ import Strike from '@tiptap/extension-strike'
 import Text from '@tiptap/extension-text'
 import TextStyle from '@tiptap/extension-text-style'
 import Underline from '@tiptap/extension-underline'
-import type { JSONContent } from '@tiptap/react'
 import { BubbleMenu, Editor, EditorContent, useEditor } from '@tiptap/react'
 import useOutsideClick from '../../hooks/useClickOutside'
 import * as Icons from './Icons'
@@ -30,10 +29,12 @@ const cx = classNames.bind(styles)
 
 interface ISimpleEditor {
   placeholder?: string
-  onValueChange: (value: JSONContent) => void
+  onValueChange: (value: string) => void
+  value?: string
+  onChange?: (value: string) => void
 }
 
-export function SimpleEditor({ placeholder, onValueChange }: ISimpleEditor) {
+export function SimpleEditor({ value, onChange, placeholder, onValueChange }: ISimpleEditor) {
   const editor = useEditor({
     extensions: [
       Document,
@@ -65,7 +66,7 @@ export function SimpleEditor({ placeholder, onValueChange }: ISimpleEditor) {
       Code
     ],
     onUpdate({ editor }) {
-      onValueChange(editor.getJSON())
+      onValueChange(editor.getHTML())
     }
   }) as Editor
   const [modalIsOpen, setIsModalOpen] = useState(false)
@@ -81,7 +82,6 @@ export function SimpleEditor({ placeholder, onValueChange }: ISimpleEditor) {
   })
 
   const openModal = useCallback(() => {
-    console.log(editor.chain().focus())
     setUrl(editor.getAttributes('link').href)
     setIsModalOpen(true)
   }, [editor])

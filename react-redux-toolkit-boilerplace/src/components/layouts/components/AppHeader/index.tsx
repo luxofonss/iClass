@@ -69,7 +69,7 @@ export default function AppHeader() {
 
         <div className={cx('info')}>
           <Typography.Text className={cx('name')}>Nguyen Van A</Typography.Text>
-          <Typography.Text className={cx('position')}>CEO</Typography.Text>
+          <Typography.Text className={cx('position')}>Teacher</Typography.Text>
         </div>
       </div>
       {/* )} */}

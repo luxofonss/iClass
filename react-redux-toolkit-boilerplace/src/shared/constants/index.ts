@@ -33,21 +33,28 @@ export const COLOR = {
   }
 }
 
+export const QUESTION_TYPE_ENUM = {
+  SINGLE_CHOICE: 'single_choice',
+  MULTI_CHOICE: 'multi_choice',
+  SHORT_ANSWER: 'short_answer',
+  LONG_ANSWER: 'long_answer'
+}
+
 export const QUESTION_TYPE = [
   {
-    value: 'single-choice',
+    value: QUESTION_TYPE_ENUM.SINGLE_CHOICE,
     label: 'Single choice'
   },
   {
-    value: 'multi-choice',
+    value: QUESTION_TYPE_ENUM.MULTI_CHOICE,
     label: 'Multi choice'
   },
   {
-    value: 'short-answer',
+    value: QUESTION_TYPE_ENUM.SHORT_ANSWER,
     label: 'Short answer'
   },
   {
-    value: 'long-answer',
+    value: QUESTION_TYPE_ENUM.LONG_ANSWER,
     label: 'Long answer'
   }
 ]
@@ -111,3 +118,48 @@ export const COURSE_LEVEL_OPS = [
     value: 'Proficiency'
   }
 ]
+
+export const ASSIGNMENT_TYPE = {
+  MID: {
+    value: 'mid',
+    label: 'Middle exam'
+  },
+  FINAL: {
+    value: 'final',
+    label: 'Final exam'
+  },
+  HOME_WORK: {
+    value: 'home-work',
+    label: 'Home work'
+  },
+  OTHER: {
+    value: 'other',
+    label: 'Other'
+  }
+}
+
+export const ASSIGNMENT_ATTEMPT_TYPE = {
+  SINGLE: {
+    value: false,
+    label: 'Single attempt'
+  },
+  MULTIPLE: {
+    value: true,
+    label: 'Multiple attempt'
+  }
+}
+
+export const QUESTION_LEVEL = {
+  EASY: {
+    value: 'easy',
+    label: 'Easy'
+  },
+  MEDIUM: {
+    value: 'medium',
+    label: 'Medium'
+  },
+  HARD: {
+    value: 'hard',
+    label: 'Hard'
+  }
+}

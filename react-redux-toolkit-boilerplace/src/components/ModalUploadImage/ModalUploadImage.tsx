@@ -20,13 +20,11 @@ const ModalUploadImage = forwardRef((props: IModalUploadImageProps, ref) => {
   const [src, setSrc] = useState<string>('')
 
   console.log('src:: ', src)
-
   const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setFileList(newFileList)
   }
 
   const onPreview = async (file: UploadFile) => {
-    console.log('file:: ', file)
     let src = file.url as string
     if (!src) {
       src = await new Promise((resolve) => {

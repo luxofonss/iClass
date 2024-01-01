@@ -9,6 +9,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
 import persistStore from 'redux-persist/es/persistStore'
+import { assignmentApi } from './service/assignment.service'
 import { authApi } from './service/auth.service'
 import { courseApi } from './service/course.service'
 import { uploadApi } from './service/upload.service'
@@ -18,7 +19,8 @@ const allReducers = combineReducers({
   auth: authReducer,
   [authApi.reducerPath]: authApi.reducer,
   [courseApi.reducerPath]: courseApi.reducer,
-  [uploadApi.reducerPath]: uploadApi.reducer
+  [uploadApi.reducerPath]: uploadApi.reducer,
+  [assignmentApi.reducerPath]: assignmentApi.reducer
 })
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,7 +58,8 @@ export function configureAppStore(preloadedState: any) {
         // loggerMiddleware,
         authApi.middleware,
         courseApi.middleware,
-        uploadApi.middleware
+        uploadApi.middleware,
+        assignmentApi.middleware
       ]),
     reducer: persistedReducer,
     preloadedState,

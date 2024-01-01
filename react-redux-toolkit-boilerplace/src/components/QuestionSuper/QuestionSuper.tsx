@@ -10,7 +10,6 @@ import { QuestionField } from '../../types/question'
 const cx = classNames.bind(styles)
 
 export default function QuestionSuper(props: { field: QuestionField }) {
-  console.log('field:: ', props.field)
   return (
     <div className={cx('question-super')}>
       <div className={cx('heading')}>

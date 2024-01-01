@@ -1,5 +1,5 @@
 import QuestionAnswer from '@components/QuestionAnswer'
-import { QUESTION_TYPE } from '@shared/constants'
+import { QUESTION_TYPE, QUESTION_TYPE_ENUM } from '@shared/constants'
 import { Button, Form, Input, Select } from 'antd'
 import classNames from 'classnames/bind'
 import { Trash } from 'lucide-react'
@@ -20,7 +20,7 @@ interface ISubQuestion {
 }
 
 export default function SubQuestion({ field, action, questionKey }: ISubQuestion) {
-  const [type, setType] = useState<string>('single-choice')
+  const [type, setType] = useState<string>(QUESTION_TYPE_ENUM.SINGLE_CHOICE)
 
   const onSelectType = (value: string) => {
     setType(value)
@@ -33,8 +33,13 @@ export default function SubQuestion({ field, action, questionKey }: ISubQuestion
         <Form.Item className={cx('title')} name={[field.name, 'title']} label={`Question ${field.key + 1}:`}>
           <TextArea rows={2} placeholder='Enter question' />
         </Form.Item>
-        <Form.Item name={[field.name, 'type']} initialValue={'single-choice'}>
-          <Select className={cx('type')} defaultValue='single-choice' options={QUESTION_TYPE} onSelect={onSelectType} />
+        <Form.Item name={[field.name, 'type']} initialValue={QUESTION_TYPE_ENUM.SINGLE_CHOICE}>
+          <Select
+            className={cx('type')}
+            defaultValue={QUESTION_TYPE_ENUM.SINGLE_CHOICE}
+            options={QUESTION_TYPE}
+            onSelect={onSelectType}
+          />
         </Form.Item>
         <Button
           icon={<Trash size={14} />}

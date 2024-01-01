@@ -6,7 +6,7 @@ import styles from './Question.module.scss'
 import QuestionAnswer from '@components/QuestionAnswer'
 import { TypeQuestion } from '@components/QuestionTypeIcon/QuestionTypeIcon'
 import { SimpleEditor } from '@components/Tiptap'
-import { QUESTION_TYPE } from '@shared/constants'
+import { QUESTION_LEVEL, QUESTION_TYPE, QUESTION_TYPE_ENUM } from '@shared/constants'
 
 import { Trash } from 'lucide-react'
 import { QuestionField } from '../../types/question'
@@ -19,7 +19,7 @@ interface IQuestion {
 }
 
 export default function Question({ field, dragHandler }: IQuestion) {
-  const [type, setType] = useState<TypeQuestion>('single-choice')
+  const [type, setType] = useState<string>(QUESTION_TYPE_ENUM.SINGLE_CHOICE)
 
   const form = Form.useFormInstance()
 
@@ -36,16 +36,25 @@ export default function Question({ field, dragHandler }: IQuestion) {
           <Tag className={cx('title')} color='green'>
             Question {field.key + 1}
           </Tag>
-          <Form.Item style={{ margin: 0 }} name={[field.name, field.key, 'type']} initialValue={'single-choice'}>
+          <Form.Item
+            initialValue={QUESTION_TYPE_ENUM.SINGLE_CHOICE}
+            style={{ margin: 0 }}
+            name={[field.name, field.key, 'type']}
+          >
             <Select
               className={cx('type')}
-              defaultValue='single-choice'
               options={QUESTION_TYPE}
               onSelect={(value) => onSelectType(value as TypeQuestion)}
             />
           </Form.Item>
+          <Form.Item name={[field.name, field.key, 'level']}>
+            <Select options={Object.values(QUESTION_LEVEL)} placeholder='Level' />
+          </Form.Item>
           <Form.Item name={[field.name, field.key, 'point']}>
             <Input type='number' placeholder="Enter question's point " addonAfter='Point' />
+          </Form.Item>
+          <Form.Item hidden name='order' initialValue={field.key}>
+            <Input />
           </Form.Item>
         </div>
         <Button
@@ -60,7 +69,7 @@ export default function Question({ field, dragHandler }: IQuestion) {
       <Form.Item name={[field.name, field.key, 'title']}>
         <SimpleEditor
           onValueChange={(value) => {
-            form.setFieldValue('title', value)
+            form.setFieldValue([field.name, field.key, 'title'], value)
           }}
           placeholder='Enter question'
         />
@@ -76,10 +85,10 @@ export default function Question({ field, dragHandler }: IQuestion) {
       <div className={cx('answer')}>
         <QuestionAnswer field={field} type={type} />
       </div>
-      <Form.Item name={[field.name, field.key, 'explain']} label='Explain the answer'>
+      <Form.Item name={[field.name, field.key, 'answer_explain']} label='Explain the answer'>
         <SimpleEditor
           onValueChange={(value) => {
-            form.setFieldValue('explain', value)
+            form.setFieldValue([field.name, field.key, 'answer_explain'], value)
           }}
           placeholder='Explain the answer'
         />

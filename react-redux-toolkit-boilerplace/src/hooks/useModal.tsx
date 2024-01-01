@@ -8,7 +8,6 @@ const useModal = () => {
   }
 
   const closeModal = () => {
-    console.log('close')
     setVisible(false)
   }
 

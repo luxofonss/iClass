@@ -216,7 +216,6 @@ export function EditorWithComment({ placeholder, onValueChange }: ISimpleEditor)
   })
 
   const openModal = useCallback(() => {
-    console.log(editor.chain().focus())
     setUrl(editor.getAttributes('link').href)
     setIsModalOpen(true)
   }, [editor])

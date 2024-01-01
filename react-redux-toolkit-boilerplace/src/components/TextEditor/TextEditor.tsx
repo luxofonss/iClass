@@ -54,18 +54,14 @@ export default function TextEditor({ defaultText, onValueChange }: ITextEditor) 
         data={`<p>${defaultText}!</p>`}
         onReady={(editor) => {
           // You can store the "editor" and use when it is needed.
-          console.log('Editor is ready to use!', editor)
           editor.config.set('toolbar', ['heading', '|', 'bold', 'italic'])
-          console.log(editor.config.get('toolbar'))
           hideToolbar()
         }}
         onChange={(event, editor) => {
           const data = editor.getData()
           onValueChange(data)
-          console.log({ event, editor, data })
         }}
         onFocus={(event, editor) => {
-          console.log('Focus.', editor)
           showToolbar()
         }}
       />

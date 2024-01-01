@@ -105,7 +105,6 @@ export default function NewClass() {
       navigate('/classrooms')
     } catch (error) {
       toast.error('Create course fail!')
-      console.log('error:: ', error)
     }
   }
 

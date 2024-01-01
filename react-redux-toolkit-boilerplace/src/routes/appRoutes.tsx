@@ -35,7 +35,7 @@ const appRoutes: RouteObject[] = [
         element: <Assignments />
       },
       {
-        path: '/classroom/:id/teacher/assignments',
+        path: '/classroom/:classroomId/teacher/assignments',
         element: <Assignments />
       },
       {
