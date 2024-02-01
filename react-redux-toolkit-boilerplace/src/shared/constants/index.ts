@@ -5,8 +5,14 @@ export const HEADER = {
 }
 
 export const ROLE = {
-  USER: 'USER',
-  ADMIN: 'ADMIN'
+  STUDENT: 'STUDENT',
+  TEACHER: 'TEACHER'
+}
+
+export const COURSE_VIEW_MODE = {
+  TEACHER: 'TEACHER',
+  NOT_ENROLLED: 'NOT_ENROLLED',
+  ENROLLED: 'ENROLLED'
 }
 
 export const IMAGE =
@@ -95,29 +101,52 @@ export const QUESTION_INDEX = [
 export const COURSE_LEVEL_OPS = [
   {
     label: 'Beginner',
-    value: 'Beginner'
+    value: 'beginner'
   },
   {
-    label: 'elementary',
+    label: 'Elementary',
     value: 'elementary'
   },
   {
-    label: 'intermediate',
+    label: 'Intermediate',
     value: 'intermediate'
   },
   {
-    label: 'upper-intermediate',
-    value: 'Upper intermediate'
+    label: 'Upper-intermediate',
+    value: 'upper intermediate'
   },
   {
-    label: 'advanced',
-    value: 'Advanced'
+    label: 'Advanced',
+    value: 'advanced'
   },
   {
-    label: 'proficiency',
-    value: 'Proficiency'
+    label: 'Proficiency',
+    value: 'proficiency'
   }
 ]
+
+export const COURSE_INFO_TYPES = {
+  INTEND: {
+    type: 'intend',
+    label: 'Intend'
+  },
+  REQUIREMENT: {
+    type: 'requirement',
+    label: 'Requirement'
+  },
+  WHO: {
+    type: 'who',
+    label: 'Who is this course for?'
+  },
+  WELCOME_MSG: {
+    type: 'welcome_msg',
+    label: 'Welcome message'
+  },
+  CONGRAT_MSG: {
+    type: 'congrat_msg',
+    label: 'Congratulation message'
+  }
+}
 
 export const ASSIGNMENT_TYPE = {
   MID: {

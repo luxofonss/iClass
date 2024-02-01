@@ -18,6 +18,8 @@ export type CourseViewSchema = {
   name: string
   description: string
   background_img: string
+  thumbnail: string | null
+  code: string
   start_date: string
   end_date: string
   price: number
@@ -61,12 +63,14 @@ export type CourseInfoSchema = {
 }
 
 export type SectionSchema = {
+  id?: string
   name: string
   description: string
   lectures: LectureSchema[]
 }
 
 export type LectureSchema = {
+  id?: string
   name: string
   description: string
   video_url: string

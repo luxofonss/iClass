@@ -67,15 +67,34 @@
         @include card-wrapper;
 
         &__section {
+          margin-bottom: 8px;
           .inputs {
             .list-items {
+              margin-top: 12px;
               border: 1px solid #efefef;
               border-radius: 4px;
               padding: 12px;
 
               &__item {
                 display: flex;
+                gap: 12px;
+                align-items: center;
+
+                &__name {
+                  flex: 1;
+                }
               }
+            }
+          }
+
+          &__name {
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            .label {
+              flex: 1;
             }
           }
         }

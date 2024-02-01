@@ -5,7 +5,7 @@ import { courseApi } from '@app-data/service/course.service'
 import { uploadApi } from '@app-data/service/upload.service'
 import AppSelect from '@components/AppSelect'
 import ColorPrefix from '@components/ColorPrefix'
-import { COLOR, COURSE_LEVEL_OPS } from '@shared/constants'
+import { COLOR, COURSE_LEVEL_OPS, COURSE_VIEW_MODE } from '@shared/constants'
 import type { MenuProps } from 'antd'
 import { Button, Col, DatePicker, Divider, Empty, Form, Image, Input, Menu, Row, Select, Typography } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
@@ -13,7 +13,7 @@ import { GitBranch, LucideAppWindow, MessageCircle, School } from 'lucide-react'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import ClassBlock from '../../components/ClassBlock'
+import ClassBlock from '../../../../../components/ClassBlock'
 import styles from './NewClass.module.scss'
 
 const cx = classNames.bind(styles)
@@ -46,9 +46,10 @@ const items: MenuItem[] = [
 export default function NewClass() {
   const [openKeys, setOpenKeys] = useState(['landing-page '])
   const [backgroundUrl, setBackgroundUrl] = useState('')
+  const [thumbnail, setThumbnail] = useState<string | null>(null)
 
   const [getSubjects, { data: subjects, isLoading: isGettingSubjects }] = courseApi.endpoints.getSubjects.useLazyQuery()
-  const [uploadImage, { data: uploadedImage, isLoading: isUploading }] = uploadApi.endpoints.uploadFile.useMutation()
+  const [uploadImage] = uploadApi.endpoints.uploadFile.useMutation()
   const [createCourse, { isLoading: isCreatingCourse }] = courseApi.endpoints.createCourse.useMutation()
 
   const navigate = useNavigate()
@@ -77,6 +78,7 @@ export default function NewClass() {
         name: values.name,
         description: values.description,
         background_img: backgroundUrl,
+        thumbnail: thumbnail,
         start_date: values.start_date,
         end_date: values.end_date,
         price: parseInt(values.price),
@@ -102,14 +104,14 @@ export default function NewClass() {
 
       await createCourse(data).unwrap()
       toast.success('Create course successfully!')
-      navigate('/classrooms')
+      navigate('/courses')
     } catch (error) {
       toast.error('Create course fail!')
     }
   }
 
-  async function handleUploadImage(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target?.files?.length > 0)
+  async function handleUploadImage(e: React.ChangeEvent<HTMLInputElement>, name: string) {
+    if (e.target?.files && e.target?.files?.length > 0)
       try {
         const file = e.target.files[0]
         const formData = new FormData()
@@ -119,7 +121,9 @@ export default function NewClass() {
         await uploadImage(formData)
           .unwrap()
           .then((res: any) => {
-            setBackgroundUrl(res.data.url)
+            if (name === 'thumbnail') {
+              setThumbnail(res.data.ulr)
+            } else if (name === 'background_img') setBackgroundUrl(res.data.url)
           })
       } catch (error) {
         toast.error('Upload image fail, please try again!')
@@ -127,7 +131,8 @@ export default function NewClass() {
       }
   }
 
-  console.log('uploadedImage:: ', uploadedImage, isUploading)
+  const subject = Form.useWatch('subject_id', form)
+  const course_level = Form.useWatch('level', form)
 
   return (
     <div className={cx('new-class')}>
@@ -142,14 +147,21 @@ export default function NewClass() {
               items={items}
             />
             <ClassBlock
+              mode={COURSE_VIEW_MODE.NOT_ENROLLED}
               data={{
+                thumbnail: thumbnail,
                 subject: {
-                  name: form.getFieldValue('subject_id')
+                  id: '123',
+                  name: subject
                 },
-                level: form.getFieldValue('level'),
+                level: course_level
+                  ? COURSE_LEVEL_OPS.filter((level) => {
+                      level.value === course_level
+                    })[0]?.label
+                  : '',
                 teacher: {
-                  last_name: 'Nguyen',
-                  first_name: 'Tuan'
+                  last_name: 'Nguyen Van',
+                  first_name: 'A'
                 },
                 name: form.getFieldValue('name')
               }}
@@ -231,13 +243,33 @@ export default function NewClass() {
                     Upload your course image here. It must meet our course image quality standards to be accepted.
                     Important guidelines: 750x422 pixels; .jpg, .jpeg,. gif, or .png. no text on the image.
                   </Typography.Paragraph>
-                  <Form.Item name='background_img' hidden className={cx('label')} label='Course image'>
+                  <Form.Item name='thumbnail' hidden className={cx('label')} label='Course thumbnail'>
                     <Input />
                   </Form.Item>
-                  <Form.Item className={cx('label')} label='Course image'>
+                  <Form.Item className={cx('label')} label='Course thumbnail'>
                     <Input
                       onChange={(e) => {
-                        handleUploadImage(e)
+                        handleUploadImage(e, 'thumbnail')
+                      }}
+                      type='file'
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>{thumbnail ? <Image src={thumbnail} /> : <Empty />}</Col>
+              </Row>
+              <Row gutter={24}>
+                <Col span={12}>
+                  <Typography.Paragraph className={cx('detail-info')}>
+                    Upload your course image here. It must meet our course image quality standards to be accepted.
+                    Important guidelines: 750x422 pixels; .jpg, .jpeg,. gif, or .png. no text on the image.
+                  </Typography.Paragraph>
+                  <Form.Item name='background_img' hidden className={cx('label')} label='Course background'>
+                    <Input />
+                  </Form.Item>
+                  <Form.Item className={cx('label')} label='Course background'>
+                    <Input
+                      onChange={(e) => {
+                        handleUploadImage(e, 'background_img')
                       }}
                       type='file'
                     />
@@ -373,15 +405,29 @@ export default function NewClass() {
                     <div className={cx('curriculum__section')}>
                       {fields.map((field) => (
                         <div className={cx('inputs')} key={field.key}>
-                          <Form.Item name={[field.name, 'name']} className={cx('label')} label='Section'>
-                            <Input />
-                          </Form.Item>
+                          <Typography.Text strong>Section {field.key + 1}:</Typography.Text>
+                          <div className={cx('curriculum__section__name')}>
+                            <Form.Item noStyle name={[field.name, 'name']} className={cx('label')} label='Section'>
+                              <Input />
+                            </Form.Item>
+                            <Button
+                              onClick={() => {
+                                remove(field.key)
+                              }}
+                            >
+                              Remove
+                            </Button>
+                          </div>
                           <Form.List name={[field.name, 'lectures']} initialValue={['']}>
                             {(fields, { add, remove }) => (
                               <div className={cx('list-items')}>
                                 {fields.map((field) => (
                                   <div className={cx('list-items__item')} key={field.key}>
-                                    <Form.Item name={[field.name, 'name']}>
+                                    <Form.Item
+                                      noStyle
+                                      className={cx('list-items__item__name')}
+                                      name={[field.name, 'name']}
+                                    >
                                       <Input />
                                     </Form.Item>
                                     <Button
@@ -397,20 +443,14 @@ export default function NewClass() {
                                   onClick={() => {
                                     add()
                                   }}
+                                  style={{ marginTop: 12 }}
                                   htmlType='button'
                                 >
-                                  Add item
+                                  Add lecture
                                 </Button>
                               </div>
                             )}
                           </Form.List>
-                          <Button
-                            onClick={() => {
-                              remove(field.key)
-                            }}
-                          >
-                            Remove
-                          </Button>
                         </div>
                       ))}
                       <Button
@@ -418,6 +458,7 @@ export default function NewClass() {
                           add()
                         }}
                         htmlType='button'
+                        style={{ marginTop: 12 }}
                       >
                         Add section
                       </Button>

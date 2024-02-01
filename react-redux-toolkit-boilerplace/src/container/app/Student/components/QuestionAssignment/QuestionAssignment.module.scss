@@ -1,0 +1,10 @@
+@import '@shared/styles/mixins';
+
+.question-assignment {
+  margin-top: 12px;
+
+  .choices {
+    display: flex;
+    flex-direction: column;
+  }
+}

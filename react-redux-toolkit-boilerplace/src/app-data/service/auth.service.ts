@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi } from '@reduxjs/toolkit/query/react'
 import customFetchBase from '@shared/configs/customFetchBase'
-import { LoginSchema } from '@shared/schema/auth.schema'
+import { LoginSchema, RegisterSchema } from '@shared/schema/auth.schema'
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -13,6 +14,31 @@ export const authApi = createApi({
           url: 'http://localhost:8080/v1/auth/login',
           method: 'POST',
           body: body,
+          credentials: 'include',
+          headers: {
+            'content-type': 'application/json'
+          }
+        }
+      }
+    }),
+    register: build.mutation<{ success: boolean; data: RegisterSchema }, any>({
+      query: (body) => {
+        return {
+          url: 'http://localhost:8080/v1/auth/register',
+          method: 'POST',
+          body: body,
+          credentials: 'include',
+          headers: {
+            'content-type': 'application/json'
+          }
+        }
+      }
+    }),
+    getProfile: build.query<any, any>({
+      query: () => {
+        return {
+          url: 'http://localhost:8080/v1/user/profile',
+          method: 'GET',
           credentials: 'include',
           headers: {
             'content-type': 'application/json'

@@ -1,0 +1,16 @@
+@import '@shared/styles/mixins';
+
+.conversation-info {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+
+  .name {
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .time {
+    font-size: 12px;
+  }
+}

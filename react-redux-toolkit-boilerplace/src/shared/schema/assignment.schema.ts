@@ -3,6 +3,21 @@ import { ImageSchema } from './common.schema'
 export type AssignmentCreateSchema = {
   start_time?: string
   end_time?: string
+  time: number
+  type: string
+  placement_id: string
+  multiple_attempts: boolean
+  title: string
+  description: string
+  total_point: number
+  subject_id: string
+  questions: QuestionSchema[]
+}
+
+export type AssignmentViewSchema = {
+  id: string
+  start_time?: string
+  end_time?: string
   type: string
   placement_id: string
   multiple_attempts: boolean

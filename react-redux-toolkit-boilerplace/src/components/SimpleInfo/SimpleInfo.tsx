@@ -2,12 +2,13 @@
 import classNames from 'classnames/bind'
 
 import { Typography } from 'antd'
+import React from 'react'
 import styles from './SimpleInfo.module.scss'
 const cx = classNames.bind(styles)
 
 interface ISimpleInfo {
   label: string
-  value: string
+  value: string | React.ReactNode
 }
 
 export default function SimpleInfo({ value, label }: ISimpleInfo) {

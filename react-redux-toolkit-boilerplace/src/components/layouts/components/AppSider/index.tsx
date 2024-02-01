@@ -2,6 +2,7 @@
 import classNames from 'classnames/bind'
 
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons'
+import { ROLE } from '@shared/constants'
 import { Button, Menu, theme } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import { BookText, Calendar, Folder, GraduationCap } from 'lucide-react'
@@ -10,36 +11,36 @@ import { useNavigate } from 'react-router-dom'
 import styles from './AppSider.module.scss'
 const cx = classNames.bind(styles)
 
-const menuItems = [
-  {
-    key: '/classrooms',
-    icon: <GraduationCap size={24} />,
-    label: 'Classrooms'
-  },
-  {
-    key: '/assignments',
-    icon: <BookText size={24} />,
-    label: 'Assignments'
-  },
-  {
-    key: '/calendar',
-    icon: <Calendar size={24} />,
-    label: 'Calendar'
-  },
-  {
-    key: '/files',
-    icon: <Folder size={24} />,
-    label: 'Files'
-  }
-]
-
-export default function AppSider({ collapsed = false }: { collapsed: boolean }) {
+export default function AppSider({ collapsed = false, mode }: { collapsed: boolean; mode: string }) {
   const [isCollapsed, setIsCollapsed] = useState(collapsed)
   const {
     token: { colorBorderSecondary }
   } = theme.useToken()
 
   const navigate = useNavigate()
+
+  const menuItems = [
+    {
+      key: mode === ROLE.STUDENT ? '/courses' : '/teacher/courses',
+      icon: <GraduationCap size={24} />,
+      label: 'Classrooms'
+    },
+    {
+      key: mode === ROLE.STUDENT ? '/assignments' : '/teacher/assignments',
+      icon: <BookText size={24} />,
+      label: 'Assignments'
+    },
+    {
+      key: '/calendar',
+      icon: <Calendar size={24} />,
+      label: 'Calendar'
+    },
+    mode === ROLE.TEACHER && {
+      key: '/files',
+      icon: <Folder size={24} />,
+      label: 'Files'
+    }
+  ]
 
   return (
     <Sider

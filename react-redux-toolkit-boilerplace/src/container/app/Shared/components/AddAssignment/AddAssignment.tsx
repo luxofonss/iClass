@@ -5,15 +5,15 @@ import { useState } from 'react'
 import { assignmentApi } from '@app-data/service/assignment.service'
 import Question from '@components/Question'
 import QuestionSuper from '@components/QuestionSuper'
-import { SimpleEditor } from '@components/Tiptap'
 import { ASSIGNMENT_ATTEMPT_TYPE, ASSIGNMENT_TYPE, TIME_OPTIONS } from '@shared/constants'
 import { AssignmentCreateSchema, QuestionSchema } from '@shared/schema/assignment.schema'
-import { Button, Col, DatePicker, Form, Row, Select } from 'antd'
+import { Button, Col, DatePicker, Form, Input, Row, Select } from 'antd'
+import TextArea from 'antd/es/input/TextArea'
 import { GripVertical } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 import { SortableContainer, SortableElement, SortableHandle, arrayMove } from 'react-sortable-hoc'
 import styles from './AddAssignment.module.scss'
-import toast from 'react-hot-toast'
 
 const cx = classNames.bind(styles)
 const { RangePicker } = DatePicker
@@ -53,12 +53,12 @@ const SortableList = SortableContainer<ISortableListProps>(({ items }: ISortable
   )
 })
 
-export default function AddAssignment() {
+export default function AddAssignment({ backAllAssignment }: { backAllAssignment: () => void }) {
   const [timeType, setTimeType] = useState<string>('free')
   const [question, setQuestion] = useState<IQuestionType[]>([])
 
   const [form] = Form.useForm()
-  const { classroomId } = useParams()
+  const { id } = useParams()
 
   const [createAssignment] = assignmentApi.endpoints.createAssignment.useMutation()
 
@@ -85,8 +85,9 @@ export default function AddAssignment() {
         start_time: data.start_time,
         end_time: data.end_time,
         type: data.type,
-        placement_id: classroomId ?? '',
+        placement_id: id ?? '',
         multiple_attempts: data.multiple_attempts,
+        time: parseInt(data.time_to_do),
         title: data.title,
         description: data.description,
         total_point: 10,
@@ -112,12 +113,10 @@ export default function AddAssignment() {
           return questionData
         })
       }
-
-      console.log('body:: ', body)
-
       await createAssignment(body).unwrap()
 
       toast.success('Create assignment successfully!')
+      backAllAssignment()
     } catch (error: any) {
       console.log('error:: ', error)
     }
@@ -128,13 +127,13 @@ export default function AddAssignment() {
       <Form layout='vertical' form={form} onFinish={onSubmit}>
         <div className={cx('assignment-info')}>
           <Form.Item style={{ marginBottom: '0px !important' }} className={cx('title')} name={'title'} label='Title'>
-            {/* <Input style={{ fontWeight: 500 }} size='large' placeholder='Enter title' /> */}
-            <SimpleEditor
+            <Input style={{ fontWeight: 500 }} size='large' placeholder='Enter assignment title' />
+            {/* <SimpleEditor
               onValueChange={(value) => {
                 form.setFieldValue('title', value)
               }}
               placeholder='Enter assignment title'
-            />
+            /> */}
           </Form.Item>
           <Form.Item
             style={{ marginBottom: '0px !important' }}
@@ -142,13 +141,13 @@ export default function AddAssignment() {
             name={'description'}
             label='Description'
           >
-            {/* <TextArea placeholder='Enter description' /> */}
-            <SimpleEditor
+            <TextArea placeholder='Enter assignment description' />
+            {/* <SimpleEditor
               onValueChange={(value) => {
                 form.setFieldValue('description', value)
               }}
               placeholder='Enter assignment description'
-            />
+            /> */}
           </Form.Item>
           <Row gutter={24}>
             <Col span={6}>
@@ -157,9 +156,13 @@ export default function AddAssignment() {
               </Form.Item>
             </Col>
 
-            <Col span={12}>
-              <Form.Item hidden={timeType === 'free'} name='custom_time' label='Custom time'>
-                <RangePicker showTime />
+            <Form.Item hidden={timeType === 'free'} name='custom_time' label='Custom time'>
+              <RangePicker showTime />
+            </Form.Item>
+
+            <Col span={6}>
+              <Form.Item name='time_to_do' label='Time to do'>
+                <Input type='number' suffix='minutes' />
               </Form.Item>
             </Col>
 
@@ -186,13 +189,13 @@ export default function AddAssignment() {
           >
             Add question
           </Button>
-          <Button
+          {/* <Button
             onClick={() => {
               setQuestion([...question, 'super-question'])
             }}
           >
             Add super question
-          </Button>
+          </Button> */}
         </div>
         <Button className={cx('btn-submit')} htmlType='submit' type='primary'>
           Submit

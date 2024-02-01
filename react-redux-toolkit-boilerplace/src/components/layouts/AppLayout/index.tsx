@@ -11,12 +11,20 @@ import styles from './AppLayout.module.scss'
 const cx = classNames.bind(styles)
 const { Content } = Layout
 
-const AppLayout = ({ padding = 32, collapsed = true }: { padding?: number; collapsed?: boolean }) => {
+const AppLayout = ({
+  padding = 32,
+  collapsed = true,
+  mode
+}: {
+  padding?: number
+  collapsed?: boolean
+  mode?: string
+}) => {
   return (
     <Layout className={cx('app-layout')}>
       <AppHeader />
       <Layout className={cx('layout-content')}>
-        <AppSider collapsed={collapsed} />
+        <AppSider collapsed={collapsed} mode={mode} />
         <Content
           style={{
             marginLeft: 80,

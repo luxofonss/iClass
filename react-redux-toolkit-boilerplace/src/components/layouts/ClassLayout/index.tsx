@@ -10,7 +10,13 @@ import styles from './ClassLayout.module.scss'
 
 const cx = classNames.bind(styles)
 
-function ClassLayout() {
+interface IClassLayout {
+  readonly mode: string
+}
+
+function ClassLayout(props: IClassLayout) {
+  const { mode } = props
+
   const [getCourse, { data: course }] = courseApi.endpoints.getCourseById.useLazyQuery()
 
   const { id } = useParams()
@@ -21,7 +27,7 @@ function ClassLayout() {
 
   return (
     <div className={cx('class-layout')}>
-      <ClassLayoutSider data={course?.data} siderCollapsed={false} />
+      <ClassLayoutSider mode={mode} data={course?.data} siderCollapsed={false} />
       <Content
         style={{
           padding: 24,

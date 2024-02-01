@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames/bind'
 
-import styles from './ClassSettings.module.scss'
 import { Tabs } from 'antd'
 import ClassSettingMembers from '../../components/ClassSettingMembers'
+import styles from './ClassSettings.module.scss'
 const cx = classNames.bind(styles)
 
 export default function ClassSettings() {

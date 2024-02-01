@@ -1,0 +1,57 @@
+@import '@shared/styles/mixins';
+
+.header {
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 48px;
+  position: sticky;
+  inset: 0;
+  z-index: 1000;
+  background-color: #ffe2eb;
+
+  .logo {
+    @include flex-center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    img {
+      height: 50px;
+    }
+  }
+
+  .search-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .user {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .info {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .name {
+        line-height: normal;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .position {
+        font-size: 14px;
+        line-height: normal;
+        font-style: italic;
+      }
+    }
+  }
+}

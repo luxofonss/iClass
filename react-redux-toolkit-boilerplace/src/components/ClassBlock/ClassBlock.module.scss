@@ -87,4 +87,11 @@
       }
     }
   }
+
+  .footer {
+    padding: 12px;
+    display: flex;
+    justify-content: end;
+    gap: 12px;
+  }
 }

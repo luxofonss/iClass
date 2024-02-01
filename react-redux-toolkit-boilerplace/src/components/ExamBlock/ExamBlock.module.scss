@@ -1,0 +1,31 @@
+@import '@shared/styles/mixins';
+
+.exam-block {
+  box-shadow: rgb(236, 236, 236) 0px 0px 10px 0px;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: rgb(236, 236, 236) 0px 0px 10px 0px;
+    scale: 1.02;
+  }
+
+  .heading {
+    display: flex;
+    gap: 24px;
+
+    .banner {
+      img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .footer {
+    margin-top: 12px;
+    display: flex;
+    justify-content: end;
+    gap: 12px;
+  }
+}

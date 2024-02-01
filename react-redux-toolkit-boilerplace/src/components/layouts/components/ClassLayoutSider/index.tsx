@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from 'classnames/bind'
 
-import { IMAGE } from '@shared/constants'
+import { ROLE } from '@shared/constants'
 import { SimpleCourseView } from '@shared/schema/course.schema'
 import { Divider, Menu, Typography } from 'antd'
 import Sider from 'antd/es/layout/Sider'
@@ -13,45 +13,47 @@ const cx = classNames.bind(styles)
 interface IClassLayoutSiderProps {
   siderCollapsed: boolean
   data: SimpleCourseView
+  mode: string
 }
 
-export default function ClassLayoutSider({ siderCollapsed, data }: IClassLayoutSiderProps) {
+export default function ClassLayoutSider({ siderCollapsed, data, mode }: IClassLayoutSiderProps) {
   const navigate = useNavigate()
 
+  console.log('mode:: ', mode)
   const { id } = useParams()
 
   const menuItems = [
     {
-      key: `/classroom/${id}/home`,
+      key: mode === ROLE.TEACHER ? `/teacher/courses/${id}/home` : `/courses/${id}/home`,
       icon: <GraduationCap size={16} />,
       label: 'Home page'
     },
     {
-      key: `/classroom/${id}/lectures`,
+      key: mode === ROLE.TEACHER ? `/teacher/courses/${id}/lectures` : `/courses/${id}/lectures`,
       icon: <BookCheck size={16} />,
       label: 'Lectures'
     },
     {
-      key: `/classroom/${id}/teacher/assignments`,
+      key: mode === ROLE.TEACHER ? `/teacher/courses/${id}/assignments` : `/courses/${id}/assignments`,
       icon: <BookText size={16} />,
       label: 'Assignments'
     },
     {
-      key: `/classroom/${id}/files`,
+      key: mode === ROLE.TEACHER ? `/teacher/courses/${id}/files` : `/courses/${id}/files`,
       icon: <Folder size={16} />,
       label: 'Files'
     },
-    {
-      key: `/classroom/${id}/settings`,
+    mode === ROLE.TEACHER && {
+      key: `/teacher/courses/${id}/settings`,
       icon: <Settings size={16} />,
-      label: 'Setting'
+      label: 'Settings'
     }
   ]
 
   return (
     <Sider className={cx('sider')} theme='light' trigger={null} collapsible collapsed={siderCollapsed} width={240}>
       <div className={cx('class-info')}>
-        <img className={cx('thumbnail')} src={IMAGE} alt='logo' />
+        <img className={cx('thumbnail')} src={data?.background_img} alt='logo' />
         {!siderCollapsed && (
           <Typography.Title level={4} ellipsis={{ rows: 2, tooltip: data?.name }} className={cx('class-name')}>
             {data?.name}
@@ -68,11 +70,13 @@ export default function ClassLayoutSider({ siderCollapsed, data }: IClassLayoutS
           navigate(e.key)
         }}
       >
-        {menuItems.map((item) => (
-          <Menu.Item style={{ fontSize: 14 }} key={item.key} icon={item.icon}>
-            {item.label}
-          </Menu.Item>
-        ))}
+        {menuItems.map((item) =>
+          item ? (
+            <Menu.Item style={{ fontSize: 14 }} key={item.key} icon={item.icon}>
+              {item.label}
+            </Menu.Item>
+          ) : null
+        )}
       </Menu>
     </Sider>
   )

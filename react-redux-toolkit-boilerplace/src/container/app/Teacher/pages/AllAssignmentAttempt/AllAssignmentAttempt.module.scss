@@ -1,0 +1,9 @@
+@import '@shared/styles/mixins';
+
+.class-setting-member {
+  .options {
+    display: flex;
+    margin-bottom: 12px;
+    gap: 12px;
+  }
+}

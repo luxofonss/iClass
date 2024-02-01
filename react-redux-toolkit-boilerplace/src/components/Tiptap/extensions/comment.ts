@@ -70,8 +70,10 @@ export const Comment = Mark.create<CommentOptions>({
           commands.toggleMark('comment'),
       unsetComment:
         () =>
-        ({ commands }) =>
+        ({ commands }) => {
           commands.unsetMark('comment')
+          commands.unsetColor()
+        }
     }
   },
 
