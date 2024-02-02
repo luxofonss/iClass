@@ -1,35 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import classNames from 'classnames/bind'
-
-import { courseApi } from '@app-data/service/course.service'
-import { Button, Modal, Space, Table, Tag, Typography } from 'antd'
+import { assignmentApi } from '@app-data/service/assignment.service'
+import formatTimeString from '@shared/utils/formatTimeString'
+import { Button, Table } from 'antd'
 import type { ColumnsType, TableProps } from 'antd/es/table'
+import classNames from 'classnames/bind'
 import { useEffect } from 'react'
-import toast from 'react-hot-toast'
-import { useParams } from 'react-router-dom'
-import useModal from '../../../../../hooks/useModal'
+import { Link, useParams } from 'react-router-dom'
 import styles from './AllAssignmentAttempt.module.scss'
 
 const cx = classNames.bind(styles)
 
 interface DataType {
   id: string
-  key: React.Key
-  user_id: string
-  course_id: string
-  price: string
-  student_id: string
-  status: string
+  deleted_at: string | null
   created_at: string
+  updated_at: string
+  user_id: string
+  assignment_id: string
+  assignment_time_millis: number
+  point: number
+  teacher_comment: string
+  finished_at: string
+  assignment: null
+  question_answer: null
   user: {
     id: string
-    deleted_at: string
+    deleted_at: string | null
     created_at: string
     updated_at: string
-    first_name: string
     last_name: string
-    gender: string
+    first_name: string
     dob: string
+    gender: string
   }
 }
 
@@ -38,159 +40,58 @@ const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter,
 }
 
 export default function AllAssignmentAttempt() {
-  const { visible, openModal, closeModal } = useModal()
-  const { id } = useParams()
+  const { assignmentId } = useParams()
 
-  const [getAllEnrolledStudents, { data: enrollments }] = courseApi.endpoints.getAllEnrolledStudents.useLazyQuery()
-  const [deleteEnrollment, { isLoading: isDisabling }] = courseApi.endpoints.deleteCourseEnrollment.useMutation()
-  const [enableEnrollment, { isLoading: isEnabling }] = courseApi.endpoints.enableCourseEnrollment.useMutation()
-  const [getCourse, { data: course }] = courseApi.endpoints.getCourseById.useLazyQuery()
+  const [getAlAssignmentAttemptResults, { data: allAttempts }] =
+    assignmentApi.endpoints.getAlAssignmentAttemptResults.useLazyQuery()
 
   useEffect(() => {
-    if (id) getCourse({ id })
-  }, [])
-
-  useEffect(() => {
-    if (id) getAllEnrolledStudents({ id: id })
-  }, [])
-
-  function getCourseStudentHandler() {
-    if (id) getAllEnrolledStudents({ id: id })
-  }
-  async function handleDeleteEnrollment(id: string) {
-    try {
-      await deleteEnrollment({ id: id }).unwrap()
-      toast.success('Disable user successfully')
-      getCourseStudentHandler()
-    } catch (error) {
-      toast.error('Disable user failed')
-      console.log(error)
+    if (assignmentId) {
+      getAlAssignmentAttemptResults({ assignment_id: assignmentId })
     }
-  }
-
-  async function handleEnableEnrollment(id: string) {
-    try {
-      await enableEnrollment({ id: id }).unwrap()
-      toast.success('Enable user successfully')
-      getCourseStudentHandler()
-    } catch (error) {
-      toast.error('Enable user failed')
-      console.log(error)
-    }
-  }
+  }, [assignmentId])
 
   const columns: ColumnsType<DataType> = [
     {
       title: 'Họ và tên',
-      key: 'fullName',
+      key: 'user',
       render: (_, { user }) => {
         return `${user?.last_name} ${user?.first_name}`
       }
     },
     {
-      title: 'Số báo danh',
-      dataIndex: 'student_id',
-      sorter: {
-        compare: (a, b) => a.student_id.localeCompare(b.student_id),
-        multiple: 3
-      }
+      title: 'Bắt đầu',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (_, { created_at }) => formatTimeString(created_at)
     },
     {
-      title: 'Giới tính',
-      dataIndex: 'gender',
-      sorter: {
-        compare: (a, b) => a.user.gender.localeCompare(b.user.gender),
-        multiple: 3
-      },
-      render: (_, { user }) => {
-        return user?.gender
-      }
+      title: 'Kết thúc',
+      dataIndex: 'finished_at',
+      key: 'finished_at',
+      render: (_, { finished_at }) => formatTimeString(finished_at)
     },
     {
-      title: 'Ngày sinh',
-      dataIndex: 'dob',
-      sorter: {
-        compare: (a, b) => a.user?.dob.localeCompare(b.user?.dob),
-        multiple: 2
-      },
-      render: (_, { user }) => {
-        return user?.dob
-      }
-    },
-    {
-      title: 'Ngày tham gia',
-      dataIndex: 'enrollDate',
-      sorter: {
-        compare: (a, b) => a.created_at.localeCompare(b.created_at),
-        multiple: 2
-      },
-      render: (_, { user }) => {
-        return user?.created_at?.slice(0, 19)
-      }
-    },
-    {
-      title: 'Trạng thái',
-      key: 'status',
-      dataIndex: 'status',
-      render: (_, { status }) => {
-        let color
-        if (status === 'inactive') {
-          color = 'volcano'
-        } else {
-          color = 'green'
-        }
-        return (
-          <Tag color={color} key={status}>
-            {status.toUpperCase()}
-          </Tag>
-        )
-      }
+      title: 'Tổng điểm',
+      dataIndex: 'point',
+      key: 'point'
     },
     {
       title: 'Action',
       key: 'action',
       render: (_, record) => {
-        if (record?.status === 'ACTIVE')
-          return (
-            <Space>
-              <Button
-                loading={isDisabling}
-                onClick={() => {
-                  handleDeleteEnrollment(record?.id)
-                }}
-                danger
-              >
-                Disable
-              </Button>
-            </Space>
-          )
-        else
-          return (
-            <Space>
-              <Button
-                loading={isEnabling}
-                onClick={() => {
-                  handleEnableEnrollment(record?.id)
-                }}
-              >
-                Enable
-              </Button>
-            </Space>
-          )
+        return (
+          <Link to={`/teacher/courses/assignments/${record?.assignment_id}/attempts/${record?.id}`}>
+            <Button type='primary'>Chấm lại</Button>
+          </Link>
+        )
       }
     }
   ]
   return (
     <div className={cx('class-setting-member')}>
-      <div className={cx('options')}>
-        <Button>Add student</Button>
-        <Button onClick={openModal}>Get course code</Button>
-        <Modal title='Get course code' open={visible} onCancel={closeModal} onOk={closeModal}>
-          <Typography.Title level={3}>{course?.data?.code}</Typography.Title>
-        </Modal>
-      </div>
-      {enrollments?.data && (
-        <Table pagination={false} columns={columns} dataSource={enrollments?.data} onChange={onChange} />
+      {allAttempts?.data && (
+        <Table pagination={false} columns={columns} dataSource={allAttempts?.data} onChange={onChange} />
       )}
     </div>
   )

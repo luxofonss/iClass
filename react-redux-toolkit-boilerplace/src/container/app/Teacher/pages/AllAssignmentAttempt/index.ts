@@ -1,1 +1,1 @@
-export { default } from './ClassSettingMembers'
+export { default } from './AllAssignmentAttempt'

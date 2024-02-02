@@ -1,0 +1,12 @@
+@import '@shared/styles/mixins';
+
+.attempt-assignment {
+  background: white;
+  padding: 32px;
+  border-radius: 12px;
+
+  .choices {
+    display: flex;
+    flex-direction: column;
+  }
+}

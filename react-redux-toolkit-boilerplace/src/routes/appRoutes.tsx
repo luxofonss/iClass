@@ -15,9 +15,11 @@ import LectureDetail from '@container/app/Shared/pages/LectureDetail'
 import Lectures from '@container/app/Shared/pages/Lectures'
 import AttemptAssignment from '@container/app/Student/pages/AttemptAssignment'
 import MyEnrolledCourses from '@container/app/Student/pages/MyEnrolledCourses'
+import AllAssignmentAttempt from '@container/app/Teacher/pages/AllAssignmentAttempt'
 import AssignmentDetail from '@container/app/Teacher/pages/AssignmentDetail'
 import ClassSettings from '@container/app/Teacher/pages/ClassSettings'
 import NewClass from '@container/app/Teacher/pages/NewClass'
+import ViewAssignmentAttempt from '@container/app/Teacher/pages/ViewAssignmentAttempt'
 import { ROLE } from '@shared/constants'
 import type { RouteObject } from 'react-router-dom'
 import ProtectedRoutes from './protectedRoutes'
@@ -97,8 +99,12 @@ const appRoutes: RouteObject[] = [
             element: <AssignmentDetail />
           },
           {
-            path: '/teacher/courses/:id/assignments/:assignmentId/attempts',
-            element: <AssignmentDetail />
+            path: '/teacher/courses/assignments/:assignmentId/attempts',
+            element: <AllAssignmentAttempt />
+          },
+          {
+            path: '/teacher/courses/assignments/:assignmentId/attempts/:attemptId',
+            element: <ViewAssignmentAttempt />
           }
         ]
       }

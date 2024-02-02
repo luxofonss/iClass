@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable import/no-named-as-default */
 import classNames from 'classnames/bind'
 import { useCallback, useEffect, useRef, useState } from 'react'
 // => Tiptap packages
+import { assignmentApi } from '@app-data/service/assignment.service'
 import CommentInfo from '@components/CommentInfo'
 import ModalUploadImage from '@components/ModalUploadImage'
 import { Comment } from '@sereneinserenade/tiptap-comment-extension'
@@ -23,6 +25,7 @@ import Underline from '@tiptap/extension-underline'
 import { BubbleMenu, Editor, EditorContent, useEditor } from '@tiptap/react'
 import { Button, Card, Col, Input, Row } from 'antd'
 import { Send } from 'lucide-react'
+import toast from 'react-hot-toast'
 import useOutsideClick from '../../../hooks/useClickOutside'
 import * as Icons from '../Icons'
 import { LinkModal } from '../LinkModal'
@@ -39,13 +42,16 @@ interface IEditorWithCommentSystem {
   defaultValue?: string
   onChange?: (value: string) => void
   comment?: boolean
+  answerId?: string
+  assignmentAttemptId?: string
+  feedbacks?: Comment[]
+  questionId?: string
 }
 
 //COMMENTS
 interface Comment {
   id: string
-  content: string
-  replies: Comment[]
+  message: string
   createdAt: Date
   type: string
 }
@@ -67,18 +73,26 @@ export function EditorWithCommentSystem({
   placeholder,
   defaultValue,
   onValueChange,
-  comment
+  comment,
+  answerId,
+  questionId,
+  assignmentAttemptId,
+  feedbacks
 }: IEditorWithCommentSystem) {
-  const [comments, setComments] = useState<Comment[]>([])
+  const [content, setContent] = useState<string>(value ?? '')
+  const [comments, setComments] = useState<Comment[]>(feedbacks ?? [])
   const [defaultContent, setDefaultContent] = useState<string>(value ?? '')
   const [activeCommentId, setActiveCommentId] = useState<string | null>(null)
 
   const commentsSectionRef = useRef<HTMLDivElement | null>(null)
 
+  const [addFeedbackLongAnswer] = assignmentApi.endpoints.addFeedbackLongAnswer.useMutation()
+  const [feedbackEditAnswerContent] = assignmentApi.endpoints.feedbackEditAnswerContent.useMutation()
+
   const focusCommentWithActiveId = (id: string) => {
     if (!commentsSectionRef.current) return
 
-    const commentInput = commentsSectionRef.current.querySelector<HTMLInputElement>(`input#${id} `)
+    const commentInput = commentsSectionRef.current.querySelector<HTMLInputElement>(`#${id}`)
 
     if (!commentInput) return
 
@@ -92,7 +106,9 @@ export function EditorWithCommentSystem({
   useEffect(() => {
     if (!activeCommentId) return
 
-    focusCommentWithActiveId(activeCommentId)
+    setTimeout(() => {
+      focusCommentWithActiveId(activeCommentId)
+    }, 300)
   }, [activeCommentId])
 
   useEffect(() => {
@@ -102,7 +118,7 @@ export function EditorWithCommentSystem({
 
   const getNewComment = (content: string, type: string): Comment => {
     return {
-      id: `a${crypto.randomUUID()}a`,
+      id: `${crypto.randomUUID()}`,
       content,
       replies: [],
       createdAt: new Date(),
@@ -114,16 +130,59 @@ export function EditorWithCommentSystem({
     setComments(comments.filter((comment) => comment.id !== id))
   }
 
-  const setComment = (type: string) => {
-    const newComment = getNewComment('', type)
+  async function submitFeedback(comment: { id: string; message: string; type: string }) {
+    try {
+      await addFeedbackLongAnswer({
+        assignment_attempt_id: assignmentAttemptId ?? '',
+        answer_id: answerId ?? '',
+        body: {
+          id: comment.id,
+          message: comment.message ?? '',
+          type: comment.type
+        }
+      }).unwrap()
 
-    setComments([...comments, newComment])
+      toast.success('Feedback submitted')
+    } catch (error) {
+      toast.error("Error: Can't submit feedback")
+    }
+  }
 
-    editor?.commands.setComment(newComment.id)
+  const setComment = async (type: string) => {
+    try {
+      const newComment = getNewComment('', type)
 
-    setActiveCommentId(newComment.id)
+      await submitFeedback({ id: newComment.id, message: newComment.message, type: type })
+      // await addFeedbackLongAnswer({
+      //   assignment_attempt_id: assignmentAttemptId ?? '',
+      //   answer_id: answerId,
+      //   body: {
+      //     id: newComment.id,
+      //     message: newComment.message,
+      //     type: type
+      //   }
+      // }).unwrap()
 
-    setTimeout(focusCommentWithActiveId)
+      setComments([...comments, newComment])
+
+      editor?.commands.setComment(newComment.id)
+
+      setActiveCommentId(newComment.id)
+
+      // setTimeout(focusCommentWithActiveId, [300])
+
+      feedbackEditAnswerContent({
+        assignment_attempt_id: assignmentAttemptId ?? '',
+        question_id: questionId ?? '',
+        answer: {
+          id: answerId,
+          selected_option_id: undefined,
+          text_answer: content
+        }
+      }).unwrap()
+    } catch (error) {
+      toast.error("Error: Can't set comment")
+    }
   }
   // endcomments
 
@@ -174,6 +233,7 @@ export function EditorWithCommentSystem({
     onUpdate({ editor }) {
       onValueChange(editor.getHTML())
       onChange?.(editor.getHTML())
+      setContent(editor.getHTML())
     }
   }) as Editor
   const [modalIsOpen, setIsModalOpen] = useState(false)
@@ -188,6 +248,7 @@ export function EditorWithCommentSystem({
     setIsToolbarOpen(false)
   })
 
+  // TOOLBAR HANDLER
   const openModal = useCallback(() => {
     setUrl(editor.getAttributes('link').href)
     setIsModalOpen(true)
@@ -241,9 +302,24 @@ export function EditorWithCommentSystem({
       editor.chain().focus().setImage({ src: url }).run()
     }
   }
+  // END TOOLBAR HANDLER
 
   if (!editor) {
     return null
+  }
+
+  async function handleFeedback(values: any) {
+    try {
+      setActiveCommentId(null)
+      editor.commands.focus()
+      submitFeedback({
+        id: values.id,
+        message: values.message,
+        type: values.type
+      })
+    } catch (error) {
+      console.log('error:: ', error)
+    }
   }
 
   return (
@@ -357,7 +433,7 @@ export function EditorWithCommentSystem({
               <Button
                 onClick={() => {
                   editor.chain().focus().setColor('#a0d911').run()
-                  setComment('good')
+                  setComment('GOOD')
                 }}
                 type='primary'
               >
@@ -367,7 +443,7 @@ export function EditorWithCommentSystem({
                 type='primary'
                 onClick={() => {
                   editor.chain().focus().setColor('#ff4d4f').run()
-                  setComment('bad')
+                  setComment('BAD')
                 }}
                 danger
               >
@@ -401,9 +477,9 @@ export function EditorWithCommentSystem({
                     style={
                       comment.id === activeCommentId
                         ? {}
-                        : comment.type === 'good'
-                          ? { backgroundColor: '#edf0f5', border: '1px solid #a0d911' }
-                          : { backgroundColor: '#edf0f5', border: '1px solid #ff4d4f' }
+                        : comment.type === 'GOOD'
+                        ? { backgroundColor: '#edf0f5', border: '1px solid #a0d911' }
+                        : { backgroundColor: '#edf0f5', border: '1px solid #ff4d4f' }
                     }
                   >
                     <div className='flex items-end gap-2'>
@@ -411,12 +487,12 @@ export function EditorWithCommentSystem({
                     </div>
 
                     <Input
-                      value={comment.content || ''}
+                      defaultValue={comment.message || ''}
                       disabled={comment.id !== activeCommentId}
                       style={comment.id === activeCommentId ? {} : { backgroundColor: '#edf0f5' }}
                       className={cx('comment-input')}
                       id={comment.id}
-                      onInput={(event) => {
+                      onChange={(event) => {
                         const value = (event.target as HTMLInputElement).value
 
                         setComments(
@@ -424,7 +500,7 @@ export function EditorWithCommentSystem({
                             if (comment.id === activeCommentId) {
                               return {
                                 ...comment,
-                                content: value
+                                message: value
                               }
                             }
 
@@ -451,11 +527,14 @@ export function EditorWithCommentSystem({
                         </Button>
                         <Button
                           type='primary'
-                          icon={<Send size={16} />}
                           onClick={() => {
-                            setActiveCommentId(null)
-                            editor.commands.focus()
+                            handleFeedback({
+                              id: comment.id,
+                              message: comment.message,
+                              type: comment.type
+                            })
                           }}
+                          icon={<Send size={16} />}
                         >
                           Send
                         </Button>

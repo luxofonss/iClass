@@ -40,7 +40,7 @@ export default function AssignmentBlockTeacher(props: IAssignmentBlockTeacherPro
 
   async function handleViewAttemptsByAssignment() {
     if (data?.id) {
-      navigate(`/teacher/courses/${data?.course_id}/assignments/${data?.id}/attempts`)
+      navigate(`/teacher/courses/assignments/${data?.id}/attempts`)
     } else {
       toast.error('Something went wrong!')
     }
