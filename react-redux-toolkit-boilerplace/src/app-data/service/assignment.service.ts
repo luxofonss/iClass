@@ -141,6 +141,15 @@ export const assignmentApi = createApi({
           credentials: 'include'
         }
       }
+    }),
+    getAllAssignmentAttemptInCourse: build.query<any, { course_id: string }>({
+      query: (params) => {
+        return {
+          url: `http://localhost:8080/v1/courses/${params.course_id}/assignment-attempts`,
+          method: 'GET',
+          credentials: 'include'
+        }
+      }
     })
   })
 })

@@ -23,7 +23,7 @@ import Text from '@tiptap/extension-text'
 import TextStyle from '@tiptap/extension-text-style'
 import Underline from '@tiptap/extension-underline'
 import { BubbleMenu, Editor, EditorContent, useEditor } from '@tiptap/react'
-import { Button, Card, Col, Input, Row } from 'antd'
+import { Button, Card, Col, Input, Row, Typography } from 'antd'
 import { Send } from 'lucide-react'
 import toast from 'react-hot-toast'
 import useOutsideClick from '../../../hooks/useClickOutside'
@@ -46,6 +46,7 @@ interface IEditorWithCommentSystem {
   assignmentAttemptId?: string
   feedbacks?: Comment[]
   questionId?: string
+  canComment?: boolean
 }
 
 //COMMENTS
@@ -77,7 +78,8 @@ export function EditorWithCommentSystem({
   answerId,
   questionId,
   assignmentAttemptId,
-  feedbacks
+  feedbacks,
+  canComment = false
 }: IEditorWithCommentSystem) {
   const [content, setContent] = useState<string>(value ?? '')
   const [comments, setComments] = useState<Comment[]>(feedbacks ?? [])
@@ -92,7 +94,7 @@ export function EditorWithCommentSystem({
   const focusCommentWithActiveId = (id: string) => {
     if (!commentsSectionRef.current) return
 
-    const commentInput = commentsSectionRef.current.querySelector<HTMLInputElement>(`#${id}`)
+    const commentInput = commentsSectionRef.current.querySelector<HTMLInputElement>(`#f${id}`)
 
     if (!commentInput) return
 
@@ -425,32 +427,34 @@ export function EditorWithCommentSystem({
             </button>
           </BubbleMenu>
 
-          <BubbleMenu className={cx('comment-bubble')} editor={editor}>
-            <div>
-              <strong>Feedback</strong>
-            </div>
-            <div className={cx('comment-btns')}>
-              <Button
-                onClick={() => {
-                  editor.chain().focus().setColor('#a0d911').run()
-                  setComment('GOOD')
-                }}
-                type='primary'
-              >
-                Good
-              </Button>
-              <Button
-                type='primary'
-                onClick={() => {
-                  editor.chain().focus().setColor('#ff4d4f').run()
-                  setComment('BAD')
-                }}
-                danger
-              >
-                Bad
-              </Button>
-            </div>
-          </BubbleMenu>
+          {canComment && (
+            <BubbleMenu className={cx('comment-bubble')} editor={editor}>
+              <div>
+                <strong>Feedback</strong>
+              </div>
+              <div className={cx('comment-btns')}>
+                <Button
+                  onClick={() => {
+                    editor.chain().focus().setColor('#a0d911').run()
+                    setComment('GOOD')
+                  }}
+                  type='primary'
+                >
+                  Good
+                </Button>
+                <Button
+                  type='primary'
+                  onClick={() => {
+                    editor.chain().focus().setColor('#ff4d4f').run()
+                    setComment('BAD')
+                  }}
+                  danger
+                >
+                  Bad
+                </Button>
+              </div>
+            </BubbleMenu>
+          )}
 
           <EditorContent rows={10} height={400} spellCheck={false} className={cx('editor-content')} editor={editor} />
 
@@ -476,46 +480,60 @@ export function EditorWithCommentSystem({
                     key={comment.id}
                     style={
                       comment.id === activeCommentId
-                        ? {}
+                        ? comment.type === 'GOOD'
+                          ? {
+                            backgroundColor: '#edf0f5',
+                            border: '2px solid #a0d911',
+                            boxShadow: '-11px -10px 38px -5px rgba(160,217,17,0.75)'
+                          }
+                          : {
+                            backgroundColor: '#edf0f5',
+                            border: '2px solid #ff4d4f',
+                            boxShadow: '-11px -10px 38px -5px rgba(255,77,79,0.75)'
+                          }
                         : comment.type === 'GOOD'
-                        ? { backgroundColor: '#edf0f5', border: '1px solid #a0d911' }
-                        : { backgroundColor: '#edf0f5', border: '1px solid #ff4d4f' }
+                          ? { backgroundColor: '#edf0f5', border: '1px solid #a0d911' }
+                          : { backgroundColor: '#edf0f5', border: '1px solid #ff4d4f' }
                     }
                   >
                     <div className='flex items-end gap-2'>
                       <CommentInfo />
                     </div>
 
-                    <Input
-                      defaultValue={comment.message || ''}
-                      disabled={comment.id !== activeCommentId}
-                      style={comment.id === activeCommentId ? {} : { backgroundColor: '#edf0f5' }}
-                      className={cx('comment-input')}
-                      id={comment.id}
-                      onChange={(event) => {
-                        const value = (event.target as HTMLInputElement).value
+                    {canComment ? (
+                      <Input
+                        defaultValue={comment.message || ''}
+                        disabled={comment.id !== activeCommentId}
+                        style={comment.id === activeCommentId ? {} : { backgroundColor: '#edf0f5' }}
+                        className={cx('comment-input')}
+                        id={'f' + comment.id}
+                        onChange={(event) => {
+                          const value = (event.target as HTMLInputElement).value
 
-                        setComments(
-                          comments.map((comment) => {
-                            if (comment.id === activeCommentId) {
-                              return {
-                                ...comment,
-                                message: value
+                          setComments(
+                            comments.map((comment) => {
+                              if (comment.id === activeCommentId) {
+                                return {
+                                  ...comment,
+                                  message: value
+                                }
                               }
-                            }
 
-                            return comment
-                          })
-                        )
-                      }}
-                      onKeyDown={(event) => {
-                        if (event.key !== 'Enter') return
+                              return comment
+                            })
+                          )
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key !== 'Enter') return
 
-                        setActiveCommentId(null)
-                      }}
-                    />
+                          setActiveCommentId(null)
+                        }}
+                      />
+                    ) : (
+                      <Typography.Paragraph>{comment?.message || ''}</Typography.Paragraph>
+                    )}
 
-                    {comment.id === activeCommentId && (
+                    {comment.id === activeCommentId && canComment && (
                       <div className={cx('submit-cmt')}>
                         <Button
                           onClick={() => {

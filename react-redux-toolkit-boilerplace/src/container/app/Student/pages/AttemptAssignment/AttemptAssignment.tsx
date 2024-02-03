@@ -71,12 +71,6 @@ export default function AttemptAssignment() {
       {assignmentAttempt?.data?.assignment?.questions?.map((question: any, index: number) => (
         <QuestionAssignment key={index} data={question} order={index} mode='ATTEMPT' />
       ))}
-
-      {/* <EditorWithCommentSystem
-        onValueChange={(v) => {
-          console.log('v:: ', v)
-        }}
-      /> */}
     </div>
   )
 }

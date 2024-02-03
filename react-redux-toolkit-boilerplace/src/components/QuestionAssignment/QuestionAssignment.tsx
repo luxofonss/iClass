@@ -95,7 +95,7 @@ export default function QuestionAssignment({ data, order, mode }: IQuestionAssig
       <Form form={form} onFinish={handleSubmitAnswer}>
         <Typography.Text>
           <strong>Question {order + 1}:</strong>{' '}
-          {mode === 'RESULT' && (
+          {(mode === 'RESULT' || mode === 'TEACHER') && (
             <Tag color={checkAnswer() === 0 ? 'red' : 'green'}>
               {checkAnswer()}/{data?.point}
             </Tag>
@@ -183,7 +183,7 @@ export default function QuestionAssignment({ data, order, mode }: IQuestionAssig
         )}
         {data?.type === 'long_answer' && (
           <Fragment>
-            {mode === 'RESULT' && (
+            {mode === 'TEACHER' && (
               <div>
                 <Form.Item name='score' initialValue={data?.point} normalize={(v) => parseInt(v)}>
                   <Input type='number' />
@@ -215,6 +215,7 @@ export default function QuestionAssignment({ data, order, mode }: IQuestionAssig
                 assignmentAttemptId={attemptId}
                 feedbacks={data?.answer?.length > 0 ? data?.answer[0].feedback : null}
                 questionId={data?.id}
+                canComment={mode === 'TEACHER' ? true : false}
               />
             </Form.Item>
           </Fragment>
@@ -224,7 +225,7 @@ export default function QuestionAssignment({ data, order, mode }: IQuestionAssig
             style={{ backgroundColor: submittedAnswer ? 'green' : 'orange' }}
             htmlType='submit'
             loading={isSubmitting}
-          // type='primary'
+            // type='primary'
           >
             Submit
           </Button>

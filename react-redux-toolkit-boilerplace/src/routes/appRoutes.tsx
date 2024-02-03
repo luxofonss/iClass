@@ -15,6 +15,7 @@ import LectureDetail from '@container/app/Shared/pages/LectureDetail'
 import Lectures from '@container/app/Shared/pages/Lectures'
 import AttemptAssignment from '@container/app/Student/pages/AttemptAssignment'
 import MyEnrolledCourses from '@container/app/Student/pages/MyEnrolledCourses'
+import StudentAssignments from '@container/app/Student/pages/StudentAssignments'
 import AllAssignmentAttempt from '@container/app/Teacher/pages/AllAssignmentAttempt'
 import AssignmentDetail from '@container/app/Teacher/pages/AssignmentDetail'
 import ClassSettings from '@container/app/Teacher/pages/ClassSettings'
@@ -104,7 +105,7 @@ const appRoutes: RouteObject[] = [
           },
           {
             path: '/teacher/courses/assignments/:assignmentId/attempts/:attemptId',
-            element: <ViewAssignmentAttempt />
+            element: <ViewAssignmentAttempt mode='TEACHER' />
           }
         ]
       }
@@ -142,7 +143,7 @@ const appRoutes: RouteObject[] = [
           },
           {
             path: '/courses/:id/assignments',
-            element: <Assignments mode={ROLE.STUDENT} />
+            element: <StudentAssignments mode={ROLE.STUDENT} />
           }
         ]
       }
@@ -167,12 +168,16 @@ const appRoutes: RouteObject[] = [
     ]
   },
   {
-    path: '/course',
+    path: '/courses',
     element: <AppLayout mode={ROLE.STUDENT} />,
     children: [
       {
-        path: '/course/assignments/:id/:attemptId',
+        path: '/courses/assignments/:id/:attemptId',
         element: <AttemptAssignment />
+      },
+      {
+        path: '/courses/:id/assignments/attempt-review/:attemptId',
+        element: <ViewAssignmentAttempt mode='RESULT' />
       }
     ]
   }

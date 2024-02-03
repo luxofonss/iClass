@@ -28,7 +28,7 @@ export default function Classrooms(props: IClassRoomsProps) {
   return (
     <div className={cx('classrooms')}>
       <div className={cx('add-btn')}>
-        <Link className={cx('link')} to='/courses/new'>
+        <Link className={cx('link')} to='/teacher/courses/new'>
           <Plus />
           <Typography.Text strong>New class</Typography.Text>
         </Link>

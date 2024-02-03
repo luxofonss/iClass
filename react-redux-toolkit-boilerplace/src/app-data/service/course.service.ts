@@ -131,6 +131,16 @@ export const courseApi = createApi({
           }
         }
       }
+    }),
+    addStudentToCourse: build.mutation<any, { id: string; body: { emails: string } }>({
+      query: (body) => {
+        return {
+          url: `/courses/${body.id}/enrolls/add-many`,
+          method: 'POST',
+          credentials: 'include',
+          body: body.body
+        }
+      }
     })
   })
 })

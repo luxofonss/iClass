@@ -51,7 +51,7 @@ export default function AssignmentBlockTeacher(props: IAssignmentBlockTeacherPro
       <div className={cx('heading')}>
         {/* <Link
           to={
-            mode === ROLE.STUDENT ? `/course/assignments/${data?.id}` : `/teacher/courses/${id}/assignments/${data?.id}`
+            mode === ROLE.STUDENT ? `/courses/assignments/${data?.id}` : `/teacher/courses/${id}/assignments/${data?.id}`
           }
         > */}
         <Typography.Title level={4} className={cx('title')}>

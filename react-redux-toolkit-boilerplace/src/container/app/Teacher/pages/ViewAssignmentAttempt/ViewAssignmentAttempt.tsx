@@ -10,22 +10,19 @@ import styles from './ViewAssignmentAttempt.module.scss'
 
 const cx = classNames.bind(styles)
 
-export default function ViewAssignmentAttempt() {
+export default function ViewAssignmentAttempt({ mode }: { mode: string }) {
   const [getAssignmentAttemptDetail, { data: assignmentAttempt }] =
     assignmentApi.endpoints.getAssignmentAttemptDetail.useLazyQuery()
   const { attemptId } = useParams()
 
   useEffect(() => {
     if (attemptId) {
-      console.log('attemptId:: ', attemptId)
       getAssignmentAttemptDetail({ assignment_attempt_id: attemptId })
     }
   }, [attemptId])
 
-  console.log('assignmentAttempt:: ', assignmentAttempt?.data?.assignment_time_millis)
-
   return (
-    <div className={cx('attempt-assignment', 'container')}>
+    <div className={cx('attempt-assignment')}>
       <Typography.Title level={3}>{assignmentAttempt?.data?.assignment?.title}</Typography.Title>
       <Typography.Paragraph>{assignmentAttempt?.data?.assignment?.description}</Typography.Paragraph>
 
@@ -35,14 +32,8 @@ export default function ViewAssignmentAttempt() {
       <Divider />
 
       {assignmentAttempt?.data?.assignment?.questions?.map((question: any, index: number) => (
-        <QuestionAssignment key={index} data={question} order={index} mode='RESULT' />
+        <QuestionAssignment key={index} data={question} order={index} mode={mode} />
       ))}
-
-      {/* <EditorWithCommentSystem
-        onValueChange={(v) => {
-          console.log('v:: ', v)
-        }}
-      /> */}
     </div>
   )
 }

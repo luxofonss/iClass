@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 import useModal from '../../../../../hooks/useModal'
+import ModalAddUserToCourses from '../ModalAddUserToCourses'
 import styles from './ClassSettingMembers.module.scss'
 
 const cx = classNames.bind(styles)
@@ -30,6 +31,7 @@ interface DataType {
     last_name: string
     gender: string
     dob: string
+    email: string
   }
 }
 
@@ -85,6 +87,13 @@ export default function ClassSettingMembers() {
       key: 'fullName',
       render: (_, { user }) => {
         return `${user?.last_name} ${user?.first_name}`
+      }
+    },
+    {
+      title: 'Email',
+      key: 'email',
+      render: (_, { user }) => {
+        return `${user?.email}`
       }
     },
     {
@@ -183,7 +192,7 @@ export default function ClassSettingMembers() {
   return (
     <div className={cx('class-setting-member')}>
       <div className={cx('options')}>
-        <Button>Add student</Button>
+        <ModalAddUserToCourses />
         <Button onClick={openModal}>Get course code</Button>
         <Modal title='Get course code' open={visible} onCancel={closeModal} onOk={closeModal}>
           <Typography.Title level={3}>{course?.data?.code}</Typography.Title>
