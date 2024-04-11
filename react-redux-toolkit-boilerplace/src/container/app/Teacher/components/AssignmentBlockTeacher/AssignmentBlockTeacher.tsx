@@ -8,7 +8,7 @@ import { AssignmentViewSchema } from '@shared/schema/assignment.schema'
 import { Button, Col, Divider, Row, Tag, Typography } from 'antd'
 import { Fragment } from 'react'
 import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import styles from './AssignmentBlockTeacher.module.scss'
 const cx = classNames.bind(styles)
 
@@ -21,6 +21,7 @@ export default function AssignmentBlockTeacher(props: IAssignmentBlockTeacherPro
   const { data, mode } = props
 
   const navigate = useNavigate()
+  const { id: courseId } = useParams()
 
   const [attemptAssignment] = assignmentApi.endpoints.attemptAssignment.useMutation()
 
@@ -29,7 +30,7 @@ export default function AssignmentBlockTeacher(props: IAssignmentBlockTeacherPro
       try {
         const response = await attemptAssignment({ assignment_id: data?.id }).unwrap()
         console.log('response:: ', response)
-        navigate(`/course/assignments/${data?.id}/${response?.data?.id}`)
+        navigate(`/courses/assignments/${data?.id}/${response?.data?.id}`)
       } catch (error: any) {
         toast.error(error?.data?.message || 'Something went wrong!')
       }
@@ -40,7 +41,7 @@ export default function AssignmentBlockTeacher(props: IAssignmentBlockTeacherPro
 
   async function handleViewAttemptsByAssignment() {
     if (data?.id) {
-      navigate(`/teacher/courses/assignments/${data?.id}/attempts`)
+      navigate(`/teacher/courses/${courseId}/assignments/${data?.id}/attempts`)
     } else {
       toast.error('Something went wrong!')
     }

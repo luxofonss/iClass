@@ -28,7 +28,7 @@ const JoinCourseModel: React.FC = () => {
       closeModal()
     } catch (error: any) {
       console.log('error:: ', error)
-      toast.error(error?.data?.message || 'Something went wrong')
+      toast.error(error?.data?.log || error?.data?.message || 'Something went wrong')
     }
   }
 

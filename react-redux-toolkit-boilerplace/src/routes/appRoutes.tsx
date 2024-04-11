@@ -100,11 +100,11 @@ const appRoutes: RouteObject[] = [
             element: <AssignmentDetail />
           },
           {
-            path: '/teacher/courses/assignments/:assignmentId/attempts',
+            path: '/teacher/courses/:id/assignments/:assignmentId/attempts',
             element: <AllAssignmentAttempt />
           },
           {
-            path: '/teacher/courses/assignments/:assignmentId/attempts/:attemptId',
+            path: '/teacher/courses/:id/assignments/:assignmentId/attempts/:attemptId',
             element: <ViewAssignmentAttempt mode='TEACHER' />
           }
         ]

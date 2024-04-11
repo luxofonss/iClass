@@ -1,6 +1,7 @@
 @import '@shared/styles/mixins';
 
 .class-files {
+  width: 100%;
   .heading {
     @include flex-between;
     margin-top: 12px;

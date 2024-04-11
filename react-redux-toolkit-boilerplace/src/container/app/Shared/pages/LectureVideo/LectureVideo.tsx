@@ -9,8 +9,8 @@ export default function LectureVideo() {
   return (
     <div className={cx('lecture-video')}>
       <ReactPlayer
-        width='1280px'
-        height='720px'
+        width='100%'
+        height={600}
         url='https://www.youtube.com/watch?v=GrG2-oX5z24&t=1260s&ab_channel=FallInChill'
       />
     </div>

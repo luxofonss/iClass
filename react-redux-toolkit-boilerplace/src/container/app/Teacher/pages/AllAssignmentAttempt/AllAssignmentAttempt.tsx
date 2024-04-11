@@ -40,7 +40,7 @@ const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter,
 }
 
 export default function AllAssignmentAttempt() {
-  const { assignmentId } = useParams()
+  const { assignmentId, id: courseId } = useParams()
 
   const [getAlAssignmentAttemptResults, { data: allAttempts }] =
     assignmentApi.endpoints.getAlAssignmentAttemptResults.useLazyQuery()
@@ -81,7 +81,7 @@ export default function AllAssignmentAttempt() {
       key: 'action',
       render: (_, record) => {
         return (
-          <Link to={`/teacher/courses/assignments/${record?.assignment_id}/attempts/${record?.id}`}>
+          <Link to={`/teacher/courses/${courseId}/assignments/${record?.assignment_id}/attempts/${record?.id}`}>
             <Button type='primary'>Chấm lại</Button>
           </Link>
         )

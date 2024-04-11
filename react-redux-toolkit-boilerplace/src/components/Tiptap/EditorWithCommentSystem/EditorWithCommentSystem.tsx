@@ -26,11 +26,13 @@ import { BubbleMenu, Editor, EditorContent, useEditor } from '@tiptap/react'
 import { Button, Card, Col, Input, Row, Typography } from 'antd'
 import { Send } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useSelector } from 'react-redux'
 import useOutsideClick from '../../../hooks/useClickOutside'
 import * as Icons from '../Icons'
 import { LinkModal } from '../LinkModal'
 import { FontSize } from '../extensions/font-size'
 import styles from './EditorWithCommentSystem.module.scss'
+import { RootState } from '@app-data'
 // Custom
 
 const cx = classNames.bind(styles)
@@ -55,6 +57,7 @@ interface Comment {
   message: string
   createdAt: Date
   type: string
+  user: any
 }
 
 const getNewComment = (content: string, type: string): Comment => {
@@ -81,6 +84,7 @@ export function EditorWithCommentSystem({
   feedbacks,
   canComment = false
 }: IEditorWithCommentSystem) {
+  const user = useSelector((state: RootState) => state.auth.user)
   const [content, setContent] = useState<string>(value ?? '')
   const [comments, setComments] = useState<Comment[]>(feedbacks ?? [])
   const [defaultContent, setDefaultContent] = useState<string>(value ?? '')
@@ -124,7 +128,11 @@ export function EditorWithCommentSystem({
       content,
       replies: [],
       createdAt: new Date(),
-      type: type
+      type: type,
+      user: {
+        first_name: user?.first_name,
+        last_name: user?.last_name
+      }
     }
   }
 
@@ -482,22 +490,25 @@ export function EditorWithCommentSystem({
                       comment.id === activeCommentId
                         ? comment.type === 'GOOD'
                           ? {
-                            backgroundColor: '#edf0f5',
-                            border: '2px solid #a0d911',
-                            boxShadow: '-11px -10px 38px -5px rgba(160,217,17,0.75)'
-                          }
+                              backgroundColor: '#edf0f5',
+                              border: '2px solid #a0d911',
+                              boxShadow: '-11px -10px 38px -5px rgba(160,217,17,0.75)'
+                            }
                           : {
-                            backgroundColor: '#edf0f5',
-                            border: '2px solid #ff4d4f',
-                            boxShadow: '-11px -10px 38px -5px rgba(255,77,79,0.75)'
-                          }
+                              backgroundColor: '#edf0f5',
+                              border: '2px solid #ff4d4f',
+                              boxShadow: '-11px -10px 38px -5px rgba(255,77,79,0.75)'
+                            }
                         : comment.type === 'GOOD'
-                          ? { backgroundColor: '#edf0f5', border: '1px solid #a0d911' }
-                          : { backgroundColor: '#edf0f5', border: '1px solid #ff4d4f' }
+                        ? { backgroundColor: '#edf0f5', border: '1px solid #a0d911' }
+                        : { backgroundColor: '#edf0f5', border: '1px solid #ff4d4f' }
                     }
                   >
                     <div className='flex items-end gap-2'>
-                      <CommentInfo />
+                      <CommentInfo
+                        name={comment?.user?.first_name + ' ' + comment?.user?.last_name}
+                        time={comment?.created_at}
+                      />
                     </div>
 
                     {canComment ? (

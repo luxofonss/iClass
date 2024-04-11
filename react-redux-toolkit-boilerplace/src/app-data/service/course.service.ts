@@ -141,6 +141,13 @@ export const courseApi = createApi({
           body: body.body
         }
       }
+    }),
+    addSection: build.mutation<any, any>({
+      query: (body) => ({
+        url: `/courses/${body.courseId}/section`,
+        method: 'POST',
+        body: body.data
+      })
     })
   })
 })

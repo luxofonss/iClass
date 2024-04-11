@@ -4,6 +4,7 @@ import { Divider, Typography } from 'antd'
 import classNames from 'classnames/bind'
 import { BookOpenCheck, BookText, Video } from 'lucide-react'
 import styles from './LectureBlock.module.scss'
+import { Link, useParams } from 'react-router-dom'
 const cx = classNames.bind(styles)
 
 interface ILectureBlock {
@@ -12,12 +13,17 @@ interface ILectureBlock {
 
 export default function LectureBlock(props: ILectureBlock) {
   const { data } = props
+
+  const { id: courseId } = useParams()
+
   return (
     <div className={cx('lecture-block')}>
       <div className={cx('heading')}>
-        <Typography.Title level={5} ellipsis={{ rows: 2 }} className={cx('title')}>
-          {data?.name}
-        </Typography.Title>
+        <Link to={`/teacher/courses/${courseId}/lectures/${data.id}`}>
+          <Typography.Title level={5} ellipsis={{ rows: 2 }} className={cx('title')}>
+            {data?.name}
+          </Typography.Title>
+        </Link>
         <Typography.Text className={cx('description')}>{data?.description}</Typography.Text>
       </div>
       <div className={cx('info')}>
