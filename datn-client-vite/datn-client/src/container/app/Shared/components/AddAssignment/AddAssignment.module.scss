@@ -1,0 +1,56 @@
+@import "@/shared/styles/mixins";
+
+.add-assignment {
+	.assignment-info {
+		@include card-wrapper;
+		margin-top: 12px;
+		border-radius: 6px;
+		box-shadow: 0 0 6px 0 #ffddf5;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+
+		.title {
+			// does not work
+			.ck .ck-editor__main > .ck-editor__editable {
+				border: none !important;
+			}
+
+			p {
+				font-size: 22px;
+			}
+		}
+
+		.description {
+			font-size: 16px;
+		}
+	}
+
+	.questions {
+		margin-top: 12px;
+
+		.btn-add {
+			margin-top: 12px;
+		}
+	}
+
+	.btn-submit {
+		margin-top: 12px;
+	}
+
+	.btn-action {
+		margin-top: 12px;
+		display: flex;
+		gap: 12px;
+	}
+}
+
+.grip-btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 2px;
+	width: 28px;
+	height: 28px;
+	background-color: rgb(215, 237, 250);
+}

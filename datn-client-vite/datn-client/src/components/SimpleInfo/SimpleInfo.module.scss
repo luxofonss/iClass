@@ -1,0 +1,16 @@
+@import "@/shared/styles/mixins";
+
+.simple-info {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	.label {
+		font-size: 12px;
+	}
+
+	.value {
+		font-size: 12px;
+		font-weight: 500;
+	}
+}

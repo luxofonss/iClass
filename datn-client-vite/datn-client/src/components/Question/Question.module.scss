@@ -1,0 +1,47 @@
+@import "@/shared/styles/mixins";
+
+.question {
+	@include card-wrapper;
+	margin-top: 12px;
+	border-radius: 6px;
+	box-shadow: 0 0 6px 0 #e4e4e4;
+
+	.heading {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 8px;
+
+		.info {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+
+			.title {
+				font-size: 14px;
+				height: 28px;
+				@include flex-center;
+			}
+
+			button {
+				@include flex-center;
+			}
+		}
+	}
+
+	.options {
+		display: flex;
+		gap: 12px;
+	}
+
+	.answer {
+		width: 100%;
+		margin-top: 12px;
+		margin-bottom: 12px;
+
+		.choice-wrapper {
+			.choice {
+				display: flex;
+			}
+		}
+	}
+}

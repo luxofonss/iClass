@@ -1,0 +1,111 @@
+@import "@/shared/styles/mixins";
+@import "@/shared/styles/variables";
+
+.new-class {
+	position: relative;
+	background: white;
+	min-height: 85vh;
+	border-radius: 6px;
+	@include card-wrapper;
+
+	.content {
+		min-height: 82vh;
+	}
+
+	.submit-btn {
+		width: 100%;
+		margin: 0 auto;
+		margin-top: 12px;
+	}
+
+	.section {
+		min-height: 82vh;
+		height: 100%;
+		overflow-y: auto;
+		padding: 0 12px;
+
+		&__title {
+			font-size: 22px;
+			font-weight: 500px;
+			display: flex;
+			gap: 6px;
+		}
+
+		&__description {
+			font-size: 14px;
+			font-weight: 400;
+			font-style: italic;
+			color: $neutral-4;
+		}
+
+		&:not(:first-child) {
+			margin-top: 16px;
+		}
+
+		.info-block {
+			&__title {
+				font-size: 18px;
+				font-weight: 500;
+			}
+
+			&__description {
+				font-size: 14px;
+				font-style: italic;
+			}
+
+			&__question-list {
+				margin-top: 12px;
+				display: flex;
+				gap: 12px;
+
+				&__input {
+					flex: 1;
+				}
+			}
+		}
+
+		.curriculum {
+			&__section {
+				margin-bottom: 8px;
+				.inputs {
+					@include card-wrapper;
+					.list-items {
+						margin-top: 12px;
+						border: 1px solid #efefef;
+						border-radius: 4px;
+						padding: 12px;
+
+						&__item {
+							display: flex;
+							gap: 12px;
+							align-items: center;
+
+							&__name {
+								flex: 1;
+							}
+						}
+					}
+				}
+
+				&__name {
+					margin-top: 4px;
+					display: flex;
+					align-items: center;
+					gap: 12px;
+
+					.label {
+						flex: 1;
+					}
+				}
+			}
+		}
+	}
+}
+
+.label {
+	font-weight: 500;
+}
+
+.detail-info {
+	@extend .section__description;
+}

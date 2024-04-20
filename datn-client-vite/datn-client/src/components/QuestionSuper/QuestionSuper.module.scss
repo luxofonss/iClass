@@ -1,0 +1,23 @@
+@import "@/shared/styles/mixins";
+
+.question-super {
+	@include card-wrapper;
+	border-radius: 6px;
+	box-shadow: 0 0 6px 0 #e4e4e4;
+
+	.heading {
+		display: flex;
+		gap: 12px;
+
+		.title {
+			flex: 1;
+			font-size: 18px;
+			font-weight: 500;
+		}
+	}
+
+	.options {
+		display: flex;
+		gap: 24px;
+	}
+}
