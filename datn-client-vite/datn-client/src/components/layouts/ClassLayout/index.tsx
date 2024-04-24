@@ -26,6 +26,8 @@ function ClassLayout(props: IClassLayout) {
 		if (id) getCourse({ id });
 	}, []);
 
+	console.log("course:: ", course);
+
 	return (
 		<div className={cx("class-layout")}>
 			<ClassLayoutSider

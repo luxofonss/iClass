@@ -14,7 +14,7 @@ export const assignmentApi = createApi({
 		>({
 			query: (body) => {
 				return {
-					url: "http://localhost:8080/v1/assignment",
+					url: "http://localhost:8080/api/v1/assignments",
 					method: "POST",
 					body: body,
 					credentials: "include",

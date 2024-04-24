@@ -16,19 +16,19 @@ const cx = classNames.bind(styles);
 interface DataType {
 	id: string;
 	key: React.Key;
-	user_id: string;
-	course_id: string;
+	userId: string;
+	courseId: string;
 	price: string;
-	student_id: string;
+	studentId: string;
 	status: string;
-	created_at: string;
-	user: {
+	createdAt: string;
+	student: {
 		id: string;
-		deleted_at: string;
-		created_at: string;
-		updated_at: string;
-		first_name: string;
-		last_name: string;
+		deletedAt: string;
+		createdAt: string;
+		updatedAt: string;
+		firstName: string;
+		lastName: string;
 		gender: string;
 		dob: string;
 		email: string;
@@ -46,7 +46,7 @@ const onChange: TableProps<DataType>["onChange"] = (
 
 export default function ClassSettingMembers() {
 	const { visible, openModal, closeModal } = useModal();
-	const { id } = useParams();
+	const { courseId } = useParams();
 
 	const [getAllEnrolledStudents, { data: enrollments }] =
 		courseApi.endpoints.getAllEnrolledStudents.useLazyQuery();
@@ -58,15 +58,15 @@ export default function ClassSettingMembers() {
 		courseApi.endpoints.getCourseById.useLazyQuery();
 
 	useEffect(() => {
-		if (id) getCourse({ id });
+		if (courseId) getCourse({ id: courseId });
 	}, []);
 
 	useEffect(() => {
-		if (id) getAllEnrolledStudents({ id: id });
+		if (courseId) getAllEnrolledStudents({ id: courseId });
 	}, []);
 
 	function getCourseStudentHandler() {
-		if (id) getAllEnrolledStudents({ id: id });
+		if (courseId) getAllEnrolledStudents({ id: courseId });
 	}
 	async function handleDeleteEnrollment(id: string) {
 		try {
@@ -94,22 +94,22 @@ export default function ClassSettingMembers() {
 		{
 			title: "Họ và tên",
 			key: "fullName",
-			render: (_, { user }) => {
-				return `${user?.last_name} ${user?.first_name}`;
+			render: (_, { student }) => {
+				return `${student?.lastName} ${student?.firstName}`;
 			},
 		},
 		{
 			title: "Email",
 			key: "email",
-			render: (_, { user }) => {
-				return `${user?.email}`;
+			render: (_, { student }) => {
+				return `${student?.email}`;
 			},
 		},
 		{
 			title: "Số báo danh",
-			dataIndex: "student_id",
+			dataIndex: "studentId",
 			sorter: {
-				compare: (a, b) => a.student_id.localeCompare(b.student_id),
+				compare: (a, b) => a.studentId.localeCompare(b.studentId),
 				multiple: 3,
 			},
 		},
@@ -117,33 +117,37 @@ export default function ClassSettingMembers() {
 			title: "Giới tính",
 			dataIndex: "gender",
 			sorter: {
-				compare: (a, b) => a.user.gender.localeCompare(b.user.gender),
+				compare: (a, b) =>
+					a.student.gender.localeCompare(b.student.gender),
 				multiple: 3,
 			},
-			render: (_, { user }) => {
-				return user?.gender;
+			render: (_, { student }) => {
+				return student?.gender;
 			},
 		},
 		{
 			title: "Ngày sinh",
-			dataIndex: "dob",
+			dataIndex: "dateOfBirth",
 			sorter: {
-				compare: (a, b) => a.user?.dob.localeCompare(b.user?.dob),
+				compare: (a, b) =>
+					a.student?.dateOfBirth.localeCompare(
+						b.student?.dateOfBirth
+					),
 				multiple: 2,
 			},
-			render: (_, { user }) => {
-				return user?.dob;
+			render: (_, { student }) => {
+				return student?.dateOfBirth;
 			},
 		},
 		{
 			title: "Ngày tham gia",
-			dataIndex: "enrollDate",
+			dataIndex: "createdAt",
 			sorter: {
-				compare: (a, b) => a.created_at.localeCompare(b.created_at),
+				compare: (a, b) => a.createdAt.localeCompare(b.createdAt),
 				multiple: 2,
 			},
-			render: (_, { user }) => {
-				return user?.created_at?.slice(0, 19);
+			render: (_, { createdAt }) => {
+				return createdAt?.slice(0, 19);
 			},
 		},
 		{

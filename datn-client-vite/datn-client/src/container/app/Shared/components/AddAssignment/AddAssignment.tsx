@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from "classnames/bind";
 import { useState } from "react";
-
 import { assignmentApi } from "@/app-data/service/assignment.service";
 import Question from "@/components/Question";
 import QuestionSuper from "@/components/QuestionSuper";
@@ -130,7 +129,7 @@ export default function AddAssignment({
 				title: data.title,
 				description: data.description,
 				total_point: 10,
-				subject_id: "39d6e7e7-1536-4bf3-aabe-194e57843324",
+				subjectId: "39d6e7e7-1536-4bf3-aabe-194e57843324",
 				questions: data.questions.map(
 					(question: any, index: number) => {
 						const questionData: QuestionSchema = {
@@ -139,9 +138,9 @@ export default function AddAssignment({
 							audio_url: question?.audio,
 							type: question.type,
 							level: question.level,
-							subject_id: "39d6e7e7-1536-4bf3-aabe-194e57843324",
+							subjectId: question.subjectId,
 							order: index,
-							point: parseInt(question.point, 10),
+							mark: parseInt(question.mark, 10),
 							choices: question.choices?.map((choice: any) => {
 								return {
 									content: choice.content,

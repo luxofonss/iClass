@@ -18,6 +18,7 @@ export type CourseUpdateSchema = {
 	name: string;
 	description: string;
 	backgroundImage: string;
+	thumbnail: string;
 	startDate: string;
 	endDate: string;
 	price: number;
@@ -62,15 +63,16 @@ export type SimpleCourseView = {
 	updated_at: string;
 	name: string;
 	description: string;
-	background_img: string;
+	backgroundImg: string;
 	startDate: string;
 	endDate: string;
 	price: number;
 	currency: string;
 	level: string;
-	is_verified: boolean;
-	subject_id: string;
+	isVerified: boolean;
+	subjectId: string;
 	grade: string;
+	thumbnail: string;
 };
 
 export type CourseInfoSchema = {
@@ -89,6 +91,8 @@ export type LectureSchema = {
 	id?: string;
 	name: string;
 	description: string;
+	order: number;
+	type: string;
 	video_url: string;
 };
 

@@ -5,7 +5,7 @@ export const HEADER = {
 };
 
 export const ROLE = {
-	STUDENT: "STUDENT",
+	STUDENT: "USER",
 	TEACHER: "TEACHER",
 };
 
@@ -41,10 +41,10 @@ export const COLOR = {
 };
 
 export const QUESTION_TYPE_ENUM = {
-	SINGLE_CHOICE: "single_choice",
-	MULTI_CHOICE: "multi_choice",
-	SHORT_ANSWER: "short_answer",
-	LONG_ANSWER: "long_answer",
+	SINGLE_CHOICE: "SINGLE_CHOICE",
+	MULTI_CHOICE: "MULTIPLE_CHOICES",
+	SHORT_ANSWER: "SHORT_ANSWER",
+	LONG_ANSWER: "LONG_ANSWER",
 };
 
 export const QUESTION_TYPE = [
@@ -181,15 +181,15 @@ export const ASSIGNMENT_ATTEMPT_TYPE = {
 
 export const QUESTION_LEVEL = {
 	EASY: {
-		value: "easy",
+		value: "EASY",
 		label: "Easy",
 	},
 	MEDIUM: {
-		value: "medium",
+		value: "MEDIUM",
 		label: "Medium",
 	},
 	HARD: {
-		value: "hard",
+		value: "HARD",
 		label: "Hard",
 	},
 };

@@ -8,7 +8,6 @@ import ColorPrefix from "@/components/ColorPrefix";
 import { COLOR, COURSE_LEVEL_OPS } from "@/shared/constants";
 import {
 	Button,
-	Card,
 	Col,
 	DatePicker,
 	Divider,
@@ -39,27 +38,26 @@ import dayjs from "dayjs";
 import {
 	CourseInfoSchema,
 	CourseUpdateSchema,
+	CourseViewSchema,
 } from "@/shared/schema/course.schema";
+import SectionCreateUpdate from "../../components/SectionCreateUpdate";
 
 const cx = classNames.bind(styles);
 
 export default function NewClass() {
 	const [backgroundUrl, setBackgroundUrl] = useState("");
 	const [thumbnail, setThumbnail] = useState<string | null>(null);
-	const [addingSection, setAddingSection] = useState<boolean>(false);
 
 	const [getSubjects, { data: subjects, isLoading: isGettingSubjects }] =
 		courseApi.endpoints.getSubjects.useLazyQuery();
 	const [uploadImage] = uploadApi.endpoints.uploadFile.useMutation();
 	const [updateCourse, { isLoading: isCreatingCourse }] =
 		courseApi.endpoints.updateCourse.useMutation();
-	const [addSection, { isLoading: isAddingSection }] =
-		courseApi.endpoints.addSection.useMutation();
-	const [getCourseById] = courseApi.endpoints.getCourseById.useLazyQuery();
+	const [getCourseById, { data: courseData }] =
+		courseApi.endpoints.getCourseById.useLazyQuery();
 
 	const { courseId } = useParams();
 	const [form] = Form.useForm();
-	const [sectionForm] = Form.useForm();
 
 	async function handleGetCourse() {
 		try {
@@ -187,27 +185,7 @@ export default function NewClass() {
 			}
 	}
 
-	async function handleAddSection(values: any) {
-		try {
-			console.log("values:: ", values);
-			const payload = {
-				courseId: courseId,
-				data: {
-					name: values.name,
-					description: values.description,
-				},
-			};
-
-			await addSection(payload).unwrap();
-			handleGetCourse();
-			setAddingSection(false);
-			sectionForm.resetFields();
-
-			toast.success("Add section successfully!");
-		} catch (error: any) {
-			toast.error(error?.data?.message || "Add section fails!");
-		}
-	}
+	console.log(courseData?.data);
 
 	return (
 		<div className={cx("new-class")}>
@@ -215,9 +193,6 @@ export default function NewClass() {
 				<Tabs
 					className={cx("content")}
 					tabPosition="left"
-					tabBarStyle={{
-						height: "100%",
-					}}
 					tabBarExtraContent={
 						<div>
 							<Button
@@ -708,183 +683,10 @@ export default function NewClass() {
 							</Space>
 						}
 					>
-						<div id="curriculum" className={cx("section")}>
-							<div className={cx("section__title")}>
-								<ColorPrefix color={COLOR.SECONDARY.BLUE} />
-								<Typography.Title level={4}>
-									Curriculum
-								</Typography.Title>
-							</div>
-							<Divider />
-							<p className={cx("section__description")}>
-								Start putting together your course by creating
-								sections, lectures and practice (quizzes, coding
-								exercises and assignments). Start putting
-								together your course by creating sections,
-								lectures and practice activities (quizzes,
-								coding exercises and assignments). Use your
-								course outline to structure your content and
-								label your sections and lectures clearly. If
-								you’re intending to offer your course for free,
-								the total length of video content must be less
-								than 2 hours.
-							</p>
-							<div className={cx("curriculum")}>
-								<Form.List name="sections" initialValue={[""]}>
-									{(fields, { add, remove }) => (
-										<div
-											className={cx(
-												"curriculum__section"
-											)}
-										>
-											{fields.map((field) => (
-												<div
-													className={cx("inputs")}
-													key={field.key}
-												>
-													<Typography.Text strong>
-														Section {field.key + 1}:
-													</Typography.Text>
-													<div
-														className={cx(
-															"curriculum__section__name"
-														)}
-													>
-														<Form.Item
-															noStyle
-															name={[
-																field.name,
-																"name",
-															]}
-															className={cx(
-																"label"
-															)}
-															label="Section"
-														>
-															<Input />
-														</Form.Item>
-														<Button
-															onClick={() => {
-																remove(
-																	field.key
-																);
-															}}
-														>
-															Remove
-														</Button>
-													</div>
-													<Form.List
-														name={[
-															field.name,
-															"lectures",
-														]}
-														initialValue={[""]}
-													>
-														{(
-															fields,
-															{ add, remove }
-														) => (
-															<div
-																className={cx(
-																	"list-items"
-																)}
-															>
-																{fields.map(
-																	(field) => (
-																		<div
-																			className={cx(
-																				"list-items__item"
-																			)}
-																			key={
-																				field.key
-																			}
-																		>
-																			<Form.Item
-																				noStyle
-																				className={cx(
-																					"list-items__item__name"
-																				)}
-																				name={[
-																					field.name,
-																					"name",
-																				]}
-																			>
-																				<Input />
-																			</Form.Item>
-																			<Button
-																				onClick={() => {
-																					remove(
-																						field.key
-																					);
-																				}}
-																			>
-																				Delete
-																			</Button>
-																		</div>
-																	)
-																)}
-																<Button
-																	onClick={() => {
-																		add();
-																	}}
-																	style={{
-																		marginTop: 12,
-																	}}
-																	htmlType="button"
-																>
-																	Add lecture
-																</Button>
-															</div>
-														)}
-													</Form.List>
-												</div>
-											))}
-										</div>
-									)}
-								</Form.List>
-								{addingSection ? (
-									<Card>
-										<Form
-											form={sectionForm}
-											onFinish={handleAddSection}
-											layout="vertical"
-										>
-											<Form.Item
-												label="Title"
-												name="name"
-											>
-												<Input placeholder="Enter your title" />
-											</Form.Item>
-											<Form.Item
-												label="What will students be able to do at the end of this section?"
-												name="description"
-											>
-												<Input placeholder="Enter your description" />
-											</Form.Item>
-											<Button
-												type="primary"
-												onClick={() => {
-													sectionForm.submit();
-												}}
-												loading={isAddingSection}
-											>
-												Create
-											</Button>
-										</Form>
-									</Card>
-								) : (
-									<Button
-										htmlType="button"
-										style={{ marginTop: 12 }}
-										onClick={() => {
-											setAddingSection(true);
-										}}
-									>
-										Add section
-									</Button>
-								)}
-							</div>
-						</div>
+						<SectionCreateUpdate
+							courseData={courseData?.data as CourseViewSchema}
+							handleGetCourse={handleGetCourse}
+						/>
 					</Tabs.TabPane>
 					<Tabs.TabPane
 						key={4}

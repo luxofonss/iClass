@@ -22,13 +22,13 @@ export default function Assignments({ mode }: IAssignmentsProps) {
 	const [getAssignmentsInCourse, { data: assignments }] =
 		courseApi.endpoints.getAssignmentsInCourse.useLazyQuery();
 
-	const { id } = useParams<{ id: string }>();
+	const { courseId } = useParams<{ courseId: string }>();
 
 	useEffect(() => {
 		if (getAssignmentsInCourse) {
-			getAssignmentsInCourse(id, false);
+			getAssignmentsInCourse({ id: courseId }, false);
 		}
-	}, [id]);
+	}, [courseId]);
 
 	return (
 		<div className={cx("assignments")}>

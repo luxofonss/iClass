@@ -19,20 +19,20 @@ const ModalAddUserToCourses = () => {
 		courseApi.endpoints.getAllEnrolledStudents.useLazyQuery();
 
 	const [form] = Form.useForm();
-	const { id } = useParams();
+	const { courseId } = useParams();
 
 	async function onAddStudents(values: any) {
 		console.log(values);
 		try {
 			await addStudentToCourse({
-				id: id as string,
+				id: courseId as string,
 				body: {
 					emails: values.emails,
 				},
 			}).unwrap();
 
 			toast.success("Students added successfully");
-			getAllEnrolledStudents({ id: id as string });
+			getAllEnrolledStudents({ id: courseId as string });
 			closeModal();
 		} catch (error: any) {
 			toast.error(

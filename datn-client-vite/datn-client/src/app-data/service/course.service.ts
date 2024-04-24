@@ -120,7 +120,7 @@ export const courseApi = createApi({
 		getAllEnrolledStudents: build.query<any, { id: string }>({
 			query: ({ id }) => {
 				return {
-					url: `/courses/${id}/enrollments`,
+					url: `/courses/${id}/students`,
 					method: "GET",
 					credentials: "include",
 				};
@@ -158,7 +158,7 @@ export const courseApi = createApi({
 		>({
 			query: (body) => {
 				return {
-					url: `/courses/${body.id}/enrolls/add-many`,
+					url: `/courses/${body.id}/students/add-many`,
 					method: "POST",
 					credentials: "include",
 					body: body.body,
@@ -170,6 +170,13 @@ export const courseApi = createApi({
 				url: `/courses/${body.courseId}/sections`,
 				method: "POST",
 				body: { sections: [body.data] },
+			}),
+		}),
+		addLesson: build.mutation<any, any>({
+			query: (body) => ({
+				url: `/courses/${body.courseId}/sections/${body.sectionId}/lessons`,
+				method: "POST",
+				body: { lessons: [body.data] },
 			}),
 		}),
 	}),

@@ -24,6 +24,9 @@ import { ROLE } from "@/shared/constants";
 import type { RouteObject } from "react-router-dom";
 import ProtectedRoutes from "./protectedRoutes";
 import NewClassDraft from "@/container/app/Teacher/pages/NewClassDraft";
+import AddAssignment from "@/container/app/Shared/components/AddAssignment";
+import CourseLesson from "@/container/app/Student/pages/CourseLesson";
+import LessonLearningLayout from "@/components/layouts/LessonLearningLayout";
 
 const appRoutes: RouteObject[] = [
 	// TEACHER ROUTES
@@ -76,27 +79,31 @@ const appRoutes: RouteObject[] = [
 				element: <ClassLayout mode={ROLE.TEACHER} />,
 				children: [
 					{
-						path: "/teacher/courses/:id/home",
+						path: "/teacher/courses/:courseId/home",
 						element: <Class />,
 					},
 					{
-						path: "/teacher/courses/:id/lectures",
+						path: "/teacher/courses/:courseId/lectures",
 						element: <Lectures mode={ROLE.TEACHER} />,
 					},
 					{
-						path: "/teacher/courses/:id/lectures/:id",
+						path: "/teacher/courses/:courseId/lectures/:id",
 						element: <LectureDetail />,
 					},
 					{
-						path: "/teacher/courses/:id/files",
+						path: "/teacher/courses/:courseId/lectures/:id/assignment",
+						element: <AddAssignment backAllAssignment={() => {}} />,
+					},
+					{
+						path: "/teacher/courses/:courseId/files",
 						element: <ClassFiles />,
 					},
 					{
-						path: "/teacher/courses/:id/settings",
+						path: "/teacher/courses/:courseId/settings",
 						element: <ClassSettings />,
 					},
 					{
-						path: "/teacher/courses/:id/assignments",
+						path: "/teacher/courses/:courseId/assignments",
 						element: <Assignments mode={ROLE.TEACHER} />,
 					},
 					{
@@ -116,7 +123,6 @@ const appRoutes: RouteObject[] = [
 		],
 	},
 
-	// STUDENT VIEW REGISTERED COURSES ROUTES
 	{
 		path: "/",
 		element: (
@@ -130,26 +136,37 @@ const appRoutes: RouteObject[] = [
 				element: <ClassLayout mode={ROLE.STUDENT} />,
 				children: [
 					{
-						path: "/courses/:id/home",
+						path: "/courses/:courseId/home",
 						element: <Class />,
 					},
+
 					{
-						path: "/courses/:id/lectures",
-						element: <Lectures mode={ROLE.STUDENT} />,
-					},
-					{
-						path: "/courses/:id/lecture/:id",
+						path: "/courses/:courseId/lecture/:id",
 						element: <LectureDetail />,
 					},
 					{
-						path: "/courses/:id/files",
+						path: "/courses/:courseId/files",
 						element: <ClassFiles />,
 					},
 					{
-						path: "/courses/:id/assignments",
+						path: "/courses/:courseId/assignments",
 						element: <StudentAssignments mode={ROLE.STUDENT} />,
 					},
 				],
+			},
+		],
+	},
+	{
+		path: "/",
+		element: (
+			<ProtectedRoutes requiredRoles={[ROLE.STUDENT]}>
+				<LessonLearningLayout />
+			</ProtectedRoutes>
+		),
+		children: [
+			{
+				path: "/courses/:courseId/lessons",
+				element: <CourseLesson />,
 			},
 		],
 	},

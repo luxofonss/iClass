@@ -30,43 +30,43 @@ export default function ClassLayoutSider({
 	const navigate = useNavigate();
 
 	console.log("mode:: ", mode);
-	const { id } = useParams();
+	const { courseId } = useParams();
 
 	const menuItems = [
 		{
 			key:
 				mode === ROLE.TEACHER
-					? `/teacher/courses/${id}/home`
-					: `/courses/${id}/home`,
+					? `/teacher/courses/${courseId}/home`
+					: `/courses/${courseId}/home`,
 			icon: <GraduationCap size={16} />,
 			label: "Home page",
 		},
 		{
 			key:
 				mode === ROLE.TEACHER
-					? `/teacher/courses/${id}/lectures`
-					: `/courses/${id}/lectures`,
+					? `/teacher/courses/${courseId}/lectures`
+					: `/courses/${courseId}/lessons`,
 			icon: <BookCheck size={16} />,
 			label: "Lectures",
 		},
 		{
 			key:
 				mode === ROLE.TEACHER
-					? `/teacher/courses/${id}/assignments`
-					: `/courses/${id}/assignments`,
+					? `/teacher/courses/${courseId}/assignments`
+					: `/courses/${courseId}/assignments`,
 			icon: <BookText size={16} />,
 			label: "Assignments",
 		},
 		{
 			key:
 				mode === ROLE.TEACHER
-					? `/teacher/courses/${id}/files`
-					: `/courses/${id}/files`,
+					? `/teacher/courses/${courseId}/files`
+					: `/courses/${courseId}/files`,
 			icon: <Folder size={16} />,
 			label: "Files",
 		},
 		mode === ROLE.TEACHER && {
-			key: `/teacher/courses/${id}/settings`,
+			key: `/teacher/courses/${courseId}/settings`,
 			icon: <Settings size={16} />,
 			label: "Settings",
 		},
@@ -84,7 +84,7 @@ export default function ClassLayoutSider({
 			<div className={cx("class-info")}>
 				<img
 					className={cx("thumbnail")}
-					src={data?.background_img}
+					src={data?.thumbnail}
 					alt="logo"
 				/>
 				{!siderCollapsed && (

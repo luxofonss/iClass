@@ -59,7 +59,7 @@ export default function Question({ field, dragHandler }: IQuestion) {
 							placeholder="Level"
 						/>
 					</Form.Item>
-					<Form.Item name={[field.name, field.key, "point"]}>
+					<Form.Item name={[field.name, field.key, "mark"]}>
 						<Input
 							type="number"
 							placeholder="Enter question's point "
@@ -67,6 +67,13 @@ export default function Question({ field, dragHandler }: IQuestion) {
 						/>
 					</Form.Item>
 					<Form.Item hidden name="order" initialValue={field.key}>
+						<Input />
+					</Form.Item>
+					<Form.Item
+						hidden
+						name="subjectId"
+						initialValue={"39d6e7e7-1536-4bf3-aabe-194e57843324"}
+					>
 						<Input />
 					</Form.Item>
 				</div>
