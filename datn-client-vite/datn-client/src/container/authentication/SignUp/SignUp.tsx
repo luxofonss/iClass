@@ -89,7 +89,7 @@ function SignUp() {
 				first_name: values.first_name,
 				last_name: values.last_name,
 				phone_number: values.phone_number,
-				gender: values.gender as "male" | "female",
+				gender: values.gender,
 				dob: values.dob,
 				auth_type: "email",
 				role: values.type as "student" | "teacher",
@@ -199,10 +199,10 @@ function SignUp() {
 										className={cx("input-item")}
 										size="large"
 									>
-										<Select.Option value="male">
+										<Select.Option value="MALE">
 											Male
 										</Select.Option>
-										<Select.Option value="female">
+										<Select.Option value="FEMALE">
 											Female
 										</Select.Option>
 									</Select>
@@ -369,15 +369,15 @@ function SignUp() {
 								defaultValue=""
 								size="large"
 							>
-								<Radio.Button value="student">
+								<Radio.Button value="USER">
 									Student
 								</Radio.Button>
-								<Radio.Button value="teacher">
+								<Radio.Button value="TEACHER">
 									Teacher
 								</Radio.Button>
 							</Radio.Group>
 						</Form.Item>
-						{type === "student" && (
+						{type === "STUDENT" && (
 							<Fragment>
 								<Form.Item
 									hidden={step === 1}
@@ -405,7 +405,7 @@ function SignUp() {
 								</Form.Item>
 							</Fragment>
 						)}
-						{type === "teacher" && (
+						{type === "TEACHER" && (
 							<Fragment>
 								<Form.Item
 									hidden={step === 1}

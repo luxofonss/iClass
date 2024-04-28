@@ -1,141 +1,110 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from "classnames/bind";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { assignmentApi } from "@/app-data/service/assignment.service";
-import Question from "@/components/Question";
-import QuestionSuper from "@/components/QuestionSuper";
 import {
 	ASSIGNMENT_ATTEMPT_TYPE,
 	ASSIGNMENT_TYPE,
+	QUESTION_LEVEL,
+	QUESTION_TYPE,
+	QUESTION_TYPE_ENUM,
 	TIME_OPTIONS,
 } from "@/shared/constants";
 import {
 	AssignmentCreateSchema,
 	QuestionSchema,
 } from "@/shared/schema/assignment.schema";
-import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
+import {
+	Button,
+	Checkbox,
+	Col,
+	DatePicker,
+	Form,
+	Image,
+	Input,
+	Row,
+	Select,
+	Space,
+	Tag,
+} from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { GripVertical } from "lucide-react";
+import { Fingerprint, Plus, Trash } from "lucide-react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import {
-	SortableContainer,
-	SortableElement,
-	SortableHandle,
-	arrayMove,
-} from "react-sortable-hoc";
 import styles from "./AddAssignment.module.scss";
+import { SimpleEditor } from "@/components/Tiptap";
+import { uploadApi } from "@/app-data/service/upload.service";
+import ReactPlayer from "react-player";
 
 const cx = classNames.bind(styles);
 const { RangePicker } = DatePicker;
 
-type IQuestionType = "question" | "super-question";
 
-const DragHandle = SortableHandle(() => (
-	<Button className={cx("grip-btn")}>
-		<GripVertical size={14} />
-	</Button>
-));
 
-interface ISortableItemProps {
-	type: IQuestionType;
-	order: number;
-}
-
-const SortableItem = SortableElement<ISortableItemProps>(
-	({ type, order }: ISortableItemProps) => {
-		if (type === "question") {
-			return (
-				<Question
-					dragHandler={<DragHandle />}
-					field={{ key: order, name: "questions" }}
-				/>
-			);
-		} else if (type === "super-question") {
-			return <QuestionSuper field={{ key: order, name: "questions" }} />;
-		}
-	}
-);
-
-interface ISortableListProps {
-	items: IQuestionType[];
-}
-
-const SortableList = SortableContainer<ISortableListProps>(
-	({ items }: ISortableListProps) => {
-		return (
-			<ul>
-				{items?.map((type, index) => {
-					return (
-						<SortableItem
-							key={`item-${type}-${index}`}
-							index={index}
-							order={index}
-							type={type}
-						/>
-					);
-				})}
-			</ul>
-		);
-	}
-);
-
-export default function AddAssignment({
-	backAllAssignment,
-}: {
-	backAllAssignment: () => void;
-}) {
+export default function AddAssignment() {
 	const [timeType, setTimeType] = useState<string>("free");
-	const [question, setQuestion] = useState<IQuestionType[]>([]);
+
+	const { assignmentId } = useParams();
 
 	const [form] = Form.useForm();
-	const { id } = useParams();
+	const { lessonId } = useParams();
 
+	const [getAssignmentById] =
+		assignmentApi.endpoints.getOneById.useLazyQuery();
 	const [createAssignment] =
 		assignmentApi.endpoints.createAssignment.useMutation();
+	const [uploadFile] = uploadApi.endpoints.uploadFile.useMutation();
+
+	useEffect(() => {
+		if (assignmentId) {
+			handleGetAssignment();
+			console.log(form.getFieldsValue());
+		}
+	}, [assignmentId]);
+
+	async function handleGetAssignment() {
+		try {
+			const response = await getAssignmentById(assignmentId).unwrap();
+			form.setFieldsValue(response?.data);
+		} catch (error: any) {
+			toast.error(error?.data?.message || "Something went wrong!");
+		}
+	}
 
 	const onTimeTypeChange = (value: string) => {
 		setTimeType(value);
 	};
 
-	const onSortEnd = ({
-		oldIndex,
-		newIndex,
-	}: {
-		oldIndex: number;
-		newIndex: number;
-	}) => {
-		setQuestion(arrayMove(question, oldIndex, newIndex));
-	};
 
 	const onSubmit = async (values: any) => {
 		try {
+			console.log("values:: ", values)
 			const data = { ...values };
 			if (data.time === "custom") {
-				data.start_time = data.custom_time;
-				data.end_time = data.custom_time;
+				data.startTime = data.customTime;
+				data.endTime = data.customTime;
 			} else {
-				data.start_time = null;
-				data.end_time = null;
+				data.startTime = null;
+				data.endTime = null;
 			}
 
 			const body: AssignmentCreateSchema = {
-				start_time: data.start_time,
-				end_time: data.end_time,
-				type: data.type,
-				placement_id: id ?? "",
-				multiple_attempts: data.multiple_attempts,
-				time: parseInt(data.time_to_do),
+				startTime: data.startTime,
+				endTime: data.endTime,
+				maxAttemptTimes: data.maxAttemptTimes,
+				multipleAttempts: data.multipleAttempts,
+				duration: parseInt(data.duration) * 1000,
 				title: data.title,
 				description: data.description,
-				total_point: 10,
+				lessonId: lessonId as string,
 				subjectId: "39d6e7e7-1536-4bf3-aabe-194e57843324",
-				questions: data.questions.map(
+				questions: data.questions?.map(
 					(question: any, index: number) => {
 						const questionData: QuestionSchema = {
 							title: question.title,
 							image: question?.image,
-							audio_url: question?.audio,
+							audio: question?.audio,
 							type: question.type,
 							level: question.level,
 							subjectId: question.subjectId,
@@ -145,9 +114,10 @@ export default function AddAssignment({
 								return {
 									content: choice.content,
 									order: choice.order,
-									is_correct: choice.is_correct,
+									isCorrect: choice.isCorrect,
 								};
 							}),
+							answerExplanation: question.answerExplanation
 						};
 						return questionData;
 					}
@@ -156,11 +126,28 @@ export default function AddAssignment({
 			await createAssignment(body).unwrap();
 
 			toast.success("Create assignment successfully!");
-			backAllAssignment();
 		} catch (error: any) {
 			console.log("error:: ", error);
+			toast.error(error?.data?.message || "Something went wrong");
 		}
 	};
+
+	async function handleUpload(e, name, type) {
+		try {
+			const file = e.target.files[0];
+			const formData = new FormData();
+			formData.append("file", file);
+			formData.append("folder", type);
+
+			const res = await uploadFile(formData).unwrap();
+
+			form.setFieldValue(["questions", name, type], res?.data?.url)
+			form.validateFields()
+
+		} catch (error: any) {
+			toast.error(error?.data?.message || "Something went wrong!")
+		}
+	}
 
 	return (
 		<div className={cx("add-assignment")}>
@@ -177,12 +164,6 @@ export default function AddAssignment({
 							size="large"
 							placeholder="Enter assignment title"
 						/>
-						{/* <SimpleEditor
-              onValueChange={(value) => {
-                form.setFieldValue('title', value)
-              }}
-              placeholder='Enter assignment title'
-            /> */}
 					</Form.Item>
 					<Form.Item
 						style={{ marginBottom: "0px !important" }}
@@ -191,12 +172,6 @@ export default function AddAssignment({
 						label="Description"
 					>
 						<TextArea placeholder="Enter assignment description" />
-						{/* <SimpleEditor
-              onValueChange={(value) => {
-                form.setFieldValue('description', value)
-              }}
-              placeholder='Enter assignment description'
-            /> */}
 					</Form.Item>
 					<Row gutter={24}>
 						<Col span={6}>
@@ -214,62 +189,243 @@ export default function AddAssignment({
 
 						<Form.Item
 							hidden={timeType === "free"}
-							name="custom_time"
+							name="customTime"
 							label="Custom time"
 						>
 							<RangePicker showTime />
 						</Form.Item>
 
 						<Col span={6}>
-							<Form.Item name="time_to_do" label="Time to do">
+							<Form.Item name="duration" label="Duration">
 								<Input type="number" suffix="minutes" />
 							</Form.Item>
 						</Col>
 
 						<Col span={6}>
-							<Form.Item name="type" label="Assignment type">
+							<Form.Item name="assignmentType" label="Assignment type">
 								<Select
 									options={Object.values(ASSIGNMENT_TYPE)}
 								/>
 							</Form.Item>
 						</Col>
+
 						<Col span={6}>
-							<Form.Item
-								name="multiple_attempts"
-								label="Attempt type"
-							>
-								<Select
-									options={Object.values(
-										ASSIGNMENT_ATTEMPT_TYPE
-									)}
-								/>
+							<Form.Item name="maxAttemptTimes" initialValue={1} label="Times of attempts">
+								<Input type="number" />
 							</Form.Item>
 						</Col>
 					</Row>
 				</div>
-				<div className={cx("questions")}>
-					<SortableList
-						useDragHandle
-						items={question}
-						onSortEnd={onSortEnd}
-					/>
-				</div>
-				<div className={cx("btn-action")}>
-					<Button
-						onClick={() => {
-							setQuestion([...question, "question"]);
-						}}
-					>
-						Add question
-					</Button>
-					{/* <Button
-            onClick={() => {
-              setQuestion([...question, 'super-question'])
-            }}
-          >
-            Add super question
-          </Button> */}
-				</div>
+				<Form.List name="questions">
+					{(fields, { add, remove }) => (
+						<>
+							{fields.map(({ key, name }) => (
+								<div key={key} className={cx("question")}>
+									<div className={cx("heading")}>
+										{/* <h2 className={cx('title')}>Question 1: How to abc</h2> */}
+										<div className={cx("info")}>
+											<Tag
+												className={cx("title")}
+												color="green"
+											>
+												Question {key + 1}
+											</Tag>
+											<Form.Item hidden name={[name, "id"]}>
+												<Input />
+											</Form.Item>
+											<Form.Item
+												initialValue={
+													QUESTION_TYPE_ENUM.SINGLE_CHOICE
+												}
+												style={{ margin: 0 }}
+												name={[name, "type"]}
+											>
+												<Select
+													className={cx("type")}
+													options={QUESTION_TYPE}
+												/>
+											</Form.Item>
+											<Form.Item name={[name, "level"]}>
+												<Select
+													options={Object.values(
+														QUESTION_LEVEL
+													)}
+													placeholder="Level"
+												/>
+											</Form.Item>
+											<Form.Item name={[name, "mark"]}>
+												<Input
+													type="number"
+													placeholder="Enter question's point "
+													addonAfter="Point"
+												/>
+											</Form.Item>
+											<Form.Item
+												hidden
+												name={[name, "order"]}
+												initialValue={key}
+											>
+												<Input />
+											</Form.Item>
+											<Form.Item
+												hidden
+												name="subjectId"
+												initialValue={
+													"39d6e7e7-1536-4bf3-aabe-194e57843324"
+												}
+											>
+												<Input />
+											</Form.Item>
+										</div>
+										<Button
+											icon={<Trash size={14} />}
+											className={cx("btn-remove")}
+											onClick={() => remove(name)}
+											danger
+										/>
+									</div>
+									<Form.Item name={[name, "title"]}>
+										{/* <SimpleEditor
+											onValueChange={(value) => {
+												form.setFieldValue(
+													["questions", key, "title"],
+													value
+												);
+											}}
+											placeholder="Enter question"
+										/> */}
+										<TextArea />
+									</Form.Item>
+									<div className={cx("options")}>
+
+
+										<Space direction="vertical">
+											<Input onChange={(e) => {
+												handleUpload(e, name, 'image')
+											}} type="file" />
+											<Form.Item
+												name={[name, "image"]}
+												hidden
+											>
+												<Input />
+											</Form.Item>
+											{form.getFieldValue(["questions", key, "image"]) && <Image height={300} src={form.getFieldValue(["questions", key, "image"])} alt="img" />}
+										</Space>
+										<Space direction="vertical">
+											<Input onChange={(e) => {
+												handleUpload(e, name, 'audio')
+											}} type="file" />
+											<Form.Item
+												name={[name, "audio"]}
+												hidden
+												initialValue={null}
+											>
+												<Input />
+											</Form.Item>
+											{form.getFieldValue(["questions", key, "audio"]) && <ReactPlayer url={form.getFieldValue(["questions", key, "audio"])} controls />}
+										</Space>
+										<Form.Item
+											name={[name, "audio"]}
+											hidden
+										>
+											<Input />
+										</Form.Item>
+									</div>
+									<div className={cx("answer")}>
+										<Form.List name={[name, "choices"]}>
+											{
+												(fields, { add, remove }) => {
+													const questionType = form.getFieldValue(["questions", key, "type"]);
+													return <div>
+														<Row gutter={24}>
+															{fields.map((field, index) => (
+																<Col span={12} key={field.key}>
+																	<div className={cx("item")}>
+																		<Form.Item hidden name={[field.name, "id"]}>
+																			<Input />
+																		</Form.Item>
+																		{questionType === QUESTION_TYPE_ENUM.SINGLE_CHOICE &&
+																			<Form.Item initialValue={false} valuePropName="checked" name={[field.name, "isCorrect"]}>
+																				<input type="radio" style={{ width: 20, height: 20 }} />
+																			</Form.Item>}
+																		{
+																			questionType === QUESTION_TYPE_ENUM.MULTI_CHOICE && (
+																				<Form.Item initialValue={false} valuePropName="checked" name={[field.name, "isCorrect"]}>
+																					<Checkbox />
+																				</Form.Item>
+																			)
+																		}
+																		<Form.Item rules={[{
+																			required: true
+																		}]} className={cx("input")} style={{ margin: 0 }} name={[field.name, "content"]}>
+																			<Input />
+																		</Form.Item>
+																		<Form.Item
+																			hidden
+																			initialValue={index}
+																			className={cx("input")}
+																			style={{ margin: 0 }}
+																			name={[field.name, "order"]}
+																		>
+																			<Input />
+																		</Form.Item>
+																		<Button
+																			danger
+																			icon={<Trash size={14} />}
+																			className={cx("btn-remove")}
+																			onClick={() => {
+																				remove(index);
+																			}}
+																		/>
+																	</div>
+																</Col>
+															))}
+														</Row>
+														<Button
+															icon={<Plus size={14} />}
+															className={cx("btn-add")}
+															onClick={() => {
+																add();
+															}}
+														>
+															Add answer
+														</Button>
+
+													</div>
+												}
+											}
+										</Form.List>
+									</div>
+
+									<Form.Item
+										name={[name, "answerExplanation"]}
+										label="Explain the answer"
+									>
+										{/* <SimpleEditor
+											onValueChange={(value) => {
+												form.setFieldValue(
+													[name, "answerExplanation"],
+													value
+												);
+											}}
+											placeholder="Explain the answer"
+										/> */}
+										<TextArea />
+									</Form.Item>
+								</div>
+							))}
+							<Form.Item>
+								<Button
+									className={cx("btn-action")}
+									onClick={() => add()}
+									icon={<Plus />}
+								>
+									Add question
+								</Button>
+							</Form.Item>
+						</>
+					)}
+				</Form.List>
 				<Button
 					className={cx("btn-submit")}
 					htmlType="submit"

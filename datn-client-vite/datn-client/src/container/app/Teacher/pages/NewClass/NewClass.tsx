@@ -66,8 +66,8 @@ export default function NewClass() {
 			}).unwrap();
 			form.setFieldsValue({
 				...data?.data,
-				startDate: dayjs(data?.data?.startDate),
-				endDate: dayjs(data?.data?.endDate),
+				startDate: dayjs(data?.data?.startDate ?? new Date()),
+				endDate: dayjs(data?.data?.endDate ?? new Date()),
 			});
 			setThumbnail(data?.data?.thumbnail);
 			setBackgroundUrl(data?.data?.backgroundImage);

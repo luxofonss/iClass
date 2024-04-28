@@ -1,47 +1,46 @@
-import { ImageSchema } from "./common.schema";
-
 export type AssignmentCreateSchema = {
-	start_time?: string;
-	end_time?: string;
-	time: number;
-	type: string;
-	placement_id: string;
-	multiple_attempts: boolean;
+	startTime?: string;
+	endTime?: string;
+	duration: number;
+	assignmentType: string;
+	lessonId: string;
+	multipleAttempts: boolean;
 	title: string;
 	description: string;
-	total_point: number;
-	subject_id: string;
+	subjectId: string;
 	questions: QuestionSchema[];
+	maxAttemptTimes: number;
 };
 
 export type AssignmentViewSchema = {
 	id: string;
-	start_time?: string;
-	end_time?: string;
-	type: string;
-	placement_id: string;
-	multiple_attempts: boolean;
+	startTime?: string;
+	endTime?: string;
+	assignmentType: string;
+	lessonId: string;
+	multipleAttempts: boolean;
 	title: string;
 	description: string;
-	total_point: number;
-	subject_id: string;
+	totalPoint: number;
+	subjectId: string;
 	questions: QuestionSchema[];
 };
 
 export type QuestionSchema = {
 	title: string;
-	image?: ImageSchema;
-	audio_url?: string;
+	image?: string;
+	audio?: string;
 	type: string;
 	level: string;
-	subject_id: string;
+	subjectId: string;
 	order: number;
 	mark: number;
 	choices: ChoiceSchema[];
+	answerExplanation: string;
 };
 
 export type ChoiceSchema = {
 	content: string;
 	order: number;
-	is_correct: boolean;
+	isCorrect: boolean;
 };

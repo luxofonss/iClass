@@ -24,7 +24,7 @@ export const assignmentApi = createApi({
 		getOneById: build.query({
 			query: (id) => {
 				return {
-					url: `http://localhost:8080/v1/assignment/${id}`,
+					url: `/assignments/${id}`,
 					method: "GET",
 					credentials: "include",
 				};
@@ -33,7 +33,7 @@ export const assignmentApi = createApi({
 		attemptAssignment: build.mutation<any, { assignment_id: string }>({
 			query: (body) => {
 				return {
-					url: `http://localhost:8080/v1/assignment/attempt`,
+					url: `http://localhost:8080/v1/assignments/attempt`,
 					method: "POST",
 					body: body,
 					credentials: "include",
@@ -43,7 +43,7 @@ export const assignmentApi = createApi({
 		getAssignmentAttempt: build.query<any, string>({
 			query: (id) => {
 				return {
-					url: `http://localhost:8080/v1/assignment/attempt/${id}`,
+					url: `http://localhost:8080/v1/assignments/attempt/${id}`,
 					method: "GET",
 					credentials: "include",
 				};
@@ -75,7 +75,7 @@ export const assignmentApi = createApi({
 		>({
 			query: (params) => {
 				return {
-					url: `http://localhost:8080/v1/teacher/assignment/attempt/get-all-attempts`,
+					url: `http://localhost:8080/v1/teacher/assignments/attempt/get-all-attempts`,
 					method: "GET",
 					params: params,
 					credentials: "include",
@@ -88,7 +88,7 @@ export const assignmentApi = createApi({
 		>({
 			query: (params) => {
 				return {
-					url: `http://localhost:8080/v1/assignment/attempt-result/${params.assignment_attempt_id}`,
+					url: `http://localhost:8080/v1/assignments/attempt-result/${params.assignment_attempt_id}`,
 					method: "GET",
 					credentials: "include",
 				};

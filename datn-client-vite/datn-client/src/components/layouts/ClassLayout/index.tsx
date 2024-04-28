@@ -20,10 +20,10 @@ function ClassLayout(props: IClassLayout) {
 	const [getCourse, { data: course }] =
 		courseApi.endpoints.getCourseById.useLazyQuery();
 
-	const { id } = useParams();
+	const { courseId } = useParams();
 
 	useEffect(() => {
-		if (id) getCourse({ id });
+		if (courseId) getCourse({ id: courseId });
 	}, []);
 
 	console.log("course:: ", course);

@@ -27,7 +27,7 @@ export default function QuestionAnswer({
 }: {
 	type: TypeQuestion;
 	field: QuestionField | FormListFieldData;
-	questionKey?: number;
+	 ?: number;
 }) {
 	const name =
 		questionKey !== undefined
@@ -36,14 +36,6 @@ export default function QuestionAnswer({
 	const questionField = field;
 	const [choiceList, setChoiceList] = useState<string[]>([]);
 	const [answerName, setAnswerName] = useState<any>(name);
-	// const [selectedValue, setSelectedValue] = useState<number>()
-
-	// const handleRadioChange = (e: RadioChangeEvent) => {
-	//   console.log('selectedValue:: ', selectedValue)
-	//   setSelectedValue(e.target.value)
-	// }
-
-	// const form = useFormInstance()
 
 	useEffect(() => {
 		if (questionKey !== undefined) {
@@ -52,66 +44,6 @@ export default function QuestionAnswer({
 			setAnswerName([field.name, field.key, answerType[type]]);
 		}
 	}, [questionKey]);
-
-	// function handleSelectCorrectAnswer(key: number, name: number) {
-	//   let questions, choice
-	//   const formValues = form.getFieldsValue()
-	//   if (questionKey !== undefined) {
-	//     questions = formValues.questions
-	//     choice = questions[questionKey].questions[field.key].choices[key]
-	//   } else {
-	//     questions = formValues.questions
-	//     choice = questions[field.key].choices[key]
-	//   }
-
-	//   if (type === 'single-choice') {
-	//     if (questionKey !== undefined) Object.assign(questions[questionKey].questions[field.key], { answers: choice })
-	//     else {
-	//       Object.assign(questions[field.key], { answers: choice })
-	//       form.setFieldValue(['questions', questionKey, name, 'is_correct'], true)
-	//     }
-	//     setCorrectAnswerKey([key])
-	//   } else if (type === 'multi-choice') {
-	//     if (questionKey !== undefined) {
-	//       const currentAnswer = questions[questionKey].questions[field.key].answers
-	//       const newAnswer = currentAnswer ? [...currentAnswer] : []
-	//       const newKeys = [...correctAnswerKey]
-	//       const index = newAnswer.indexOf(choice)
-	//       if (index === -1) {
-	//         // set correct answer
-	//         form.setFieldValue(['questions', questionKey, name, 'is_correct'], true)
-	//         newAnswer.push(choice)
-	//         newKeys.push(key)
-	//       } else {
-	//         // remove correct answer
-	//         form.setFieldValue(['questions', questionKey, name, 'is_correct'], false)
-	//         newAnswer.splice(index, 1)
-	//         newKeys.splice(index, 1)
-	//       }
-	//       Object.assign(questions[questionKey].questions[field.key], { answers: newAnswer })
-	//       setCorrectAnswerKey(newKeys)
-	//     } else {
-	//       const currentAnswer = questions[field.key].answers
-	//       const newAnswer = currentAnswer ? [...currentAnswer] : []
-	//       const newKeys = [...correctAnswerKey]
-	//       const index = newAnswer.indexOf(choice)
-	//       if (index === -1) {
-	//         // set correct answer
-	//         form.setFieldValue(['questions', questionKey, 'questions', field.key, name, 'is_correct'], true)
-	//         newAnswer.push(choice)
-	//         newKeys.push(key)
-	//       } else {
-	//         // remove correct answer
-	//         form.setFieldValue(['questions', questionKey, 'questions', field.key, name, 'is_correct'], false)
-	//         newAnswer.splice(index, 1)
-	//         newKeys.splice(index, 1)
-	//       }
-	//       Object.assign(questions[field.key], { answers: newAnswer })
-	//       setCorrectAnswerKey(newKeys)
-	//     }
-	//   }
-	//   form.setFieldsValue({ questions })
-	// }
 
 	return (
 		<div>
@@ -123,17 +55,8 @@ export default function QuestionAnswer({
 								{fields.map((field, index) => (
 									<Col span={12} key={field.key}>
 										<div className={cx("item")}>
-											{/* <QuestionTypeIcon
-                          correct={
-                            (type === 'single-choice' || type === 'multi-choice') && correctAnswerKey.includes(field.name)
-                          }
-                          onClick={() => {
-                            handleSelectCorrectAnswer(field.key, field.name)
-                          }}
-                          type={type}
-                        /> */}
 											{type ===
-											QUESTION_TYPE_ENUM.SINGLE_CHOICE ? (
+												QUESTION_TYPE_ENUM.SINGLE_CHOICE ? (
 												<Form.Item
 													valuePropName="checked"
 													name={[
@@ -152,7 +75,7 @@ export default function QuestionAnswer({
 													/>
 												</Form.Item>
 											) : type ===
-											  QUESTION_TYPE_ENUM.MULTI_CHOICE ? (
+												QUESTION_TYPE_ENUM.MULTI_CHOICE ? (
 												<Form.Item
 													valuePropName="checked"
 													name={[
@@ -235,19 +158,19 @@ export default function QuestionAnswer({
 			</Form.List>
 			{(type === QUESTION_TYPE_ENUM.MULTI_CHOICE ||
 				type === QUESTION_TYPE_ENUM.SINGLE_CHOICE) && (
-				<div hidden className={cx("answer")}>
-					<Form.Item
-						name={
-							questionKey !== undefined
-								? [field.name, "answers"]
-								: [field.name, field.key, "answers"]
-						}
-						label="Key"
-					>
-						<Input />
-					</Form.Item>
-				</div>
-			)}
+					<div hidden className={cx("answer")}>
+						<Form.Item
+							name={
+								questionKey !== undefined
+									? [field.name, "answers"]
+									: [field.name, field.key, "answers"]
+							}
+							label="Key"
+						>
+							<Input />
+						</Form.Item>
+					</div>
+				)}
 		</div>
 	);
 }

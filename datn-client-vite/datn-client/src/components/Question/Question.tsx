@@ -66,7 +66,11 @@ export default function Question({ field, dragHandler }: IQuestion) {
 							addonAfter="Point"
 						/>
 					</Form.Item>
-					<Form.Item hidden name="order" initialValue={field.key}>
+					<Form.Item
+						hidden
+						name={[field.name, field.key, "order"]}
+						initialValue={field.key}
+					>
 						<Input />
 					</Form.Item>
 					<Form.Item

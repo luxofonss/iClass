@@ -2,11 +2,12 @@
 import classNames from "classnames/bind";
 
 import styles from "./CourseLesson.module.scss";
-import { Col, Collapse, Empty, Row, Typography } from "antd";
+import { Checkbox, Col, Collapse, Empty, Row, Typography } from "antd";
 import { useParams } from "react-router-dom";
 import { courseApi } from "@/app-data/service/course.service";
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
+import { Book, Video } from "lucide-react";
 const cx = classNames.bind(styles);
 
 export default function CourseLesson() {
@@ -28,7 +29,7 @@ export default function CourseLesson() {
 	return (
 		<div className={cx("wrapper")}>
 			<Row gutter={32}>
-				<Col span={18}>
+				<Col span={17}>
 					<ReactPlayer
 						width={"100%"}
 						height={"auto"}
@@ -39,7 +40,7 @@ export default function CourseLesson() {
 						{currentLesson?.name}
 					</Typography.Title>
 				</Col>
-				<Col span={6}>
+				<Col span={7}>
 					<Collapse>
 						{course?.data?.sections?.map((section, index) => (
 							// <div key={section?.id}>
@@ -47,6 +48,7 @@ export default function CourseLesson() {
 							// 	<div>{section?.description}</div>
 							// </div>
 							<Collapse.Panel
+								className={cx("panel")}
 								header={
 									"Section " +
 									(index + 1) +
@@ -60,32 +62,52 @@ export default function CourseLesson() {
 										if (lesson.type === "VIDEO")
 											return (
 												<div
+													className={cx("lesson")}
 													key={lesson.id}
 													onClick={() =>
 														setCurrentLesson(lesson)
 													}
 												>
-													<div>
-														{index + 1}.{" "}
-														{lesson?.name}
+													<div
+														className={cx(
+															"heading"
+														)}
+													>
+														<Checkbox />
+														<div>
+															{index + 1}.{" "}
+															{lesson?.name}
+														</div>
 													</div>
+													<Video size={14} />
 												</div>
 											);
 										else
 											return (
 												<div
+													className={cx("assignment")}
 													key={lesson?.id}
 													onClick={() => {
 														setCurrentLesson(null);
 													}}
 												>
-													{lesson?.name}
-													assignment
+													<div
+														className={cx(
+															"heading"
+														)}
+													>
+														<Checkbox />
+														<div>
+															{index + 1}.{" "}
+															{lesson?.name}
+														</div>
+													</div>
+													<Book size={14} />
 												</div>
 											);
 									})
 								) : (
-									<Empty />
+									<div>This course is empty</div>
 								)}
 							</Collapse.Panel>
 						))}

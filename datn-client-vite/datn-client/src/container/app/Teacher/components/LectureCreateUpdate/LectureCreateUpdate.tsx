@@ -4,11 +4,12 @@ import classNames from "classnames/bind";
 import styles from "./LectureCreateUpdate.module.scss";
 import { Button, Card, Form, Input, Space } from "antd";
 import { Fragment, useEffect, useState } from "react";
-import { LectureSchema, SectionSchema } from "@/shared/schema/course.schema";
+import { SectionSchema } from "@/shared/schema/course.schema";
 import { courseApi } from "@/app-data/service/course.service";
 import toast from "react-hot-toast";
 import { Link, useParams } from "react-router-dom";
 import { uploadApi } from "@/app-data/service/upload.service";
+import ReactPlayer from "react-player";
 const cx = classNames.bind(styles);
 
 interface ILectureCreateUpdate {
@@ -23,6 +24,8 @@ export default function LectureCreateUpdate({
 	const { courseId } = useParams();
 	const [addLesson, { isLoading: isAddingLesson }] =
 		courseApi.endpoints.addLesson.useMutation();
+	const [getCourse, { isLoading: isGettingCourse }] =
+		courseApi.endpoints.getCourseById.useLazyQuery();
 	const [uploadFile] = uploadApi.endpoints.uploadFile.useMutation();
 
 	const [lessonForm] = Form.useForm();
@@ -36,6 +39,7 @@ export default function LectureCreateUpdate({
 	}, [sectionData]);
 
 	async function handleAddLesson(values: any) {
+		console.log(values);
 		try {
 			await addLesson({
 				courseId,
@@ -49,6 +53,8 @@ export default function LectureCreateUpdate({
 				},
 			}).unwrap();
 			toast.success("Add lesson successfully!");
+			getCourse({ id: courseId as string });
+			lessonForm.resetFields();
 		} catch (error) {
 			toast.error("Something went wrong!");
 			console.log(error);
@@ -66,6 +72,7 @@ export default function LectureCreateUpdate({
 
 				const res = await uploadFile(formData).unwrap();
 				lessonForm.setFieldValue("resourceId", res?.data?.id);
+				lessonForm.setFieldValue("resource", res?.data);
 			} catch (error) {
 				toast.error("Upload image fail, please try again!");
 				console.log("error:: ", error);
@@ -107,20 +114,16 @@ export default function LectureCreateUpdate({
 											>
 												<Input />
 											</Form.Item>
-											<video
-												width="320"
-												height="240"
+											<ReactPlayer
+												width="320px"
+												height="240px"
 												controls
-											>
-												<source
-													src={
-														sectionData.lessons[
-															field.name
-														]?.resource?.url
-													}
-													type="video/mp4"
-												/>
-											</video>
+												url={
+													sectionData.lessons[
+														field.name
+													]?.resource?.url
+												}
+											/>
 										</Fragment>
 									) : (
 										<Space>
@@ -140,7 +143,22 @@ export default function LectureCreateUpdate({
 													</Button>
 												</Link>
 											) : (
-												<Button>View assignment</Button>
+												<Link
+													about="blank"
+													to={`/teacher/courses/${courseId}/lectures/${
+														sectionData.lessons[
+															field.name
+														].id
+													}/assignment/${
+														sectionData.lessons[
+															field.name
+														].assignment?.id
+													}`}
+												>
+													<Button>
+														View assignment
+													</Button>
+												</Link>
 											)}
 										</Space>
 									)}
@@ -179,6 +197,9 @@ export default function LectureCreateUpdate({
 										}}
 										type="file"
 									/>
+								</Form.Item>
+								<Form.Item hidden name={"resourceId"}>
+									<Input />
 								</Form.Item>
 								<Form.Item
 									hidden

@@ -91,8 +91,12 @@ const appRoutes: RouteObject[] = [
 						element: <LectureDetail />,
 					},
 					{
-						path: "/teacher/courses/:courseId/lectures/:id/assignment",
-						element: <AddAssignment backAllAssignment={() => {}} />,
+						path: "/teacher/courses/:courseId/lectures/:lessonId/assignment",
+						element: <AddAssignment />,
+					},
+					{
+						path: "/teacher/courses/:courseId/lectures/:lessonId/assignment/:assignmentId",
+						element: <AddAssignment />,
 					},
 					{
 						path: "/teacher/courses/:courseId/files",

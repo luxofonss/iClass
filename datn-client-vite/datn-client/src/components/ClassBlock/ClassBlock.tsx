@@ -16,12 +16,7 @@ interface IClassBlockProps {
 export default function ClassBlock(props: IClassBlockProps) {
 	const { data, mode } = props;
 
-	console.log(
-		"mode:: ",
-		mode,
-		COURSE_VIEW_MODE,
-		mode === COURSE_VIEW_MODE.TEACHER
-	);
+	console.log(props.data);
 	return (
 		<div className={cx("class-block")}>
 			<div className={cx("thumbnail")}>
@@ -39,9 +34,9 @@ export default function ClassBlock(props: IClassBlockProps) {
 					<Tag color="lime">{data?.subject?.name}</Tag>
 					<Tag color="cyan">{data?.level}</Tag>
 					<Tag color="geekblue">
-						{data?.teacher?.last_name +
+						{data?.teacher?.lastName +
 							" " +
-							data?.teacher?.first_name}
+							data?.teacher?.firstName}
 					</Tag>
 				</div>
 				<Link
@@ -57,30 +52,7 @@ export default function ClassBlock(props: IClassBlockProps) {
 						{data?.name}
 					</Typography.Title>
 				</Link>
-				<div className={cx("info")}>
-					{/* <div className={cx('item')}>
-            <div className={cx('label')}>
-              4.5 (193 reviews) <Rate disabled defaultValue={4.5} />
-            </div>
-          </div> */}
-
-					{/* <div className={cx('item')}>
-            <div className={cx('price')}>
-              <Typography.Text className={cx('new')} strong>
-                {data?.price} {data?.currency?.toUpperCase()}
-              </Typography.Text>
-              <Typography.Text className={cx('old')} delete>
-                {data?.price}
-              </Typography.Text>
-            </div>
-            <div className={cx('nums-lecture')}>
-              <div className={cx('label')}>
-                <BookCopy size={18} />
-              </div>
-              <div className={cx('value')}>15 lectures</div>
-            </div>
-          </div> */}
-				</div>
+				<div className={cx("info")}></div>
 			</div>
 			<div className={cx("footer")}>
 				<Link
