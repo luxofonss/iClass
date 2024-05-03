@@ -19,60 +19,42 @@ interface IAssignmentsProps {
 export default function Assignments({ mode }: IAssignmentsProps) {
 	const [isAdding, setIsAdding] = useState(false);
 
-	const [getAssignmentsInCourse, { data: assignments }] =
-		courseApi.endpoints.getAssignmentsInCourse.useLazyQuery();
+	const [getCourse, { data: course }] =
+		courseApi.endpoints.getCourseById.useLazyQuery();
+
 
 	const { courseId } = useParams<{ courseId: string }>();
 
 	useEffect(() => {
-		if (getAssignmentsInCourse) {
-			getAssignmentsInCourse({ id: courseId }, false);
+		if (courseId) {
+			getCourse({ id: courseId });
+			console.log(courseId);
 		}
 	}, [courseId]);
 
 	return (
 		<div className={cx("assignments")}>
-			<div className={cx("heading")}>
-				{isAdding ? (
-					<Button
-						icon={<ChevronLeft size={14} />}
-						onClick={() => {
-							setIsAdding(false);
-						}}
-					>
-						Back
-					</Button>
-				) : mode === ROLE.TEACHER ? (
-					<Button
-						onClick={() => {
-							setIsAdding(true);
-						}}
-						icon={<Plus size={14} />}
-					>
-						New assignment
-					</Button>
-				) : null}
-			</div>
-			{isAdding ? (
-				<AddAssignment
-					backAllAssignment={() => {
-						setIsAdding(false);
-					}}
-				/>
-			) : (
-				<Row className={cx("body")} gutter={[24, 24]}>
-					{assignments?.data?.map((assignment: any) => {
-						return (
-							<Col span={6} key={assignment.id}>
-								<AssignmentBlock
-									mode={mode}
-									data={assignment}
-								/>
-							</Col>
-						);
-					})}
-				</Row>
-			)}
+			<Row className={cx("body")} gutter={[24, 24]}>
+				{course?.data?.sections?.map(section => {
+					return section?.lessons?.map((lesson: any) => {
+						if (lesson.type === "ASSIGNMENT") {
+							return (
+								<Col span={6} key={lesson.id}>
+									<AssignmentBlock
+										mode={mode}
+										data={lesson?.assignment}
+									/>
+								</Col>
+							);
+						}
+						else {
+							return null;
+						}
+					})
+				}
+				)
+				}
+			</Row>
 		</div>
 	);
 }

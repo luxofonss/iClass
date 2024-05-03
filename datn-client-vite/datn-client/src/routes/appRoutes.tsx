@@ -27,6 +27,8 @@ import NewClassDraft from "@/container/app/Teacher/pages/NewClassDraft";
 import AddAssignment from "@/container/app/Shared/components/AddAssignment";
 import CourseLesson from "@/container/app/Student/pages/CourseLesson";
 import LessonLearningLayout from "@/components/layouts/LessonLearningLayout";
+import CourseLessonView from "@/container/app/Student/pages/CourseLessonView";
+import CourseAbout from "@/container/app/Shared/components/CourseAbout/CourseAbout";
 
 const appRoutes: RouteObject[] = [
 	// TEACHER ROUTES
@@ -43,7 +45,7 @@ const appRoutes: RouteObject[] = [
 				element: <Classrooms mode={ROLE.TEACHER} />,
 			},
 			{
-				path: "/teacher/courses/edit/:courseId",
+				path: "/teacher/courses/:courseId/update",
 				element: <NewClass />,
 			},
 			{
@@ -61,7 +63,7 @@ const appRoutes: RouteObject[] = [
 			{
 				path: "/teacher/courses/files",
 				element: <Files />,
-			},
+			}
 		],
 	},
 
@@ -101,6 +103,10 @@ const appRoutes: RouteObject[] = [
 					{
 						path: "/teacher/courses/:courseId/files",
 						element: <ClassFiles />,
+					},
+					{
+						path: "/teacher/courses/:courseId/about",
+						element: <CourseAbout />,
 					},
 					{
 						path: "/teacher/courses/:courseId/settings",
@@ -143,7 +149,10 @@ const appRoutes: RouteObject[] = [
 						path: "/courses/:courseId/home",
 						element: <Class />,
 					},
-
+					{
+						path: "/courses/:courseId/lessons",
+						element: <CourseLessonView />,
+					},
 					{
 						path: "/courses/:courseId/lecture/:id",
 						element: <LectureDetail />,
@@ -151,6 +160,10 @@ const appRoutes: RouteObject[] = [
 					{
 						path: "/courses/:courseId/files",
 						element: <ClassFiles />,
+					},
+					{
+						path: "/courses/:courseId/about",
+						element: <CourseAbout />,
 					},
 					{
 						path: "/courses/:courseId/assignments",
@@ -169,7 +182,7 @@ const appRoutes: RouteObject[] = [
 		),
 		children: [
 			{
-				path: "/courses/:courseId/lessons",
+				path: "/courses/:courseId/lessons/:lessonId",
 				element: <CourseLesson />,
 			},
 		],

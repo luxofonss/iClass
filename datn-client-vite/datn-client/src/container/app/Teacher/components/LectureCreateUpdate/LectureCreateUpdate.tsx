@@ -99,7 +99,7 @@ export default function LectureCreateUpdate({
 									</Form.Item>
 
 									{sectionData.lessons[field.name].type ===
-									"VIDEO" ? (
+										"VIDEO" ? (
 										<Fragment>
 											<Form.Item
 												noStyle
@@ -132,11 +132,10 @@ export default function LectureCreateUpdate({
 												?.assignment === null ? (
 												<Link
 													about="blank"
-													to={`/teacher/courses/${courseId}/lectures/${
-														sectionData.lessons[
-															field.name
-														].id
-													}/assignment`}
+													to={`/teacher/courses/${courseId}/lectures/${sectionData.lessons[
+														field.name
+													].id
+														}/assignment`}
 												>
 													<Button>
 														Add Assignment
@@ -145,15 +144,13 @@ export default function LectureCreateUpdate({
 											) : (
 												<Link
 													about="blank"
-													to={`/teacher/courses/${courseId}/lectures/${
-														sectionData.lessons[
-															field.name
-														].id
-													}/assignment/${
-														sectionData.lessons[
+													to={`/teacher/courses/${courseId}/lectures/${sectionData.lessons[
+														field.name
+													].id
+														}/assignment/${sectionData.lessons[
 															field.name
 														].assignment?.id
-													}`}
+														}`}
 												>
 													<Button>
 														View assignment

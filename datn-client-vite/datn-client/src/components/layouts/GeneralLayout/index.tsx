@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 import { Layout } from 'antd'
 import classNames from 'classnames/bind'
 
-import GeneralHeader from '../components/GeneralHeader'
+import AppHeader from '../components/AppHeader'
 import styles from './GeneralLayout.module.scss'
 
 const cx = classNames.bind(styles)
@@ -13,7 +13,7 @@ const { Content } = Layout
 const GeneralLayout = () => {
   return (
     <Layout className={cx('app-layout')}>
-      <GeneralHeader />
+      <AppHeader />
       <Layout className={cx('layout-content')}>
         <Content
           style={{

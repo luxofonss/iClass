@@ -9,8 +9,8 @@ interface AuthState {
 		id: string;
 		email: string;
 		username: string;
-		first_name: string;
-		last_name: string;
+		firstName: string;
+		lastName: string;
 		phone_number: string;
 		gender: string;
 		role: string;
@@ -28,8 +28,8 @@ const initialState: AuthState = {
 		id: "",
 		email: "",
 		username: "",
-		first_name: "",
-		last_name: "",
+		firstName: "",
+		lastName: "",
 		phone_number: "",
 		gender: "",
 		role: "",

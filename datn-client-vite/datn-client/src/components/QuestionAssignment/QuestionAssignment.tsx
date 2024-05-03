@@ -44,17 +44,17 @@ export default function QuestionAssignment({
 	async function handleSubmitAnswer(values: any) {
 		try {
 			await submitAnswer({
-				assignment_attempt_id: attemptId as string,
-				question_id: data.id,
+				attemptId: attemptId as string,
+				questionId: data.id,
 				answer: {
-					selected_option_id:
-						data?.type === "multi_choice" ||
-						data?.type === "single_choice"
-							? values.answer
-							: null,
-					text_answer:
-						data?.type === "short_answer" ||
-						data?.type === "long_answer"
+					selectedOptionIds:
+						data?.type === "MULTIPLE_CHOICES" ? values.answer
+							: data?.type === "SINGLE_CHOICE"
+								? [values.answer]
+								: null,
+					textAnswer:
+						data?.type === "SHORT_ANSWER" ||
+							data?.type === "LONG_ANSWER"
 							? values.answer
 							: "",
 				},
@@ -68,11 +68,11 @@ export default function QuestionAssignment({
 	}
 
 	function checkAnswer() {
-		if (data?.type === "multi_choice" || data?.type === "single_choice") {
-			// return data?.answer[0]?.selected_option_id === form.getFieldValue('answer')
+		if (data?.type === "MULTIPLE_CHOICES" || data?.type === "SINGLE_CHOICE") {
+			// return data?.answer[0]?.selectedOptions === form.getFieldValue('answer')
 			const isRight =
 				data?.choices?.find((choice: any) => choice?.is_correct)?.id ===
-				data?.answer[0]?.selected_option_id;
+				data?.answer[0]?.selectedOptions;
 
 			if (isRight) {
 				return data?.point;
@@ -81,7 +81,7 @@ export default function QuestionAssignment({
 			}
 		}
 
-		if (data?.type === "short_answer") {
+		if (data?.type === "SHORT_ANSWER") {
 			// return data?.answer[0]?.text_answer === form.getFieldValue('answer')
 			const isRight = data?.choices?.find(
 				(choice: any) =>
@@ -94,7 +94,7 @@ export default function QuestionAssignment({
 			}
 		}
 
-		if (data?.type === "long_answer") {
+		if (data?.type === "LONG_ANSWER") {
 			return data?.answer[0]?.score || 0;
 		}
 
@@ -120,10 +120,10 @@ export default function QuestionAssignment({
 	}
 
 	return (
-		<div className={cx("question-assignment")}>
+		<div className={cx("wrapper")}>
 			<Form form={form} onFinish={handleSubmitAnswer}>
-				<Typography.Text>
-					<strong>Question {order + 1}:</strong>{" "}
+				<Typography.Text className={cx('heading')}>
+					<strong>Câu {order + 1}:</strong>{" "}
 					{(mode === "RESULT" || mode === "TEACHER") && (
 						<Tag color={checkAnswer() === 0 ? "red" : "green"}>
 							{checkAnswer()}/{data?.point}
@@ -139,15 +139,13 @@ export default function QuestionAssignment({
 						<track kind="captions" />
 					</audio>
 				)}
-				{data?.type === "multi_choice" && (
+				{data?.type === "MULTIPLE_CHOICES" && (
 					<Form.Item
 						rules={[{ required: true }]}
 						name="answer"
 						valuePropName="value"
 						initialValue={
-							data?.answer?.length > 0
-								? data?.answer[0]?.selected_option_id
-								: data?.answer?.selected_option_id
+							data?.answer?.selectedOptions?.map(o => o?.id)
 						}
 					>
 						<Checkbox.Group className={cx("choices")}>
@@ -169,15 +167,13 @@ export default function QuestionAssignment({
 						</Checkbox.Group>
 					</Form.Item>
 				)}
-				{data?.type === "single_choice" && (
+				{data?.type === "SINGLE_CHOICE" && (
 					<Form.Item
 						rules={[{ required: true }]}
 						name="answer"
 						valuePropName="value"
 						initialValue={
-							data?.answer?.length > 0
-								? data?.answer[0]?.selected_option_id
-								: data?.answer?.selected_option_id
+							data?.answer?.selectedOptions?.length > 0 ? data?.answer?.selectedOptions[0].id : null
 						}
 					>
 						<Radio.Group className={cx("choices")}>
@@ -204,7 +200,7 @@ export default function QuestionAssignment({
 						</Radio.Group>
 					</Form.Item>
 				)}
-				{data?.type === "short_answer" && (
+				{data?.type === "SHORT_ANSWER" && (
 					<Form.Item
 						rules={[{ required: true }]}
 						name="answer"
@@ -244,7 +240,7 @@ export default function QuestionAssignment({
 						{mode === "ATTEMPT" && <Input />}
 					</Form.Item>
 				)}
-				{data?.type === "long_answer" && (
+				{data?.type === "LONG_ANSWER" && (
 					<Fragment>
 						{mode === "TEACHER" && (
 							<div>
@@ -312,12 +308,12 @@ export default function QuestionAssignment({
 						}}
 						htmlType="submit"
 						loading={isSubmitting}
-						// type='primary'
+					// type='primary'
 					>
 						Submit
 					</Button>
 				)}
 			</Form>
-		</div>
+		</div >
 	);
 }

@@ -90,7 +90,7 @@ export const courseApi = createApi({
 		joinCourseByCode: build.mutation<any, { code: string }>({
 			query: (body) => {
 				return {
-					url: `/courses/attempt`,
+					url: `/courses/register-with-code`,
 					method: "POST",
 					body: body,
 					credentials: "include",
@@ -177,6 +177,22 @@ export const courseApi = createApi({
 				url: `/courses/${body.courseId}/sections/${body.sectionId}/lessons`,
 				method: "POST",
 				body: { lessons: [body.data] },
+			}),
+		}),
+
+		addStudyStatus: build.mutation<any, any>({
+			query: (body) => ({
+				url: `/courses/${body.courseId}/sections/${body.sectionId}/lessons/${body.lessonId}/study-status`,
+				body: body.data,
+				method: "POST",
+			}),
+		}),
+
+		updateStudyStatus: build.mutation<any, any>({
+			query: (body) => ({
+				url: `/courses/${body.courseId}/sections/${body.sectionId}/lessons/${body.lessonId}/study-status`,
+				body: body.data,
+				method: "PUT",
 			}),
 		}),
 	}),

@@ -1,0 +1,38 @@
+@import "@/shared/styles/mixins";
+
+.wrapper {
+	.heading {
+		font-size: 16px;
+		color: "#141516";
+	}
+	.section {
+		.lesson {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			height: 56px;
+			padding: 0 12px;
+			transition: all 0.25s ease-in-out;
+
+			.left {
+				display: flex;
+				align-items: center;
+				gap: 24px;
+			}
+
+			.right {
+				display: flex;
+				align-items: center;
+				gap: 24px;
+
+				.play {
+					cursor: pointer;
+				}
+			}
+
+			&:hover {
+				background-color: #eae3fc;
+			}
+		}
+	}
+}

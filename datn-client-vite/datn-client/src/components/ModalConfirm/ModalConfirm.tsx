@@ -35,7 +35,7 @@ const ModalConfirm = forwardRef<ModalConfirmHandle, ModalConfirmProps>((props, r
   return (
     <div className={cx('app-wrapper')}>
       {props.btnText && (
-        <Button type='default' onClick={() => setOpen(true)}>
+        <Button type='primary' onClick={() => setOpen(true)}>
           {props.btnText}
         </Button>
       )}

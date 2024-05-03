@@ -39,7 +39,7 @@ export default function AttemptAssignment() {
 	}
 
 	return (
-		<div className={cx("attempt-assignment", "container")}>
+		<div className={cx("wrapper", "container")}>
 			<Row gutter={24}>
 				<Col span={18}>
 					<Typography.Title level={3}>
@@ -51,7 +51,7 @@ export default function AttemptAssignment() {
 				</Col>
 				<Col span={6}>
 					<div>
-						{assignmentAttempt?.data?.assignment_time_millis && (
+						{assignmentAttempt?.data?.duration && (
 							<Countdown
 								renderer={(props) => (
 									<div style={{ fontSize: 24 }}>
@@ -62,7 +62,7 @@ export default function AttemptAssignment() {
 								)}
 								date={
 									Date.now() +
-									assignmentAttempt?.data?.remaining_time
+									assignmentAttempt?.data?.duration
 								}
 							/>
 						)}

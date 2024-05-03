@@ -28,6 +28,7 @@ export default function AssignmentBlockTeacher(
 	const [attemptAssignment] =
 		assignmentApi.endpoints.attemptAssignment.useMutation();
 
+	console.log(data)
 	async function handleAttemptAssignment() {
 		if (data?.id)
 			try {

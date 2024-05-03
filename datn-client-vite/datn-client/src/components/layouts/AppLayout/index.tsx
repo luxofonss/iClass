@@ -12,7 +12,7 @@ const cx = classNames.bind(styles);
 const { Content } = Layout;
 
 const AppLayout = ({
-	padding = 32,
+	padding = 0,
 	collapsed = true,
 	mode,
 }: {
@@ -24,18 +24,14 @@ const AppLayout = ({
 		<Layout className={cx("app-layout")}>
 			<AppHeader />
 			<Layout className={cx("layout-content")}>
-				<AppSider collapsed={collapsed} mode={mode} />
+				{/* <AppSider collapsed={collapsed} mode={mode} /> */}
 				<Content
 					style={{
-						marginLeft: 80,
-						padding: padding,
 						minHeight: 280,
 						background: "#F2F2F2",
 					}}
 				>
-					<div className={cx("container")}>
-						<Outlet />
-					</div>
+					<Outlet />
 				</Content>
 			</Layout>
 		</Layout>

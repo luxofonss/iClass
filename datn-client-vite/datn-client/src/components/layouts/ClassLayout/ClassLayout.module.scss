@@ -3,13 +3,16 @@
 .class-layout {
 	width: 100%;
 	height: 100%;
-	display: flex;
 	position: relative;
+
+	.banner {
+		@include banner;
+		font-size: 32px;
+	}
 
 	.content {
 		padding: 24px;
 		min-height: 280px;
-		margin-left: 320px;
 
 		.heading {
 			display: flex;

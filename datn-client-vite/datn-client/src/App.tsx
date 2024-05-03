@@ -54,7 +54,7 @@ const App: FC = () => {
 			<ConfigProvider
 				theme={{
 					token: {
-						fontFamily: "Roboto, sans-serif",
+						fontFamily: "SF Pro Text",
 						fontSize: 14,
 						colorPrimary: "#FC77A0",
 					},
@@ -68,6 +68,16 @@ const App: FC = () => {
 							labelColor: "rgb(51, 56, 63)",
 							marginLG: 12,
 						},
+						Button: {
+							borderRadius: 12
+						},
+						Collapse: {
+							headerBg: "#F7ECFE",
+							colorBorder: "#f7f7f7"
+						},
+						// "Table": {
+						// 	"headerBg": "rgb(239, 240, 240)"
+						// }
 					},
 				}}
 			>

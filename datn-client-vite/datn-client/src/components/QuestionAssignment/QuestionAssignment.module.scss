@@ -1,10 +1,17 @@
 @import "@/shared/styles/mixins";
 
-.question-assignment {
+.wrapper {
 	margin-top: 12px;
+
+	.heading {
+		display: flex;
+		gap: 8px;
+		font-size: 16px;
+	}
 
 	.choices {
 		display: flex;
 		flex-direction: column;
+		color: #141516;
 	}
 }

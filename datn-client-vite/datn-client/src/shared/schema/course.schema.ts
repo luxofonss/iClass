@@ -54,6 +54,7 @@ export type CourseViewSchema = {
 	grade: number | string;
 	courseInfos?: CourseInfoSchema[];
 	sections?: SectionSchema[];
+	createdAt?: string;
 };
 
 export type SimpleCourseView = {
@@ -85,6 +86,7 @@ export type SectionSchema = {
 	name: string;
 	description: string;
 	lectures: LectureSchema[];
+	lessons: LectureSchema[];
 };
 
 export type LectureSchema = {
@@ -94,6 +96,8 @@ export type LectureSchema = {
 	order: number;
 	type: string;
 	video_url: string;
+	lessonStudent: LessonStudent;
+	createdAt: string;
 };
 
 export type SubjectSchema = {
@@ -104,4 +108,11 @@ export type SubjectSchema = {
 	created_at: string;
 	updated_at: string;
 	deleted_at: string;
+};
+
+export type LessonStudent = {
+	status: string;
+	createdAt: string;
+	updatedAt: string;
+	deletedAt: string;
 };

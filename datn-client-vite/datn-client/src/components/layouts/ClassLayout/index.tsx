@@ -7,6 +7,7 @@ import classNames from "classnames/bind";
 import { useEffect } from "react";
 import ClassLayoutSider from "../components/ClassLayoutSider";
 import styles from "./ClassLayout.module.scss";
+import { Col, Row } from "antd";
 
 const cx = classNames.bind(styles);
 
@@ -30,35 +31,41 @@ function ClassLayout(props: IClassLayout) {
 
 	return (
 		<div className={cx("class-layout")}>
-			<ClassLayoutSider
-				mode={mode}
-				data={course?.data}
-				siderCollapsed={false}
-			/>
-			<Content
+			<div
 				style={{
-					padding: 24,
-					minHeight: 280,
-					background: "#F2F2F2",
-				}}
-				className={cx("content")}
-			>
-				{/* <div className={cx('heading')}>
-          <div className={cx('title')}>
-            <Home /> Home page
-          </div>
-          <div>
-            <Expand
-              onClick={() => {
-                setSiderCollapsed(!siderCollapsed)
-              }}
-            />
-          </div>
-        </div> */}
-				<div className={cx("outlet")}>
-					<Outlet />
-				</div>
-			</Content>
+					backgroundImage: course?.data?.backgroundImage ? `linear-gradient(
+						90deg,
+						#9b16f3 32.4%,
+						rgba(155, 22, 243, 0.2) 100%
+					) , url(${course?.data?.backgroundImage})` : `linear-gradient(
+					90deg,
+					#9b16f3 32.4%,
+					rgba(155, 22, 243, 0.2) 100%
+				) , url("https://codeop.tech/wp-content/uploads/2023/11/florian-olivo-4hbJ-eymZ1o-unsplash-scaled.jpg")` }}
+				className={cx('banner')}>{course?.data?.name}</div>
+			<Row gutter={24}>
+				<Col span={4}>
+					<ClassLayoutSider
+						mode={mode}
+						data={course?.data}
+						siderCollapsed={false}
+					/>
+				</Col>
+				<Col span={20}>
+					<Content
+						style={{
+							padding: 24,
+							minHeight: 280,
+							background: "#F2F2F2",
+						}}
+						className={cx("content")}
+					>
+						<div className={cx("outlet")}>
+							<Outlet />
+						</div>
+					</Content>
+				</Col>
+			</Row>
 		</div>
 	);
 }

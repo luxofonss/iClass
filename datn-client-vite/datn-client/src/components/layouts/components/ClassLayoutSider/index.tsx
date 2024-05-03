@@ -39,7 +39,7 @@ export default function ClassLayoutSider({
 					? `/teacher/courses/${courseId}/home`
 					: `/courses/${courseId}/home`,
 			icon: <GraduationCap size={16} />,
-			label: "Home page",
+			label: "Bảng tin",
 		},
 		{
 			key:
@@ -47,7 +47,7 @@ export default function ClassLayoutSider({
 					? `/teacher/courses/${courseId}/lectures`
 					: `/courses/${courseId}/lessons`,
 			icon: <BookCheck size={16} />,
-			label: "Lectures",
+			label: "Chương trình học",
 		},
 		{
 			key:
@@ -55,20 +55,21 @@ export default function ClassLayoutSider({
 					? `/teacher/courses/${courseId}/assignments`
 					: `/courses/${courseId}/assignments`,
 			icon: <BookText size={16} />,
-			label: "Assignments",
+			label: "Bài tập",
 		},
 		{
 			key:
 				mode === ROLE.TEACHER
 					? `/teacher/courses/${courseId}/files`
-					: `/courses/${courseId}/files`,
+					: `/courses/${courseId}/about`,
 			icon: <Folder size={16} />,
-			label: "Files",
+			label: "Về lớp học",
 		},
+
 		mode === ROLE.TEACHER && {
 			key: `/teacher/courses/${courseId}/settings`,
 			icon: <Settings size={16} />,
-			label: "Settings",
+			label: "Cài đặt",
 		},
 	];
 
@@ -79,25 +80,8 @@ export default function ClassLayoutSider({
 			trigger={null}
 			collapsible
 			collapsed={siderCollapsed}
-			width={240}
+			width={"100%"}
 		>
-			<div className={cx("class-info")}>
-				<img
-					className={cx("thumbnail")}
-					src={data?.thumbnail}
-					alt="logo"
-				/>
-				{!siderCollapsed && (
-					<Typography.Title
-						level={4}
-						ellipsis={{ rows: 2, tooltip: data?.name }}
-						className={cx("class-name")}
-					>
-						{data?.name}
-					</Typography.Title>
-				)}
-			</div>
-			<Divider />
 			<Menu
 				className={cx("menu")}
 				theme="light"

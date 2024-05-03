@@ -30,12 +30,11 @@ export const assignmentApi = createApi({
 				};
 			},
 		}),
-		attemptAssignment: build.mutation<any, { assignment_id: string }>({
-			query: (body) => {
+		attemptAssignment: build.mutation<any, string>({
+			query: (id) => {
 				return {
-					url: `http://localhost:8080/v1/assignments/attempt`,
+					url: `/assignments/${id}/attempts`,
 					method: "POST",
-					body: body,
 					credentials: "include",
 				};
 			},
@@ -43,7 +42,7 @@ export const assignmentApi = createApi({
 		getAssignmentAttempt: build.query<any, string>({
 			query: (id) => {
 				return {
-					url: `http://localhost:8080/v1/assignments/attempt/${id}`,
+					url: `/assignments/attempts/${id}`,
 					method: "GET",
 					credentials: "include",
 				};
@@ -52,17 +51,17 @@ export const assignmentApi = createApi({
 		submitAnswer: build.mutation<
 			any,
 			{
-				assignment_attempt_id: string;
-				question_id: string;
+				attemptId: string;
+				questionId: string;
 				answer: {
-					selected_option_id?: string;
-					text_answer?: string;
+					selectedOptionIds?: string[];
+					textAnswer?: string;
 				};
 			}
 		>({
 			query: (body) => {
 				return {
-					url: `http://localhost:8080/v1/assignment-attempt/${body.assignment_attempt_id}/question/${body.question_id}/answer`,
+					url: `/assignments/attempts/${body.attemptId}/questions/${body.questionId}`,
 					method: "POST",
 					body: body.answer,
 					credentials: "include",
@@ -75,7 +74,7 @@ export const assignmentApi = createApi({
 		>({
 			query: (params) => {
 				return {
-					url: `http://localhost:8080/v1/teacher/assignments/attempt/get-all-attempts`,
+					url: `/teacher/assignments/attempt/get-all-attempts`,
 					method: "GET",
 					params: params,
 					credentials: "include",
@@ -88,7 +87,7 @@ export const assignmentApi = createApi({
 		>({
 			query: (params) => {
 				return {
-					url: `http://localhost:8080/v1/assignments/attempt-result/${params.assignment_attempt_id}`,
+					url: `/assignments/attempt-result/${params.assignment_attempt_id}`,
 					method: "GET",
 					credentials: "include",
 				};
@@ -104,7 +103,7 @@ export const assignmentApi = createApi({
 		>({
 			query: (body) => {
 				return {
-					url: `http://localhost:8080/v1/assignment-attempt/${body.assignment_attempt_id}/answer/${body.answer_id}/feedback`,
+					url: `/assignment-attempt/${body.assignment_attempt_id}/answer/${body.answer_id}/feedback`,
 					method: "POST",
 					body: body.body,
 					credentials: "include",
@@ -125,7 +124,7 @@ export const assignmentApi = createApi({
 		>({
 			query: (body) => {
 				return {
-					url: `http://localhost:8080/v1/assignment-attempt/${body.assignment_attempt_id}/question/${body.question_id}/answer`,
+					url: `/assignment-attempt/${body.assignment_attempt_id}/question/${body.question_id}/answer`,
 					method: "PUT",
 					body: body.answer,
 					credentials: "include",
@@ -138,7 +137,7 @@ export const assignmentApi = createApi({
 		>({
 			query: (params) => {
 				return {
-					url: `http://localhost:8080/v1/assignment-attempt/${params.assignment_attempt_id}/submit`,
+					url: `/assignment-attempt/${params.assignment_attempt_id}/submit`,
 					method: "POST",
 					credentials: "include",
 				};

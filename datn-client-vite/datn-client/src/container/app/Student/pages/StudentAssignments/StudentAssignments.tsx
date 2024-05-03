@@ -4,13 +4,15 @@ import { courseApi } from "@/app-data/service/course.service";
 import AssignmentBlockTeacher from "@/container/app/Teacher/components/AssignmentBlockTeacher";
 import { AssignmentViewSchema } from "@/shared/schema/assignment.schema";
 import formatTimeString from "@/shared/utils/formatTimeString";
-import { Button, Col, Row, Tabs, Typography } from "antd";
+import { Badge, Button, Col, Dropdown, Row, Space, TableColumnsType, Tabs, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import Table from "antd/es/table";
 import classNames from "classnames/bind";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styles from "./StudentAssignments.module.scss";
+import { LectureSchema, SectionSchema } from "@/shared/schema/course.schema";
+import { ChevronDown } from "lucide-react";
 
 const cx = classNames.bind(styles);
 
@@ -33,96 +35,80 @@ interface DataType {
 }
 
 export default function StudentAssignments({ mode }: IAssignmentsProps) {
-	const [getAssignmentsInCourse, { data: assignments }] =
-		courseApi.endpoints.getAssignmentsInCourse.useLazyQuery();
-	const [getAllAssignmentAttemptInCourse, { data: allAssignmentAttempt }] =
-		assignmentApi.endpoints.getAllAssignmentAttemptInCourse.useLazyQuery();
-	const { id } = useParams<{ id: string }>();
+	const [lessonData, setLessonData] = useState<LectureSchema[]>([])
+	const [getCourse, { data: course }] =
+		courseApi.endpoints.getCourseById.useLazyQuery();
+
+	const { courseId } = useParams();
+
+	async function handleGetCourse() {
+
+		if (courseId) {
+			const response = await getCourse({ id: courseId }).unwrap()
+
+			const data: LectureSchema[] = []
+			response?.data?.sections?.forEach((section: SectionSchema) => {
+				section?.lessons?.forEach((lesson: LectureSchema) => {
+					if (lesson?.type === 'ASSIGNMENT') {
+						data.push(lesson)
+					}
+				})
+			})
+
+			setLessonData(data)
+		}
+	}
 
 	useEffect(() => {
-		getAssignmentsInCourse(id, false);
-		getAllAssignmentAttemptInCourse({ course_id: id as string }, false);
-	}, [id]);
+		handleGetCourse()
+	}, [courseId]);
 
-	const onChange = (key: string) => {
-		console.log(key);
+
+
+	const expandedRowRender = (row) => {
+		console.log("row:: ", row)
+		const columns: TableColumnsType<DataType> = [
+			{ title: 'Stt', dataIndex: 'stt', key: 'stt	' },
+			{ title: 'Bắt đầu', dataIndex: 'startTime', key: 'startTime' },
+			{
+				title: 'Tổng điểm',
+				key: 'totalMark',
+				dataIndex: "totalMark"
+			},
+			{ title: 'Upgrade Status', dataIndex: 'upgradeNum', key: 'upgradeNum' },
+			{
+				title: 'Action',
+				key: 'operation',
+				render: () => (
+					<Space size="middle">
+						<a>Pause</a>
+						<a>Stop</a>
+					</Space>
+				),
+			},
+		];
+		return <Table columns={columns} dataSource={row?.assignment?.attempts} pagination={false} />;
 	};
 
-	const columns: ColumnsType<DataType> = [
-		{
-			title: "Title",
-			dataIndex: "assignment",
-			key: "title",
-			render: (_, { assignment }) => (
-				<Typography.Paragraph>{assignment.title}</Typography.Paragraph>
-			),
-		},
-		{
-			title: "Thời gian bắt đầu",
-			dataIndex: "created_at",
-			render: (_, { created_at }) => {
-				return formatTimeString(created_at);
-			},
-		},
-		{
-			title: "Điểm",
-			dataIndex: "point",
-			key: "point",
-		},
-		{
-			title: "Action",
-			key: "action",
-			render: (_, record) => {
-				return (
-					<Fragment>
-						{record?.assignment?.multiple_attempts && (
-							<a
-								href={`/student/assignment/${record.assignment_id}`}
-							>
-								Làm lại
-							</a>
-						)}
-						<Link
-							to={`/courses/${id}/assignments/attempt-review/${record?.id}`}
-						>
-							<Button>Xem chi tiết</Button>
-						</Link>
-					</Fragment>
-				);
-			},
-		},
+	const columns: TableColumnsType<DataType> = [
+		{ title: 'STT', dataIndex: 'index', key: 'id' },
+		{ title: 'Tên bài học', dataIndex: 'name', key: 'name' },
+		{ title: 'Thời gian', dataIndex: 'assignment', key: 'duration', render: (assignment) => assignment?.duration ? assignment?.duration / 1000 + 'm' : "NaN" },
+		{ title: 'Số lần làm bài', dataIndex: 'assignment', key: 'maxAttemptTimes', render: (assignment) => assignment?.maxAttemptTimes },
+		{ title: 'Điểm tối đa', dataIndex: 'assignment', key: 'totalMark', render: (assignment) => assignment?.totalMark },
+		{ title: 'Dạng bài tập', dataIndex: 'assignment', key: 'assignmentType', render: (assignment) => assignment?.assignmentType },
+		{ title: 'Số bài nộp', dataIndex: 'assignment', key: 'createdAt', render: (assignment) => assignment?.attempts?.length },
+		{ title: 'Action', key: 'operation', render: () => <Button type="primary">Làm lại</Button> },
 	];
 
 	return (
 		<div className={cx("assignments")}>
-			<Tabs defaultActiveKey="1" onChange={onChange}>
-				<Tabs.TabPane tab="Assignments" key="assignments">
-					<Row className={cx("body")} gutter={[24, 24]}>
-						{assignments?.data?.map((assignment: any) => {
-							return (
-								<Col span={6} key={assignment.id}>
-									<AssignmentBlockTeacher
-										mode={mode}
-										data={assignment}
-									/>
-								</Col>
-							);
-						})}
-					</Row>
-				</Tabs.TabPane>
-				<Tabs.TabPane
-					tab="Attempted assignments"
-					key="attempted-assignments"
-				>
-					{allAssignmentAttempt && (
-						<Table
-							pagination={false}
-							columns={columns}
-							dataSource={allAssignmentAttempt?.data}
-						/>
-					)}
-				</Tabs.TabPane>
-			</Tabs>
+			<Table
+				columns={columns}
+				expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'], }}
+				dataSource={lessonData}
+				rowKey={row => row?.id}
+			/>
 		</div>
 	);
 }

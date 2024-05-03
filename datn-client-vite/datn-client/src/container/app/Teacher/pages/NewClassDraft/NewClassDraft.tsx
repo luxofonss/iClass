@@ -27,7 +27,7 @@ export default function NewClassDraft() {
 			const response = await createCourse(data).unwrap();
 			toast.success("Create course successfully!");
 
-			navigate(`/teacher/courses/edit/${response?.data}`);
+			navigate(`/teacher/courses/${response?.data}/update`);
 		} catch (error: any) {
 			toast.error(error?.data?.message || "Create course error!");
 		}

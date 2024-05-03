@@ -28,40 +28,38 @@ export default function ClassBlock(props: IClassBlockProps) {
 					alt="thumbnail"
 				/>
 			</div>
-			<Divider />
 			<div className={cx("info")}>
 				<div className={cx("tags")}>
-					<Tag color="lime">{data?.subject?.name}</Tag>
-					<Tag color="cyan">{data?.level}</Tag>
-					<Tag color="geekblue">
+					<Typography.Text className={cx('item')}>
 						{data?.teacher?.lastName +
 							" " +
 							data?.teacher?.firstName}
-					</Tag>
+					</Typography.Text>
+					<Typography.Text className={cx('item')} >{data?.subject?.name}</Typography.Text>
+
 				</div>
 				<Link
 					to={
 						mode.toUpperCase() === COURSE_VIEW_MODE.TEACHER
 							? `/teacher/courses/${data?.id}/home`
 							: mode.toUpperCase() === COURSE_VIEW_MODE.ENROLLED
-							? `/courses/${data?.id}/home`
-							: `/courses/${data?.id}`
+								? `/courses/${data?.id}/home`
+								: `/courses/${data?.id}`
 					}
 				>
-					<Typography.Title level={5} className={cx("name")}>
+					<Typography.Title ellipsis={{ rows: 2 }} level={5} className={cx("name")}>
 						{data?.name}
 					</Typography.Title>
 				</Link>
-				<div className={cx("info")}></div>
 			</div>
-			<div className={cx("footer")}>
+			{/* <div className={cx("footer")}>
 				<Link
 					to={
 						mode.toUpperCase() === COURSE_VIEW_MODE.TEACHER
 							? `/teacher/courses/${data?.id}/home`
 							: mode.toUpperCase() === COURSE_VIEW_MODE.ENROLLED
-							? `/courses/${data?.id}/home`
-							: `/courses/${data?.id}`
+								? `/courses/${data?.id}/home`
+								: `/courses/${data?.id}`
 					}
 				>
 					<Button>View detail</Button>
@@ -69,7 +67,7 @@ export default function ClassBlock(props: IClassBlockProps) {
 				{mode.toUpperCase() === COURSE_VIEW_MODE.NOT_ENROLLED && (
 					<Button type="primary">Enroll</Button>
 				)}
-			</div>
+			</div> */}
 		</div>
 	);
 }

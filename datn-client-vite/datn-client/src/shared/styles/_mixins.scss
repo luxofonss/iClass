@@ -1,65 +1,85 @@
-@import './variables';
+@import "./variables";
 
 @mixin flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 @mixin flex-between {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 @mixin background-image {
-  // background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
+	// background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 @mixin card-wrapper {
-  background-color: #fefefe;
-  border: 1px solid #ededed;
-  border-radius: 16px;
-  transition: all 0.2s ease-in-out;
-  padding: 16px;
+	background-color: #fefefe;
+	border: 1px solid #ededed;
+	border-radius: 16px;
+	transition: all 0.2s ease-in-out;
+	padding: 16px;
 
-  &:hover {
-    box-shadow: 0 0 6px 0 hsl(0, 0%, 83%);
-  }
+	&:hover {
+		box-shadow: 0 0 6px 0 hsl(0, 0%, 83%);
+	}
+}
+
+@mixin banner {
+	position: relative;
+	width: 100%;
+	padding: 48px 80px;
+	background-color: #6609a5;
+	font-size: 48px;
+	font-weight: 500;
+	color: white;
+	mask-image: linear-gradient(
+		90deg,
+		#9b16f3 32.4%,
+		rgba(155, 22, 243, 0.2) 100%
+	);
+	-webkit-mask-image: linear-gradient(
+		90deg,
+		#9b16f3 32.4%,
+		rgba(155, 22, 243, 0.2) 100%
+	);
 }
 
 @mixin white-shadow {
-  box-shadow: 0 0 6px 0 hsl(0, 0%, 83%);
+	box-shadow: 0 0 6px 0 hsl(0, 0%, 83%);
 }
 
 @mixin mobile {
-  @media (max-width: #{$sm - 1px}) {
-    @content;
-  }
+	@media (max-width: #{$sm - 1px}) {
+		@content;
+	}
 }
 
 @mixin tablet {
-  @media (min-width: $md) and (max-width: #{$lg - 1px}) {
-    @content;
-  }
+	@media (min-width: $md) and (max-width: #{$lg - 1px}) {
+		@content;
+	}
 }
 
 @mixin big-tablet {
-  @media (min-width: $lg) and (max-width: #{$xl - 1px}) {
-    @content;
-  }
+	@media (min-width: $lg) and (max-width: #{$xl - 1px}) {
+		@content;
+	}
 }
 
 @mixin laptop {
-  @media (min-width:$lg) and (max-width: #{$xl - 1px}) {
-    @content;
-  }
+	@media (min-width:$lg) and (max-width: #{$xl - 1px}) {
+		@content;
+	}
 }
 
 @mixin desktop {
-  @media (min-width: $xl) {
-    @content;
-  }
+	@media (min-width: $xl) {
+		@content;
+	}
 }
