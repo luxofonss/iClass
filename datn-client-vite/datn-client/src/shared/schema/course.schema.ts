@@ -1,3 +1,6 @@
+import { AssignmentViewSchema } from "./assignment.schema";
+import { ConversationSchema } from "./conversation.schema";
+
 export type CourseCreateSchema = {
 	name: string;
 	description: string;
@@ -11,6 +14,7 @@ export type CourseCreateSchema = {
 	grade?: number | string;
 	course_infos?: CourseInfoSchema[];
 	sections?: SectionSchema[];
+	conversations: ConversationSchema[];
 };
 
 export type CourseUpdateSchema = {
@@ -55,6 +59,7 @@ export type CourseViewSchema = {
 	courseInfos?: CourseInfoSchema[];
 	sections?: SectionSchema[];
 	createdAt?: string;
+	conversations: ConversationSchema[];
 };
 
 export type SimpleCourseView = {
@@ -74,6 +79,7 @@ export type SimpleCourseView = {
 	subjectId: string;
 	grade: string;
 	thumbnail: string;
+	conversations: ConversationSchema[];
 };
 
 export type CourseInfoSchema = {
@@ -98,6 +104,8 @@ export type LectureSchema = {
 	video_url: string;
 	lessonStudent: LessonStudent;
 	createdAt: string;
+	conversations: ConversationSchema[];
+	assignment: AssignmentViewSchema;
 };
 
 export type SubjectSchema = {

@@ -3,7 +3,20 @@
 .comment-reply {
 	display: flex;
 	gap: 12px;
-	align-items: center;
+	align-items: top;
+
+	.form {
+		flex: 1;
+		display: flex;
+		gap: 12px;
+		align-items: end;
+		justify-content: space-between;
+
+		.input {
+			flex: 1;
+			margin: 0;
+		}
+	}
 
 	.send-btn {
 		&:hover {

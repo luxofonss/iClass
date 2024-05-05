@@ -56,7 +56,7 @@ const App: FC = () => {
 					token: {
 						fontFamily: "SF Pro Text",
 						fontSize: 14,
-						colorPrimary: "#FC77A0",
+						colorPrimary: "#9B16F3",
 					},
 					components: {
 						Divider: {
@@ -69,15 +69,19 @@ const App: FC = () => {
 							marginLG: 12,
 						},
 						Button: {
-							borderRadius: 12
+							borderRadius: 12,
 						},
 						Collapse: {
 							headerBg: "#F7ECFE",
-							colorBorder: "#f7f7f7"
+							colorBorder: "#f7f7f7",
 						},
-						// "Table": {
-						// 	"headerBg": "rgb(239, 240, 240)"
-						// }
+						Input: {
+							borderRadius: 12,
+							colorBorder: "rgb(202, 204, 206)",
+							colorTextPlaceholder: "rgb(160, 164, 167)",
+							colorText: "#4E5255",
+							fontSize: 14,
+						},
 					},
 				}}
 			>

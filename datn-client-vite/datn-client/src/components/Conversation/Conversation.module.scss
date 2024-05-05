@@ -8,6 +8,7 @@
 	.content-wrapper {
 		@include card-wrapper;
 		padding: 12px;
+		flex: 1;
 
 		.header {
 			display: flex;
@@ -16,10 +17,16 @@
 
 		.content {
 			padding: 8px;
-			border-bottom: 1px solid #e3e3e3;
 
 			.text {
 				font-size: 14px;
+				padding-bottom: 8px;
+				border-bottom: 1px solid #e3e3e3;
+			}
+
+			.reaction {
+				display: flex;
+				gap: 8px;
 			}
 		}
 

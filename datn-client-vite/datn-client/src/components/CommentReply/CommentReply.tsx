@@ -1,19 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from "classnames/bind";
-
-import { SimpleEditor } from "@/components/Tiptap";
 import { AVATAR_2 } from "@/shared/constants";
-import { Avatar } from "antd";
+import { Avatar, Button, Form } from "antd";
 import { Send } from "lucide-react";
 import styles from "./CommentReply.module.scss";
+import { conversationApi } from "@/app-data/service/conversation.service";
+import TextArea from "antd/es/input/TextArea";
+import toast from "react-hot-toast";
 const cx = classNames.bind(styles);
 
-export default function CommentReply() {
+export default function CommentReply({ conversationId }: { conversationId: string }) {
+	const [createComment] = conversationApi.endpoints.createComment.useMutation()
+
+	const [form] = Form.useForm()
+
+	async function onSubmit(values: any) {
+		try {
+			const data = {
+				content: values.content,
+				conversationId: conversationId
+			}
+
+			await createComment(data).unwrap()
+		} catch (error: any) {
+			toast.error(error?.data?.message || "Something went wrong!")
+		}
+	}
+
 	return (
 		<div className={cx("comment-reply")}>
 			<Avatar src={AVATAR_2} alt="avatar" />
-			<SimpleEditor />
-			<Send className={cx("send-btn")} size={24} color="#787ef5" />
+			<Form className={cx("form")} form={form} onFinish={onSubmit}>
+				<Form.Item className={cx('input')} name={"content"}>
+					<TextArea rows={2} autoSize placeholder="Viết bình luận" />
+				</Form.Item>
+				<Button className={cx('button')} type="default" htmlType="submit">
+					<Send className={cx("send-btn")} size={24} color="#787ef5" />
+				</Button>
+			</Form>
 		</div>
 	);
 }

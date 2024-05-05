@@ -1,0 +1,35 @@
+@import "@/shared/styles/mixins";
+
+.wrapper {
+	.add-conversation {
+		@include card-wrapper;
+		display: flex;
+		gap: 24px;
+
+		.form {
+			flex: 1;
+
+			.footer {
+				margin-top: 8px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				.attachment {
+					display: flex;
+					gap: 24px;
+
+					.item {
+						@include flex-between;
+						gap: 12px;
+					}
+				}
+
+				.btns {
+					display: flex;
+					gap: 12px;
+				}
+			}
+		}
+	}
+}

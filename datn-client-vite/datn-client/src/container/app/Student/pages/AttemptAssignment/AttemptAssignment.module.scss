@@ -1,10 +1,57 @@
 @import "@/shared/styles/mixins";
 
 .wrapper {
-	background: white;
-	margin-top: 24px;
-	padding: 32px;
-	border-radius: 12px;
+	background-color: #f4f5f5;
+
+	.heading {
+		background-color: white;
+
+		.title {
+			display: flex;
+			gap: 8px;
+			align-items: center;
+		}
+
+		.description {
+			margin: 0;
+			padding: 0 32px;
+			font-size: 12px;
+			font-style: italic;
+		}
+	}
+
+	.content {
+		margin-top: 32px;
+
+		.question-overview {
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+
+			.time,
+			.notes {
+				background-color: white;
+				padding: 16px;
+				border-radius: 16px;
+			}
+
+			.notes {
+				display: flex;
+				justify-content: space-between;
+				flex-wrap: wrap;
+				gap: 8px;
+				.item {
+					width: 20%;
+					@include flex-center;
+					width: 32px;
+					height: 32px;
+					padding: 8px;
+					border-radius: 8px;
+					border: 1px solid #9b16f3;
+				}
+			}
+		}
+	}
 
 	.choices {
 		display: flex;

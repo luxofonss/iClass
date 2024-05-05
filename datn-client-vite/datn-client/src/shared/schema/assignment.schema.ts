@@ -1,3 +1,5 @@
+import { AssignmentAttemptSchema } from "./assignmentAttempt.schema";
+
 export type AssignmentCreateSchema = {
 	startTime?: string;
 	endTime?: string;
@@ -10,6 +12,7 @@ export type AssignmentCreateSchema = {
 	subjectId: string;
 	questions: QuestionSchema[];
 	maxAttemptTimes: number;
+	attempts: AssignmentAttemptSchema[];
 };
 
 export type AssignmentViewSchema = {
@@ -24,6 +27,7 @@ export type AssignmentViewSchema = {
 	totalPoint: number;
 	subjectId: string;
 	questions: QuestionSchema[];
+	attempts: AssignmentAttemptSchema[];
 };
 
 export type QuestionSchema = {

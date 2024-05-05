@@ -2,7 +2,16 @@
 import classNames from "classnames/bind";
 
 import styles from "./LectureCreateUpdate.module.scss";
-import { Button, Card, Form, Input, Space } from "antd";
+import {
+	Button,
+	Card,
+	Form,
+	Input,
+	Space,
+	Typography,
+	Upload,
+	UploadProps,
+} from "antd";
 import { Fragment, useEffect, useState } from "react";
 import { SectionSchema } from "@/shared/schema/course.schema";
 import { courseApi } from "@/app-data/service/course.service";
@@ -10,6 +19,7 @@ import toast from "react-hot-toast";
 import { Link, useParams } from "react-router-dom";
 import { uploadApi } from "@/app-data/service/upload.service";
 import ReactPlayer from "react-player";
+import { Plus, UploadCloud, Video } from "lucide-react";
 const cx = classNames.bind(styles);
 
 interface ILectureCreateUpdate {
@@ -20,6 +30,7 @@ export default function LectureCreateUpdate({
 	sectionData,
 }: ILectureCreateUpdate) {
 	const [addingLesson, setAddingLesson] = useState<string | null>(null);
+	const [editingLesson, setEdittingLesson] = useState(null);
 
 	const { courseId } = useParams();
 	const [addLesson, { isLoading: isAddingLesson }] =
@@ -29,6 +40,7 @@ export default function LectureCreateUpdate({
 	const [uploadFile] = uploadApi.endpoints.uploadFile.useMutation();
 
 	const [lessonForm] = Form.useForm();
+	const [lessonFormCreate] = Form.useForm();
 
 	console.log("sectionData:; ", sectionData);
 
@@ -54,7 +66,8 @@ export default function LectureCreateUpdate({
 			}).unwrap();
 			toast.success("Add lesson successfully!");
 			getCourse({ id: courseId as string });
-			lessonForm.resetFields();
+			lessonFormCreate.resetFields();
+			setAddingLesson(false);
 		} catch (error) {
 			toast.error("Something went wrong!");
 			console.log(error);
@@ -79,41 +92,146 @@ export default function LectureCreateUpdate({
 			}
 	}
 
+	const uploadProps: UploadProps = {
+		action: "//jsonplaceholder.typicode.com/posts/",
+		listType: "picture",
+		previewFile(file) {
+			console.log("Your upload file:", file);
+			// Your process logic. Here we just mock to the same file
+			return fetch(
+				"https://next.json-generator.com/api/json/get/4ytyBoLK8",
+				{
+					method: "POST",
+					body: file,
+				}
+			)
+				.then((res) => res.json())
+				.then(({ thumbnail }) => thumbnail);
+		},
+	};
+
 	return (
 		<div className={cx("wrapper")}>
 			<Form layout="vertical" form={lessonForm}>
 				<Form.List name={"lessons"}>
 					{(fields, { add, remove }) => (
 						<div className={cx("list-items")}>
-							{fields.map((field) => (
+							{fields.map((field, index) => (
 								<Card
 									className={cx("list-items__item")}
 									key={field.key}
 								>
+									<div className={cx("heading")}>
+										<div>Bài giảng {index + 1}</div>
+										<Space>
+											{sectionData.lessons[field.name]
+												.type === "VIDEO" &&
+												sectionData.lessons[field.name]
+													.resource === null && (
+													<>
+														{editingLesson ===
+														index ? (
+															<Button
+																onClick={() => {
+																	setEdittingLesson(
+																		null
+																	);
+																}}
+															>
+																Huỷ thêm nội
+																dung
+															</Button>
+														) : (
+															<Button
+																icon={
+																	<Plus
+																		size={
+																			16
+																		}
+																	/>
+																}
+																onClick={() => {
+																	setEdittingLesson(
+																		index
+																	);
+																}}
+															>
+																Thêm nội dung
+															</Button>
+														)}
+													</>
+												)}
+
+											{sectionData.lessons[field.name]
+												.type === "ASSIGNMENT" && (
+												<Fragment>
+													{sectionData.lessons[
+														field.name
+													].assignment === null ? (
+														<Link
+															about="blank"
+															to={`/teacher/courses/${courseId}/lectures/${
+																sectionData
+																	.lessons[
+																	field.name
+																].id
+															}/assignment`}
+														>
+															<Button
+																icon={
+																	<Plus
+																		size={
+																			16
+																		}
+																	/>
+																}
+															>
+																Thêm bài tập
+															</Button>
+														</Link>
+													) : (
+														<Link
+															about="blank"
+															to={`/teacher/courses/${courseId}/lectures/${
+																sectionData
+																	.lessons[
+																	field.name
+																].id
+															}/assignment/${
+																sectionData
+																	.lessons[
+																	field.name
+																].assignment?.id
+															}`}
+														>
+															<Button>
+																View assignment
+															</Button>
+														</Link>
+													)}
+												</Fragment>
+											)}
+											<Button
+												onClick={() => {
+													remove(field.key);
+												}}
+												danger
+											>
+												Delete
+											</Button>
+										</Space>
+									</div>
 									<Form.Item
-										noStyle
-										className={cx("list-items__item__name")}
+										className={cx("input")}
 										name={[field.name, "name"]}
+										noStyle
 									>
 										<Input />
 									</Form.Item>
-
 									{sectionData.lessons[field.name].type ===
-										"VIDEO" ? (
+										"VIDEO" &&
+									sectionData.lessons[field.name].resource ? (
 										<Fragment>
-											<Form.Item
-												noStyle
-												className={cx(
-													"list-items__item__name"
-												)}
-												name={[
-													field.name,
-													"resource",
-													"name",
-												]}
-											>
-												<Input />
-											</Form.Item>
 											<ReactPlayer
 												width="320px"
 												height="240px"
@@ -125,47 +243,16 @@ export default function LectureCreateUpdate({
 												}
 											/>
 										</Fragment>
-									) : (
-										<Space>
-											Assignment
-											{sectionData.lessons[field.name]
-												?.assignment === null ? (
-												<Link
-													about="blank"
-													to={`/teacher/courses/${courseId}/lectures/${sectionData.lessons[
-														field.name
-													].id
-														}/assignment`}
-												>
-													<Button>
-														Add Assignment
-													</Button>
-												</Link>
-											) : (
-												<Link
-													about="blank"
-													to={`/teacher/courses/${courseId}/lectures/${sectionData.lessons[
-														field.name
-													].id
-														}/assignment/${sectionData.lessons[
-															field.name
-														].assignment?.id
-														}`}
-												>
-													<Button>
-														View assignment
-													</Button>
-												</Link>
-											)}
-										</Space>
-									)}
-									<Button
-										onClick={() => {
-											remove(field.key);
-										}}
-									>
-										Delete
-									</Button>
+									) : editingLesson === index ? (
+										<Upload
+											className={cx("adding-video")}
+											{...uploadProps}
+										>
+											<Button icon={<UploadCloud />}>
+												Thêm video bài giảng
+											</Button>
+										</Upload>
+									) : null}
 								</Card>
 							))}
 						</div>
@@ -173,17 +260,17 @@ export default function LectureCreateUpdate({
 				</Form.List>
 			</Form>
 			{addingLesson ? (
-				<Card>
+				<Card className={cx("lesson-form")}>
 					<Form
-						form={lessonForm}
+						form={lessonFormCreate}
 						onFinish={(values) => handleAddLesson(values)}
 						layout="vertical"
 					>
-						<Form.Item label="Lesson Title" name="name">
-							<Input placeholder="Enter your title" />
+						<Form.Item label="Tên bài" name="name">
+							<Input placeholder="VD: Thì hiện tại đơn" />
 						</Form.Item>
-						<Form.Item label="Short description" name="description">
-							<Input placeholder="Enter your description" />
+						<Form.Item label="Mô tả về bài học" name="description">
+							<Input placeholder="VD: Ở bài học này, các bạn sẽ hiểu rõ cấu trúc thì hiện tại đơn và cách sử dụng." />
 						</Form.Item>
 						{addingLesson === "VIDEO" ? (
 							<div>
@@ -207,23 +294,23 @@ export default function LectureCreateUpdate({
 								</Form.Item>
 							</div>
 						) : null}
-						<Space>
+						<Space align="end">
 							<Button
 								onClick={() => {
 									setAddingLesson(null);
 								}}
 								loading={false}
 							>
-								Cancel
+								Hủy
 							</Button>
 							<Button
 								type="primary"
 								onClick={() => {
-									lessonForm.submit();
+									lessonFormCreate.submit();
 								}}
 								loading={isAddingLesson}
 							>
-								Create
+								Tạo
 							</Button>
 						</Space>
 					</Form>
@@ -238,8 +325,9 @@ export default function LectureCreateUpdate({
 						onClick={() => {
 							setAddingLesson("VIDEO");
 						}}
+						icon={<Video size={16} />}
 					>
-						Add lesson
+						Thêm bài giảng
 					</Button>
 					<Button
 						htmlType="button"
@@ -250,7 +338,7 @@ export default function LectureCreateUpdate({
 							setAddingLesson("ASSIGNMENT");
 						}}
 					>
-						Add assignment
+						Thêm bài tập
 					</Button>
 				</Space>
 			)}

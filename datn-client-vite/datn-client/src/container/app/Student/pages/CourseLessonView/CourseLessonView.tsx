@@ -28,27 +28,19 @@ export default function CourseLessonView() {
       {course?.data?.sections?.map((section: SectionSchema) =>
         <Collapse.Panel key={section?.id} header={<div className={cx('heading')}>{section?.name}</div>}>
           {section?.lessons?.map((lesson: LectureSchema) => <div className={cx('section')} key={lesson?.id}>
-            {lesson?.type === 'VIDEO' && <div className={cx('lesson')}>
+            <div className={cx('lesson')}>
               <div className={cx('left')}>
-                <Video size={14} />
+                {lesson?.type === 'VIDEO' && <Video size={14} />}
+                {lesson?.type === 'ASSIGNMENT' && <PencilIcon className={cx('play')} size={14} />}
                 <div>{lesson?.name}</div>
               </div>
               <div className={cx('right')}>
-                <Tag color='green'>Đã hoàn thành</Tag>
+                {lesson?.lessonStudent?.status === 'DONE' && <Tag className={cx('tag', 'done')} color='#A3F5C1'>Đã hoàn thành</Tag>}
+                {lesson?.lessonStudent?.status === 'DOING' && <Tag className={cx('tag', 'doing')} color='#FFF4CC'>Đang học</Tag>}
+                {lesson?.lessonStudent === null && <Tag className={cx('tag')} color='#EFF0F0'>Chưa học</Tag>}
                 <Link to={`/courses/${courseId}/lessons/${lesson?.id}`}> <PlayCircle className={cx('play')} size={14} /></Link>
               </div>
-            </div>}
-
-            {lesson?.type === 'ASSIGNMENT' && <div className={cx('lesson')}>
-              <div className={cx('left')}>
-                <BookCheck size={14} />
-                <div>{lesson?.name}</div>
-              </div>
-              <div className={cx('right')}>
-                <Tag color='green'>Đã hoàn thành</Tag>
-                <Link to={`/courses/${courseId}/lessons/${lesson?.id}`}> <PencilIcon className={cx('play')} size={14} /></Link>
-              </div>
-            </div>}
+            </div>
           </div>)}
         </Collapse.Panel>)}
     </Collapse>

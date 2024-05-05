@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Avatar, Popover, Tag, Typography } from "antd";
+import { Avatar, Button, Popover, Tag, Typography } from "antd";
 
 import Comment from "@/components/Comment";
 import CommentReply from "@/components/CommentReply";
@@ -7,48 +7,61 @@ import ConversationInfo from "@/components/ConversationInfo";
 import EmojiPicker from "@/components/EmojiPicker";
 import { AVATAR } from "@/shared/constants";
 import classNames from "classnames/bind";
-import { SmilePlus } from "lucide-react";
+import { MessageCircleIcon, SmilePlus, ThumbsUp } from "lucide-react";
 import styles from "./Conversation.module.scss";
+import { ConversationSchema } from "@/shared/schema/conversation.schema";
 
 const cx = classNames.bind(styles);
 
-export default function Conversation() {
+interface IConversationProps {
+	data: ConversationSchema;
+}
+
+export default function Conversation(props: IConversationProps) {
+	const { data } = props;
 	return (
 		<div className={cx("conversation")}>
 			<div>
 				<Avatar
 					className={cx("avatar")}
 					size={48}
-					src={AVATAR}
+					src={data?.user?.avatar ?? AVATAR}
 					alt="avatar"
 				/>
 			</div>
 			<div className={cx("content-wrapper")}>
 				<div className={cx("header")}>
-					<ConversationInfo />
-					<Tag color="orange">Notification</Tag>
+					<ConversationInfo data={data} />
+					<Tag color="orange">{data?.type}</Tag>
 				</div>
 				<div className={cx("content")}>
-					<Typography.Paragraph className={cx("text")}>
-						Xin chào các em, kỳ 20221 này thầy sẽ cùng các em thực
-						hiện môn học Nhập môn Công nghệ phần mềm. Thầy tạo nhóm
-						Team để thuận tiện cho việc trao đổi trong quá trình học
-						tập nhé. Thầy đã upload slide bài giảng lên mục Files,
-						các em có thể tải về để học tập và theo dõi bài giảng
-						trên lớp. Chúc các em một tuần mới học tập hiệu quả!
-					</Typography.Paragraph>
+					<div
+						className={cx("text")}
+						dangerouslySetInnerHTML={{ __html: data?.content }}
+					/>
 					<div className={cx("reaction")}>
-						<Popover content={<EmojiPicker />}>
-							<SmilePlus size={16} />
-						</Popover>
+						<Button
+							icon={<ThumbsUp color="green" size={18} />}
+							type="text"
+						>
+							Thích
+						</Button>
+						<Button
+							icon={<MessageCircleIcon color="blue" size={18} />}
+							type="text"
+						>
+							Bình luận
+						</Button>
 					</div>
 				</div>
-				<div className={cx("comments")}>
-					<Comment />
-					<Comment />
-					<Comment />
-					<CommentReply />
-				</div>
+				{data?.comments?.length > 0 && (
+					<div className={cx("comments")}>
+						{data?.comments?.map((comment) => (
+							<Comment data={comment} />
+						))}
+					</div>
+				)}
+				<CommentReply conversationId={data?.id} />
 			</div>
 		</div>
 	);

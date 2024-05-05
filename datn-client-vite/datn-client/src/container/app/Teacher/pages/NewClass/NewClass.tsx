@@ -212,31 +212,47 @@ export default function NewClass() {
 						icon={
 							<Space>
 								<LucideAppWindow size={14} />
-								Course Landing Page
+								Thông tin lớp học
 							</Space>
 						}
 					>
 						<div id="landing-page" className={cx("section")}>
-							<div className={cx("section__title")}>
-								<ColorPrefix color={COLOR.SECONDARY.GREEN} />
-								<Typography.Title level={4}>
-									Course landing page
-								</Typography.Title>
+							<div className={cx("section__heading")}>
+								<div className={cx("title")}>
+									<ColorPrefix
+										color={COLOR.SECONDARY.GREEN}
+									/>
+									<Typography.Title level={4}>
+										Thông tin lớp học
+									</Typography.Title>
+								</div>
+								<div className={cx("description")}>
+									Bạn sẽ cập nhật những thông tin của lớp học,
+									phần quyết định khả năng thành công của lớp
+									học, giúp bạn có thể xuất hiện trên Google.
+									Hãy nghĩ em bạn sẽ muốn đọc gì khi là một
+									học viên.
+								</div>
 							</div>
 							<Divider />
 							<Form.Item
 								name="name"
 								className={cx("label")}
-								label="Class title"
+								label="Tên lớp học"
+								help="Tên lớp học nên gây ấn tượng, đầy đủ thông tin và tối ưu về SEO."
 							>
-								<Input />
+								<Input
+									placeholder="VD: Lớp luyện IELTS cho người mới "
+									size="middle"
+								/>
 							</Form.Item>
 							<Form.Item
 								name="description"
 								className={cx("label")}
-								label="Class description"
+								label="Mô tả lớp học"
+								help="Viết về lớp học một cách đầy đủ "
 							>
-								<TextArea />
+								<TextArea placeholder="VD: Lớp luyện IELTS cho người mới " />
 							</Form.Item>
 							<Row gutter={24}>
 								<Col span={6}>
@@ -296,7 +312,11 @@ export default function NewClass() {
 										className={cx("label")}
 										label="Price"
 									>
-										<Input type="number" addonAfter="VND" />
+										<Input
+											size="middle"
+											type="number"
+											addonAfter="VND"
+										/>
 									</Form.Item>
 								</Col>
 							</Row>
@@ -339,13 +359,14 @@ export default function NewClass() {
 										className={cx("label")}
 										label="Course thumbnail"
 									>
-										<Input />
+										<Input size="middle" />
 									</Form.Item>
 									<Form.Item
 										className={cx("label")}
 										label="Course thumbnail"
 									>
 										<Input
+											size="middle"
 											onChange={(e) => {
 												handleUploadImage(
 													e,
@@ -388,13 +409,14 @@ export default function NewClass() {
 										className={cx("label")}
 										label="Course background"
 									>
-										<Input />
+										<Input size="middle" />
 									</Form.Item>
 									<Form.Item
 										className={cx("label")}
 										label="Course background"
 									>
 										<Input
+											size="middle"
 											onChange={(e) => {
 												handleUploadImage(
 													e,
@@ -433,29 +455,36 @@ export default function NewClass() {
 						}
 					>
 						<div id="intend-learner" className={cx("section")}>
-							<div className={cx("section__title")}>
-								<ColorPrefix color={COLOR.SECONDARY.VIOLET} />
-								<Typography.Title level={4}>
-									Intend learners
-								</Typography.Title>
+							<div className={cx("section__heading")}>
+								<div className={cx("title")}>
+									<ColorPrefix
+										color={COLOR.SECONDARY.VIOLET}
+									/>
+									<Typography.Title level={4}>
+										Intend learners
+									</Typography.Title>
+								</div>
+								<p className={cx("description")}>
+									Các mô tả sau đây sẽ được hiển thị công khai
+									trên trang đích của khoá học của bạn và sẽ
+									có tác động trực tiếp đến hiệu suất khoá học
+									của bạn. Những gì được viết sẽ giúp cho các
+									học viê tiềm năng biết được độ phù hợp đối
+									với khoá học.
+								</p>
 							</div>
+
 							<Divider />
-							<p className={cx("section__description")}>
-								The following descriptions will be publicly
-								visible on your Course Landing Page and will
-								have a direct impact on your course performance.
-								These descriptions will help learners decide if
-								your course is right for them.
-							</p>
+
 							<div className={cx("info-block")}>
 								<h2 className={cx("info-block__title")}>
-									What will students learn in your course?
+									Người học sẽ học được gì trong lớp học của
+									bạn?
 								</h2>
 								<p className={cx("info-block__description")}>
-									You must enter at least 4 learning
-									objectives or outcomes that learners can
-									expect to achieve after completing your
-									course.
+									Cung cấp nhanh những gì học viên được học và
+									có được sau khoá học sẽ giúp bạn thu hút
+									những học viên tiềm năng.
 								</p>
 								<Form.List name="intend">
 									{(fields, { add, remove }) => (
@@ -476,7 +505,10 @@ export default function NewClass() {
 															"content",
 														]}
 													>
-														<Input placeholder="this is placeholder" />
+														<Input
+															size="middle"
+															placeholder="VD: Nắm được ngữ pháp Tiếng Anh trình độ A1"
+														/>
 													</Form.Item>
 													<Form.Item
 														hidden
@@ -485,7 +517,7 @@ export default function NewClass() {
 															"id",
 														]}
 													>
-														<Input />
+														<Input size="middle" />
 													</Form.Item>
 													<Form.Item
 														hidden
@@ -495,7 +527,7 @@ export default function NewClass() {
 														]}
 														initialValue={"INTEND"}
 													>
-														<Input />
+														<Input size="middle" />
 													</Form.Item>
 													<Button
 														onClick={() =>
@@ -512,9 +544,11 @@ export default function NewClass() {
 												<Button
 													htmlType="button"
 													onClick={() => add()}
-													type="primary"
+													type="dashed"
 													icon={<Plus size={14} />}
-												/>
+												>
+													Thêm điều mới
+												</Button>
 											</Form.Item>
 										</>
 									)}
@@ -522,16 +556,15 @@ export default function NewClass() {
 							</div>
 							<div className={cx("info-block")}>
 								<h2 className={cx("info-block__title")}>
-									What are the requirements or prerequisites
-									for taking your course?
+									Những kĩ năng cần có để học lớp học?
 								</h2>
 								<p className={cx("info-block__description")}>
-									List the required skills, experience, tools
-									or equipment learners should have prior to
-									taking your course. If there are no
-									requirements, use this space as an
-									opportunity to lower the barrier for
-									beginners.
+									Liệt kê các kỹ năng, kinh nghiệm, công cụ
+									cần thiết hoặc thiết bị người học nên có
+									trước khi tham gia khóa học của bạn. Nếu
+									không có yêu cầu, hãy sử dụng không gian này
+									như một cơ hội để hạ thấp rào cản đối với
+									người mới bắt đầu
 								</p>
 								<Form.List name="requirement">
 									{(fields, { add, remove }) => (
@@ -552,7 +585,10 @@ export default function NewClass() {
 															"content",
 														]}
 													>
-														<Input placeholder="this is placeholder" />
+														<Input
+															size="middle"
+															placeholder="VD: Cần nắm được ngữ pháp cơ bản...."
+														/>
 													</Form.Item>
 													<Form.Item
 														hidden
@@ -561,7 +597,7 @@ export default function NewClass() {
 															"id",
 														]}
 													>
-														<Input />
+														<Input size="middle" />
 													</Form.Item>
 													<Form.Item
 														hidden
@@ -573,7 +609,7 @@ export default function NewClass() {
 															"REQUIREMENT"
 														}
 													>
-														<Input />
+														<Input size="middle" />
 													</Form.Item>
 													<Button
 														onClick={() =>
@@ -590,9 +626,11 @@ export default function NewClass() {
 												<Button
 													htmlType="button"
 													onClick={() => add()}
-													type="primary"
+													type="dashed"
 													icon={<Plus size={14} />}
-												/>
+												>
+													Thêm điều mới
+												</Button>
 											</Form.Item>
 										</>
 									)}
@@ -600,13 +638,14 @@ export default function NewClass() {
 							</div>
 							<div className={cx("info-block")}>
 								<h2 className={cx("info-block__title")}>
-									Who is this course for?
+									Khóa học này dành cho ai?
 								</h2>
 								<p className={cx("info-block__description")}>
-									Write a clear description of the intended
-									learners for your course who will find your
-									course content valuable. This will help you
-									attract the right learners to your course.
+									Viết mô tả rõ ràng về mục đích những người
+									học khóa học của bạn, những người sẽ tìm
+									thấy bạn nội dung khóa học có giá trị. Điều
+									này sẽ giúp bạn thu hút đúng người học vào
+									khóa học của bạn.
 								</p>
 								<Form.List name="who">
 									{(fields, { add, remove }) => (
@@ -627,7 +666,10 @@ export default function NewClass() {
 															"content",
 														]}
 													>
-														<Input placeholder="this is placeholder" />
+														<Input
+															size="middle"
+															placeholder="VD: Học sinh lớp 12 muốn đạt bằng IELTS điểm cao."
+														/>
 													</Form.Item>
 													<Form.Item
 														hidden
@@ -636,7 +678,7 @@ export default function NewClass() {
 															"id",
 														]}
 													>
-														<Input />
+														<Input size="middle" />
 													</Form.Item>
 													<Form.Item
 														hidden
@@ -646,7 +688,7 @@ export default function NewClass() {
 														]}
 														initialValue={"WHO"}
 													>
-														<Input />
+														<Input size="middle" />
 													</Form.Item>
 													<Button
 														onClick={() =>
@@ -663,9 +705,11 @@ export default function NewClass() {
 												<Button
 													htmlType="button"
 													onClick={() => add()}
-													type="primary"
+													type="dashed"
 													icon={<Plus size={14} />}
-												/>
+												>
+													Thêm điều mới
+												</Button>
 											</Form.Item>
 										</>
 									)}
@@ -683,10 +727,29 @@ export default function NewClass() {
 							</Space>
 						}
 					>
-						<SectionCreateUpdate
-							courseData={courseData?.data as CourseViewSchema}
-							handleGetCourse={handleGetCourse}
-						/>
+						<div className={cx("section")}>
+							<div className={cx("section__heading")}>
+								<div className={cx("title")}>
+									<ColorPrefix
+										color={COLOR.SECONDARY.YELLOW}
+									/>
+									<Typography.Title level={4}>
+										Chương trình học
+									</Typography.Title>
+								</div>
+								<p className={cx("description")}>
+									Đây là phần cập nhật nội dung bài học như
+									video bài học, bài tập ôn tập, kiểm tra.
+								</p>
+							</div>
+							<Divider />
+							<SectionCreateUpdate
+								courseData={
+									courseData?.data as CourseViewSchema
+								}
+								handleGetCourse={handleGetCourse}
+							/>
+						</div>
 					</Tabs.TabPane>
 					<Tabs.TabPane
 						key={4}
@@ -699,21 +762,27 @@ export default function NewClass() {
 						}
 					>
 						<div id="course-message" className={cx("section")}>
-							<div className={cx("section__title")}>
-								<ColorPrefix color={COLOR.SECONDARY.ORANGE} />
-								<Typography.Title level={4}>
-									Course message
-								</Typography.Title>
+							<div className={cx("section__heading")}>
+								<div className={cx("title")}>
+									<ColorPrefix
+										color={COLOR.SECONDARY.ORANGE}
+									/>
+									<Typography.Title level={4}>
+										Course message
+									</Typography.Title>
+								</div>
+								<p className={cx("description")}>
+									Write messages to your students (optional)
+									that will be sent automatically when they
+									join or complete your course to encourage
+									students to engage with course content. If
+									you do not wish to send a welcome or
+									congratulations message, leave the text box
+									blank.
+								</p>
 							</div>
 							<Divider />
-							<p className={cx("section__description")}>
-								Write messages to your students (optional) that
-								will be sent automatically when they join or
-								complete your course to encourage students to
-								engage with course content. If you do not wish
-								to send a welcome or congratulations message,
-								leave the text box blank.
-							</p>
+
 							<Form.Item
 								name="welcome_msg"
 								className={cx("label")}

@@ -1,0 +1,51 @@
+@import "@/shared/styles/mixins";
+
+.wrapper {
+	color: black;
+	background-color: white;
+	border-radius: 16px;
+
+	.heading {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: 48px;
+
+		.left {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+
+			.icon {
+				width: 48px;
+				height: 48px;
+				background-color: #9b16f3;
+				@include flex-center;
+				border-top-left-radius: 16px;
+			}
+
+			.title {
+				font-size: 20px;
+				font-weight: 600;
+			}
+		}
+
+		.right {
+			padding-right: 16px;
+		}
+	}
+
+	.attempt-info {
+		display: flex;
+		justify-content: end;
+		gap: 16px;
+		padding: 16px;
+
+		&__item {
+			.value {
+				font-size: 20px;
+				align-self: center;
+			}
+		}
+	}
+}

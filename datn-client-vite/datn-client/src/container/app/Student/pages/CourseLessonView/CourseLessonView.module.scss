@@ -28,6 +28,19 @@
 				.play {
 					cursor: pointer;
 				}
+
+				.tag {
+					border-radius: 1000px;
+					color: #313335;
+				}
+
+				.tag.done {
+					color: #016526;
+				}
+
+				.tag.doing {
+					color: #7a5f00;
+				}
 			}
 
 			&:hover {

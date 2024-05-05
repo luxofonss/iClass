@@ -83,7 +83,7 @@ export function SimpleEditor({
 
 	useOutsideClick(editorWrapper, () => {
 		// alert('You clicked outside')
-		setIsToolbarOpen(false);
+		// setIsToolbarOpen(false);
 	});
 
 	const openModal = useCallback(() => {
@@ -231,12 +231,12 @@ export function SimpleEditor({
 				>
 					<Icons.Code />
 				</button>
-				<button className={cx("menu-button")} onClick={addImage}>
+				{/* <button className={cx("menu-button")} onClick={addImage}>
 					<ModalUploadImage
 						handleOk={handleAddUrl}
 						ref={uploadImage}
 					/>
-				</button>
+				</button> */}
 			</div>
 
 			<BubbleMenu

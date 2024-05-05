@@ -63,7 +63,7 @@ const appRoutes: RouteObject[] = [
 			{
 				path: "/teacher/courses/files",
 				element: <Files />,
-			}
+			},
 		],
 	},
 

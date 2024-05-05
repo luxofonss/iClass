@@ -10,42 +10,49 @@ import { AVATAR_2 } from "@/shared/constants";
 import { Avatar, Popover, Typography } from "antd";
 import { SmilePlus } from "lucide-react";
 import styles from "./Comment.module.scss";
+import { CommentSchema } from "@/shared/schema/comment.schema";
 const cx = classNames.bind(styles);
 
-export default function Comment() {
-	const [isComment, setIsComment] = useState(false);
+interface ICommentProps {
+	data: CommentSchema;
+}
 
-	function openCommentBox() {
-		setIsComment(true);
-	}
+export default function Comment(props: ICommentProps) {
+	const { data } = props;
+
+	// const [isComment, setIsComment] = useState(false);
+
+	// function openCommentBox() {
+	// 	setIsComment(true);
+	// }
 	return (
 		<div className={cx("comment")}>
 			<div className={cx("avatar")}>
 				<Avatar src={AVATAR_2} alt="avatar" />
 			</div>
 			<div className={cx("content-wrapper")}>
-				<ConversationInfo />
+				<ConversationInfo data={data} />
 				<div className={cx("content")}>
-					<Typography.Paragraph className={cx("text")}>
-						Dạ cô ơi, em đang bị sốt xuất huyết nên em xin phép thứ
-						4 đến báo cáo ạ
-					</Typography.Paragraph>
+					<div
+						className={cx("text")}
+						dangerouslySetInnerHTML={{ __html: data?.content }}
+					/>
 					<div className={cx("reaction")}></div>
 				</div>
 				<div className={cx("footer")}>
-					<div className={cx("reaction")}>
+					{/* <div className={cx("reaction")}>
 						<Popover content={<EmojiPicker />}>
 							<SmilePlus size={16} />
 						</Popover>
-					</div>
-					<button
+					</div> */}
+					{/* <button
 						onClick={openCommentBox}
 						className={cx("reply-btn")}
 					>
 						Reply
-					</button>
+					</button> */}
 				</div>
-				{isComment && <CommentReply />}
+				{/* {isComment && <CommentReply conversationId="" />} */}
 			</div>
 		</div>
 	);
