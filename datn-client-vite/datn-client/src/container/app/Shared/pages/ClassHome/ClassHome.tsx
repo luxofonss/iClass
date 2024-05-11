@@ -6,20 +6,45 @@ import Conversation from "@/components/Conversation";
 import styles from "./ClassHome.module.scss";
 import AddConversation from "../../components/AddConversation";
 import { courseApi } from "@/app-data/service/course.service";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { CourseViewSchema } from "@/shared/schema/course.schema";
+import toast from "react-hot-toast";
 
 const cx = classNames.bind(styles);
 
 export default function ClassHome() {
+	const [displayData, setDisplayData] = useState<CourseViewSchema[]>([]);
 	const { courseId } = useParams<any>();
-	const [getCourse, { data: course, isLoading: isGettingCourse }] =
+	const [getCourse, { data: course }] =
 		courseApi.endpoints.getCourseById.useLazyQuery();
+
+	async function handleGetCourse() {
+		try {
+			const response = await getCourse({
+				id: courseId as string,
+			}).unwrap();
+			setDisplayData(
+				response.data?.conversations?.toSorted((a, b) => {
+					return new Date(b.createdAt) - new Date(a.createdAt);
+				})
+			);
+		} catch (error: any) {
+			toast.error(error?.data?.message || "Get course fail");
+		}
+	}
+
+	useEffect(() => {
+		setDisplayData(
+			course?.data?.conversations?.toSorted((a, b) => {
+				return new Date(b.createdAt) - new Date(a.createdAt);
+			})
+		);
+	}, [course]);
 
 	useEffect(() => {
 		if (courseId) {
-			getCourse({ id: courseId });
-			console.log(courseId);
+			handleGetCourse();
 		}
 	}, [courseId]);
 
@@ -28,7 +53,7 @@ export default function ClassHome() {
 		<div className={cx("class-home")}>
 			<AddConversation />
 			<div className={cx("conversations")}>
-				{course?.data?.conversations?.map((conversation) => {
+				{displayData?.map((conversation) => {
 					return <Conversation data={conversation} />;
 				})}
 			</div>

@@ -16,7 +16,9 @@ const baseQuery = fetchBaseQuery({
 	prepareHeaders: (headers) => {
 		headers.set("Access-Control-Allow-Origin", "http://localhost:3000");
 		headers.set("Access-Control-Allow-Credentials", "true");
-		if (cookies.get("access_token"))
+		const token = cookies.get("access_token");
+		console.log("token:: ", token);
+		if (token && token !== undefined)
 			headers.set(
 				"Authorization",
 				"Bearer " + cookies.get("access_token")

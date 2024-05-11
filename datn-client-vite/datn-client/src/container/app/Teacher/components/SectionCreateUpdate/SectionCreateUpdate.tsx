@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import classNames from "classnames/bind";
-
-import styles from "./SectionCreateUpdate.module.scss";
-import { Button, Card, Form, Input, Space, Typography } from "antd";
-import { Fragment, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import toast from "react-hot-toast";
 import { courseApi } from "@/app-data/service/course.service";
-import { CourseViewSchema, LectureSchema } from "@/shared/schema/course.schema";
-import LectureCreateUpdate from "../LectureCreateUpdate";
-import { Pencil, Plus } from "lucide-react";
+import { CourseViewSchema } from "@/shared/schema/course.schema";
+import { Button, Form, Input, Space } from "antd";
+import classNames from "classnames/bind";
+import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import SectionCreateUpdateItem from "../SectionCreateUpdateItem";
+import styles from "./SectionCreateUpdate.module.scss";
 const cx = classNames.bind(styles);
 
 interface ISectionCreateUpdateProps {
@@ -22,7 +21,6 @@ export default function SectionCreateUpdate({
 	courseData,
 }: ISectionCreateUpdateProps) {
 	const [addingSection, setAddingSection] = useState<boolean>(false);
-	const [editingSection, setEditingLesson] = useState<null | number>(null);
 
 	const [addSection, { isLoading: isAddingSection }] =
 		courseApi.endpoints.addSection.useMutation();
@@ -64,165 +62,64 @@ export default function SectionCreateUpdate({
 
 	return (
 		<div className={cx("wrapper")}>
-			<Form layout="vertical" form={sectionForm}>
-				<div className={cx("curriculum")}>
-					<Form.List name="sections">
-						{(fields, { add, remove }) => (
-							<div className={cx("curriculum__section")}>
-								{fields.map((field, index) => (
-									<div
-										className={cx("inputs")}
-										key={field.key}
-									>
-										<div
-											className={cx(
-												"curriculum__section__name"
-											)}
-										>
-											{editingSection === index ? (
-												<div className={cx("form")}>
-													<Form.Item
-														name={[
-															field.name,
-															"name",
-														]}
-														label={`Chương ${
-															field.key + 1
-														}:`}
-													>
-														<Input />
-													</Form.Item>
-													<Form.Item
-														label="Mô tả về chương:"
-														name={[
-															field.name,
-															"description",
-														]}
-													>
-														<Input />
-													</Form.Item>
-													<div className={cx("btns")}>
-														<Button
-															onClick={() => {
-																setEditingLesson(
-																	null
-																);
-															}}
-															danger
-														>
-															Hủy
-														</Button>
-														<Button type="primary">
-															Lưu
-														</Button>
-													</div>
-												</div>
-											) : (
-												<div>
-													<Typography.Title level={5}>
-														Chương {field.key + 1}:{" "}
-														{
-															courseData
-																?.sections[
-																field.key
-															].name
-														}
-													</Typography.Title>
-													<Typography.Paragraph>
-														{
-															courseData
-																?.sections[
-																field.key
-															].description
-														}
-													</Typography.Paragraph>
-												</div>
-											)}
-											<Space>
-												{editingSection !== index && (
-													<Button
-														type="dashed"
-														icon={
-															<Pencil size={16} />
-														}
-														onClick={() => {
-															setEditingLesson(
-																index
-															);
-														}}
-													>
-														Edit
-													</Button>
-												)}
-												<Button
-													onClick={() => {
-														remove(field.name);
-													}}
-													danger
-												>
-													Xóa
-												</Button>
-											</Space>
-										</div>
-										<LectureCreateUpdate
-											sectionData={
-												courseData?.sections[field.key]
-											}
-										/>
-									</div>
-								))}
-							</div>
-						)}
-					</Form.List>
-					{addingSection ? (
-						<Form
-							form={sectionFormCreate}
-							onFinish={handleAddSection}
-							layout="vertical"
-						>
-							<Form.Item label="Tên chương" name="name">
-								<Input placeholder="VD: Giới thiệu về các thì trong tiếng Anh" />
-							</Form.Item>
-							<Form.Item
-								label="Học sinh sẽ có thể làm gì khi kết thúc phần này?"
-								name="description"
-							>
-								<Input placeholder="VD: Hiểu rõ về các thì" />
-							</Form.Item>
-							<Space>
-								<Button
-									danger
-									onClick={() => {
-										setAddingSection(false);
-									}}
-								>
-									Hủy
-								</Button>
-								<Button
-									type="primary"
-									onClick={() => {
-										sectionFormCreate.submit();
-									}}
-									loading={isAddingSection}
-								>
-									Tạo
-								</Button>
-							</Space>
-						</Form>
-					) : (
-						<Button
-							htmlType="button"
-							style={{ marginTop: 12 }}
-							onClick={() => {
-								setAddingSection(true);
-							}}
-							icon={<Plus size={16} />}
-						>
-							Thêm chương mới
-						</Button>
-					)}
+			<div className={cx("curriculum")}>
+				<div className={cx("curriculum__section")}>
+					{courseData?.sections.map((section, index) => (
+						<SectionCreateUpdateItem
+							section={section}
+							index={index}
+						/>
+					))}
 				</div>
-			</Form>
+
+				{addingSection ? (
+					<Form
+						form={sectionFormCreate}
+						onFinish={handleAddSection}
+						layout="vertical"
+					>
+						<Form.Item label="Tên chương" name="name">
+							<Input placeholder="VD: Giới thiệu về các thì trong tiếng Anh" />
+						</Form.Item>
+						<Form.Item
+							label="Học sinh sẽ có thể làm gì khi kết thúc phần này?"
+							name="description"
+						>
+							<Input placeholder="VD: Hiểu rõ về các thì" />
+						</Form.Item>
+						<Space>
+							<Button
+								danger
+								onClick={() => {
+									setAddingSection(false);
+								}}
+							>
+								Hủy
+							</Button>
+							<Button
+								type="primary"
+								onClick={() => {
+									sectionFormCreate.submit();
+								}}
+								loading={isAddingSection}
+							>
+								Tạo
+							</Button>
+						</Space>
+					</Form>
+				) : (
+					<Button
+						htmlType="button"
+						style={{ marginTop: 12 }}
+						onClick={() => {
+							setAddingSection(true);
+						}}
+						icon={<Plus size={16} />}
+					>
+						Thêm chương mới
+					</Button>
+				)}
+			</div>
 		</div>
 	);
 }

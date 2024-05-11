@@ -1,15 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import classNames from "classnames/bind";
 import { courseApi } from "@/app-data/service/course.service";
-import ModalEditAddSection from "@/container/app/Teacher/components/ModalEditAddSection";
-import { ROLE } from "@/shared/constants";
-import {
-	CourseViewSchema
-} from "@/shared/schema/course.schema";
+import SectionCreateUpdate from "@/container/app/Teacher/components/SectionCreateUpdate";
+import { CourseViewSchema } from "@/shared/schema/course.schema";
+import classNames from "classnames/bind";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./Lectures.module.scss";
-import SectionCreateUpdate from "@/container/app/Teacher/components/SectionCreateUpdate";
 const cx = classNames.bind(styles);
 
 export default function Lectures({ mode }: { mode: string }) {

@@ -37,6 +37,8 @@ export default function QuestionAssignment({
 		assignmentApi.endpoints.submitAnswer.useMutation();
 	const [scoreLongAnswer, { isLoading: isScoring }] =
 		assignmentApi.endpoints.scoreLongAnswer.useMutation();
+	const [getAssignmentAttempt] =
+		assignmentApi.endpoints.getAssignmentAttempt.useLazyQuery();
 
 	const [form] = Form.useForm();
 	const { attemptId } = useParams();
@@ -48,19 +50,23 @@ export default function QuestionAssignment({
 				questionId: data.id,
 				answer: {
 					selectedOptionIds:
-						data?.type === "MULTIPLE_CHOICES" ? values.answer
+						data?.type === "MULTIPLE_CHOICES"
+							? values.answer
 							: data?.type === "SINGLE_CHOICE"
-								? [values.answer]
-								: null,
+							? [values.answer]
+							: null,
 					textAnswer:
 						data?.type === "SHORT_ANSWER" ||
-							data?.type === "LONG_ANSWER"
-							? values.answer
+						data?.type === "LONG_ANSWER"
+							? values.answer.textAnswer
 							: "",
 				},
 			}).unwrap();
 
 			setSubmittedAnswer(true);
+			toast.success("Cập nhật câu trả lời thành công");
+			// TODO: use state
+			getAssignmentAttempt(attemptId);
 		} catch (error: any) {
 			console.log("error:: ", error);
 			toast.error(error?.data?.message || "Something went wrong!");
@@ -68,7 +74,10 @@ export default function QuestionAssignment({
 	}
 
 	function checkAnswer() {
-		if (data?.type === "MULTIPLE_CHOICES" || data?.type === "SINGLE_CHOICE") {
+		if (
+			data?.type === "MULTIPLE_CHOICES" ||
+			data?.type === "SINGLE_CHOICE"
+		) {
 			// return data?.answer[0]?.selectedOptions === form.getFieldValue('answer')
 			const isRight =
 				data?.choices?.find((choice: any) => choice?.is_correct)?.id ===
@@ -82,10 +91,9 @@ export default function QuestionAssignment({
 		}
 
 		if (data?.type === "SHORT_ANSWER") {
-			// return data?.answer[0]?.text_answer === form.getFieldValue('answer')
+			// return data?.answer[0]?.textAnswer === form.getFieldValue('answer')
 			const isRight = data?.choices?.find(
-				(choice: any) =>
-					choice?.content === data?.answer[0]?.text_answer
+				(choice: any) => choice?.content === data?.answer[0]?.textAnswer
 			);
 			if (isRight) {
 				return data?.point;
@@ -122,7 +130,7 @@ export default function QuestionAssignment({
 	return (
 		<div className={cx("wrapper")}>
 			<Form form={form} onFinish={handleSubmitAnswer}>
-				<Typography.Text className={cx('heading')}>
+				<Typography.Text className={cx("heading")}>
 					<strong>Câu {order + 1}:</strong>{" "}
 					{(mode === "RESULT" || mode === "TEACHER") && (
 						<Tag color={checkAnswer() === 0 ? "red" : "green"}>
@@ -144,9 +152,9 @@ export default function QuestionAssignment({
 						rules={[{ required: true }]}
 						name="answer"
 						valuePropName="value"
-						initialValue={
-							data?.answer?.selectedOptions?.map(o => o?.id)
-						}
+						initialValue={data?.answer?.selectedOptions?.map(
+							(o) => o?.id
+						)}
 					>
 						<Checkbox.Group className={cx("choices")}>
 							{data?.choices?.map(
@@ -173,7 +181,9 @@ export default function QuestionAssignment({
 						name="answer"
 						valuePropName="value"
 						initialValue={
-							data?.answer?.selectedOptions?.length > 0 ? data?.answer?.selectedOptions[0].id : null
+							data?.answer?.selectedOptions?.length > 0
+								? data?.answer?.selectedOptions[0].id
+								: null
 						}
 					>
 						<Radio.Group className={cx("choices")}>
@@ -203,11 +213,11 @@ export default function QuestionAssignment({
 				{data?.type === "SHORT_ANSWER" && (
 					<Form.Item
 						rules={[{ required: true }]}
-						name="answer"
+						name={["answer", "textAnswer"]}
 						initialValue={
 							data?.answer?.length > 0
-								? data?.answer[0].text_answer
-								: data?.answer?.text_answer
+								? data?.answer[0].textAnswer
+								: data?.answer?.textAnswer
 						}
 					>
 						{data?.answer?.length > 0 ? (
@@ -215,7 +225,7 @@ export default function QuestionAssignment({
 								<div>
 									Submitted answer:{" "}
 									<strong>
-										{data?.answer[0].text_answer}
+										{data?.answer[0].textAnswer}
 									</strong>
 								</div>
 								<div>
@@ -230,10 +240,10 @@ export default function QuestionAssignment({
 								</div>
 							</div>
 						) : (
-							data?.answer?.text_answer && (
+							data?.answer?.textAnswer && (
 								<div>
 									Your answer:{" "}
-									<strong>{data?.answer?.text_answer}</strong>
+									<strong>{data?.answer?.textAnswer}</strong>
 								</div>
 							)
 						)}
@@ -264,11 +274,11 @@ export default function QuestionAssignment({
 						)}
 						<Form.Item
 							rules={[{ required: true }]}
-							name="answer"
+							name={["answer", "textAnswer"]}
 							initialValue={
 								data?.answer?.length > 0
-									? data?.answer[0].text_answer
-									: data?.answer?.text_answer
+									? data?.answer[0].textAnswer
+									: data?.answer?.textAnswer
 							}
 						>
 							<EditorWithCommentSystem
@@ -278,8 +288,8 @@ export default function QuestionAssignment({
 								}}
 								value={
 									data?.answer?.length > 0
-										? data?.answer[0].text_answer
-										: data?.answer?.text_answer
+										? data?.answer[0].textAnswer
+										: data?.answer?.textAnswer
 								}
 								comment={mode === "ATTEMPT" ? false : true}
 								answerId={
@@ -303,17 +313,17 @@ export default function QuestionAssignment({
 					<Button
 						style={{
 							backgroundColor: submittedAnswer
-								? "green"
-								: "orange",
+								? "#A3F5C1"
+								: "#FFF4CC",
 						}}
 						htmlType="submit"
 						loading={isSubmitting}
-					// type='primary'
+						// type='primary'
 					>
 						Submit
 					</Button>
 				)}
 			</Form>
-		</div >
+		</div>
 	);
 }

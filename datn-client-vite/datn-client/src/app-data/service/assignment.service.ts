@@ -131,13 +131,10 @@ export const assignmentApi = createApi({
 				};
 			},
 		}),
-		submitAssignment: build.mutation<
-			any,
-			{ assignment_attempt_id: string }
-		>({
+		submitAssignment: build.mutation<any, { attemptId: string }>({
 			query: (params) => {
 				return {
-					url: `/assignment-attempt/${params.assignment_attempt_id}/submit`,
+					url: `/assignments/attempts/${params.attemptId}/submit`,
 					method: "POST",
 					credentials: "include",
 				};

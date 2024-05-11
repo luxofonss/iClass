@@ -1,10 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
 import { assignmentApi } from "@/app-data/service/assignment.service";
+import { uploadApi } from "@/app-data/service/upload.service";
 import {
-	ASSIGNMENT_ATTEMPT_TYPE,
 	ASSIGNMENT_TYPE,
 	QUESTION_LEVEL,
 	QUESTION_TYPE,
@@ -29,18 +27,16 @@ import {
 	Tag,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { Fingerprint, Plus, Trash } from "lucide-react";
+import classNames from "classnames/bind";
+import { Plus, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import ReactPlayer from "react-player";
 import { useParams } from "react-router-dom";
 import styles from "./AddAssignment.module.scss";
-import { SimpleEditor } from "@/components/Tiptap";
-import { uploadApi } from "@/app-data/service/upload.service";
-import ReactPlayer from "react-player";
 
 const cx = classNames.bind(styles);
 const { RangePicker } = DatePicker;
-
-
 
 export default function AddAssignment() {
 	const [timeType, setTimeType] = useState<string>("free");
@@ -76,10 +72,9 @@ export default function AddAssignment() {
 		setTimeType(value);
 	};
 
-
 	const onSubmit = async (values: any) => {
 		try {
-			console.log("values:: ", values)
+			console.log("values:: ", values);
 			const data = { ...values };
 			if (data.time === "custom") {
 				data.startTime = data.customTime;
@@ -94,7 +89,7 @@ export default function AddAssignment() {
 				endTime: data.endTime,
 				maxAttemptTimes: data.maxAttemptTimes,
 				multipleAttempts: data.multipleAttempts,
-				duration: parseInt(data.duration) * 1000,
+				duration: parseInt(data.duration),
 				title: data.title,
 				description: data.description,
 				lessonId: lessonId as string,
@@ -117,7 +112,7 @@ export default function AddAssignment() {
 									isCorrect: choice.isCorrect,
 								};
 							}),
-							answerExplanation: question.answerExplanation
+							answerExplanation: question.answerExplanation,
 						};
 						return questionData;
 					}
@@ -141,11 +136,10 @@ export default function AddAssignment() {
 
 			const res = await uploadFile(formData).unwrap();
 
-			form.setFieldValue(["questions", name, type], res?.data?.url)
-			form.validateFields()
-
+			form.setFieldValue(["questions", name, type], res?.data?.url);
+			form.validateFields();
 		} catch (error: any) {
-			toast.error(error?.data?.message || "Something went wrong!")
+			toast.error(error?.data?.message || "Something went wrong!");
 		}
 	}
 
@@ -202,7 +196,10 @@ export default function AddAssignment() {
 						</Col>
 
 						<Col span={6}>
-							<Form.Item name="assignmentType" label="Assignment type">
+							<Form.Item
+								name="assignmentType"
+								label="Assignment type"
+							>
 								<Select
 									options={Object.values(ASSIGNMENT_TYPE)}
 								/>
@@ -210,7 +207,11 @@ export default function AddAssignment() {
 						</Col>
 
 						<Col span={6}>
-							<Form.Item name="maxAttemptTimes" initialValue={1} label="Times of attempts">
+							<Form.Item
+								name="maxAttemptTimes"
+								initialValue={1}
+								label="Times of attempts"
+							>
 								<Input type="number" />
 							</Form.Item>
 						</Col>
@@ -230,7 +231,10 @@ export default function AddAssignment() {
 											>
 												Question {key + 1}
 											</Tag>
-											<Form.Item hidden name={[name, "id"]}>
+											<Form.Item
+												hidden
+												name={[name, "id"]}
+											>
 												<Input />
 											</Form.Item>
 											<Form.Item
@@ -297,24 +301,50 @@ export default function AddAssignment() {
 										<TextArea />
 									</Form.Item>
 									<div className={cx("options")}>
-
-
 										<Space direction="vertical">
-											<Input onChange={(e) => {
-												handleUpload(e, name, 'image')
-											}} type="file" />
+											<Input
+												onChange={(e) => {
+													handleUpload(
+														e,
+														name,
+														"image"
+													);
+												}}
+												type="file"
+											/>
 											<Form.Item
 												name={[name, "image"]}
 												hidden
 											>
 												<Input />
 											</Form.Item>
-											{form.getFieldValue(["questions", key, "image"]) && <Image height={300} src={form.getFieldValue(["questions", key, "image"])} alt="img" />}
+											{form.getFieldValue([
+												"questions",
+												key,
+												"image",
+											]) && (
+												<Image
+													height={300}
+													src={form.getFieldValue([
+														"questions",
+														key,
+														"image",
+													])}
+													alt="img"
+												/>
+											)}
 										</Space>
 										<Space direction="vertical">
-											<Input onChange={(e) => {
-												handleUpload(e, name, 'audio')
-											}} type="file" />
+											<Input
+												onChange={(e) => {
+													handleUpload(
+														e,
+														name,
+														"audio"
+													);
+												}}
+												type="file"
+											/>
 											<Form.Item
 												name={[name, "audio"]}
 												hidden
@@ -322,7 +352,20 @@ export default function AddAssignment() {
 											>
 												<Input />
 											</Form.Item>
-											{form.getFieldValue(["questions", key, "audio"]) && <ReactPlayer url={form.getFieldValue(["questions", key, "audio"])} controls />}
+											{form.getFieldValue([
+												"questions",
+												key,
+												"audio",
+											]) && (
+												<ReactPlayer
+													url={form.getFieldValue([
+														"questions",
+														key,
+														"audio",
+													])}
+													controls
+												/>
+											)}
 										</Space>
 										<Form.Item
 											name={[name, "audio"]}
@@ -333,67 +376,158 @@ export default function AddAssignment() {
 									</div>
 									<div className={cx("answer")}>
 										<Form.List name={[name, "choices"]}>
-											{
-												(fields, { add, remove }) => {
-													const questionType = form.getFieldValue(["questions", key, "type"]);
-													return <div>
+											{(fields, { add, remove }) => {
+												const questionType =
+													form.getFieldValue([
+														"questions",
+														key,
+														"type",
+													]);
+												return (
+													<div>
 														<Row gutter={24}>
-															{fields.map((field, index) => (
-																<Col span={12} key={field.key}>
-																	<div className={cx("item")}>
-																		<Form.Item hidden name={[field.name, "id"]}>
-																			<Input />
-																		</Form.Item>
-																		{questionType === QUESTION_TYPE_ENUM.SINGLE_CHOICE &&
-																			<Form.Item initialValue={false} valuePropName="checked" name={[field.name, "isCorrect"]}>
-																				<input type="radio" style={{ width: 20, height: 20 }} />
-																			</Form.Item>}
-																		{
-																			questionType === QUESTION_TYPE_ENUM.MULTI_CHOICE && (
-																				<Form.Item initialValue={false} valuePropName="checked" name={[field.name, "isCorrect"]}>
+															{fields.map(
+																(
+																	field,
+																	index
+																) => (
+																	<Col
+																		span={
+																			12
+																		}
+																		key={
+																			field.key
+																		}
+																	>
+																		<div
+																			className={cx(
+																				"item"
+																			)}
+																		>
+																			<Form.Item
+																				hidden
+																				name={[
+																					field.name,
+																					"id",
+																				]}
+																			>
+																				<Input />
+																			</Form.Item>
+																			{questionType ===
+																				QUESTION_TYPE_ENUM.SINGLE_CHOICE && (
+																				<Form.Item
+																					initialValue={
+																						false
+																					}
+																					valuePropName="checked"
+																					name={[
+																						field.name,
+																						"isCorrect",
+																					]}
+																				>
+																					<input
+																						type="radio"
+																						style={{
+																							width: 20,
+																							height: 20,
+																						}}
+																					/>
+																				</Form.Item>
+																			)}
+																			{questionType ===
+																				QUESTION_TYPE_ENUM.MULTI_CHOICE && (
+																				<Form.Item
+																					initialValue={
+																						false
+																					}
+																					valuePropName="checked"
+																					name={[
+																						field.name,
+																						"isCorrect",
+																					]}
+																				>
 																					<Checkbox />
 																				</Form.Item>
-																			)
-																		}
-																		<Form.Item rules={[{
-																			required: true
-																		}]} className={cx("input")} style={{ margin: 0 }} name={[field.name, "content"]}>
-																			<Input />
-																		</Form.Item>
-																		<Form.Item
-																			hidden
-																			initialValue={index}
-																			className={cx("input")}
-																			style={{ margin: 0 }}
-																			name={[field.name, "order"]}
-																		>
-																			<Input />
-																		</Form.Item>
-																		<Button
-																			danger
-																			icon={<Trash size={14} />}
-																			className={cx("btn-remove")}
-																			onClick={() => {
-																				remove(index);
-																			}}
-																		/>
-																	</div>
-																</Col>
-															))}
+																			)}
+																			<Form.Item
+																				rules={[
+																					{
+																						required:
+																							true,
+																					},
+																				]}
+																				className={cx(
+																					"input"
+																				)}
+																				style={{
+																					margin: 0,
+																				}}
+																				name={[
+																					field.name,
+																					"content",
+																				]}
+																			>
+																				<Input />
+																			</Form.Item>
+																			<Form.Item
+																				hidden
+																				initialValue={
+																					index
+																				}
+																				className={cx(
+																					"input"
+																				)}
+																				style={{
+																					margin: 0,
+																				}}
+																				name={[
+																					field.name,
+																					"order",
+																				]}
+																			>
+																				<Input />
+																			</Form.Item>
+																			<Button
+																				danger
+																				icon={
+																					<Trash
+																						size={
+																							14
+																						}
+																					/>
+																				}
+																				className={cx(
+																					"btn-remove"
+																				)}
+																				onClick={() => {
+																					remove(
+																						index
+																					);
+																				}}
+																			/>
+																		</div>
+																	</Col>
+																)
+															)}
 														</Row>
 														<Button
-															icon={<Plus size={14} />}
-															className={cx("btn-add")}
+															icon={
+																<Plus
+																	size={14}
+																/>
+															}
+															className={cx(
+																"btn-add"
+															)}
 															onClick={() => {
 																add();
 															}}
 														>
 															Add answer
 														</Button>
-
 													</div>
-												}
-											}
+												);
+											}}
 										</Form.List>
 									</div>
 

@@ -144,7 +144,7 @@ export default function CourseLesson() {
 						console.log("test");
 						if (idx2 < section?.lessons?.length - 1) {
 							setCurrentLesson(
-								displayData.sections[index]?.lessons[idx2 + 1]
+								displayData?.sections[index]?.lessons[idx2 + 1]
 							);
 						} else if (index < displayData?.sections?.length - 1) {
 							if (
@@ -152,10 +152,10 @@ export default function CourseLesson() {
 									?.length > 0
 							) {
 								setCurrentLesson(
-									displayData.sections[index + 1]?.lessons[0]
+									displayData?.sections[index + 1]?.lessons[0]
 								);
 								setCurrentSection(
-									displayData.sections[index + 1]
+									displayData?.sections[index + 1]
 								);
 							}
 						}
@@ -177,7 +177,7 @@ export default function CourseLesson() {
 						console.log("test");
 						if (idx2 > 0) {
 							setCurrentLesson(
-								displayData.sections[index]?.lessons[idx2 - 1]
+								displayData?.sections[index]?.lessons[idx2 - 1]
 							);
 						} else if (index > 0) {
 							if (
@@ -185,13 +185,13 @@ export default function CourseLesson() {
 									?.length > 0
 							) {
 								setCurrentLesson(
-									displayData.sections[index - 1]?.lessons[
+									displayData?.sections[index - 1]?.lessons[
 										displayData?.sections[index - 1]
 											?.lessons?.length - 1
 									]
 								);
 								setCurrentSection(
-									displayData.sections[index - 1]
+									displayData?.sections[index - 1]
 								);
 							}
 						}

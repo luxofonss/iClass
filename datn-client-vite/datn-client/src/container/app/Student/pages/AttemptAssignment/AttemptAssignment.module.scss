@@ -49,6 +49,11 @@
 					border-radius: 8px;
 					border: 1px solid #9b16f3;
 				}
+
+				.item.active {
+					background-color: #a3f5c1;
+					border: 1px solid #a3f5c1;
+				}
 			}
 		}
 	}

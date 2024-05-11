@@ -3,13 +3,13 @@ import { assignmentApi } from "@/app-data/service/assignment.service";
 import ModalConfirm from "@/components/ModalConfirm";
 import { Col, Divider, Row, Typography } from "antd";
 import classNames from "classnames/bind";
+import { ChevronLeft } from "lucide-react";
 import { useEffect } from "react";
 import Countdown from "react-countdown";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import QuestionAssignment from "../../../../../components/QuestionAssignment";
 import styles from "./AttemptAssignment.module.scss";
-import { ChevronLeft } from "lucide-react";
 
 const cx = classNames.bind(styles);
 
@@ -30,7 +30,7 @@ export default function AttemptAssignment() {
 	async function submitAssignmentHandler() {
 		try {
 			await submitAssignment({
-				assignment_attempt_id: attemptId as string,
+				attemptId: attemptId as string,
 			}).unwrap();
 
 			toast.success("Assignment submitted successfully!");
@@ -38,6 +38,18 @@ export default function AttemptAssignment() {
 			toast.error(error?.data?.message || "Something went wrong!");
 		}
 	}
+
+	function getRemainTime() {
+		const now = new Date();
+		const start = new Date(assignmentAttempt?.data?.startTime);
+		const end = new Date(assignmentAttempt?.data?.endTime);
+
+		console.log(start, end, now);
+		if (end.getTime() < now.getTime()) return 0;
+		else return now.getTime() - start.getTime();
+	}
+
+	console.log("getRemainTime()::", getRemainTime());
 
 	return (
 		<div className={cx("wrapper")}>
@@ -60,6 +72,7 @@ export default function AttemptAssignment() {
 						<div className={cx("question-overview")}>
 							<div className={cx("time")}>
 								<div>Thời gian làm bài</div>
+
 								<Countdown
 									renderer={(props) => (
 										<div style={{ fontSize: 24 }}>
@@ -68,17 +81,23 @@ export default function AttemptAssignment() {
 											{props.formatted.seconds}
 										</div>
 									)}
-									date={Date.now() + 600000}
+									date={Date.now() + (getRemainTime() ?? 0)}
 								/>
 							</div>
 							<div className={cx("notes")}>
-								<div className={cx("item")}>1</div>
-								<div className={cx("item")}>2</div>
-								<div className={cx("item")}>3</div>
-								<div className={cx("item")}>4</div>
-								<div className={cx("item")}>5</div>
-								<div className={cx("item")}>6</div>
-								<div className={cx("item")}>7</div>
+								{assignmentAttempt?.data?.assignment?.questions?.map(
+									(question, index) => (
+										<div
+											key={question?.id}
+											className={cx(
+												"item",
+												question?.answer ? "active" : ""
+											)}
+										>
+											{index + 1}
+										</div>
+									)
+								)}
 							</div>
 							<ModalConfirm
 								handleConfirm={() => {
@@ -86,8 +105,8 @@ export default function AttemptAssignment() {
 								}}
 								buttonStyle={{ width: "100%" }}
 								isSubmitting={isSubmitting}
-								modalMessage="Do you want to submit this assignment?"
-								btnText="Submit assignment"
+								modalMessage="Bạn có chắc chắn muốn nộp bài?"
+								btnText="Nộp bài"
 							/>
 						</div>
 					</Col>

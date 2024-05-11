@@ -1,25 +1,21 @@
 @import "@/shared/styles/mixins";
 
-.sider {
-	padding: 3px 12px;
-	position: relative;
+.wrapper {
+	background-color: white;
+	padding: 120px !important;
+	margin-top: 40px;
+	border-radius: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	align-items: center;
 
-	.menu-collapse {
-		position: absolute;
-		top: 0;
-		right: -24px;
-	}
+	.form {
+		width: 100%;
 
-	.divider {
-		margin: 8px;
-	}
-
-	.menu {
-		margin-top: 24px;
-		border: none;
-
-		li {
-			font-size: 16px;
+		.submit-btn {
+			margin: 0 auto;
+			width: 240px;
 		}
 	}
 }

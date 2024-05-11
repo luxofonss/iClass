@@ -17,34 +17,36 @@ export default function MyEnrolledCourses() {
 	console.log("allCourses:: ", allCourses);
 	return (
 		<div className={cx("join-course-wrapper")}>
-			<div className={cx('banner')}>
+			<div className={cx("banner")}>
 				<div>Lớp học của tôi</div>
 				<div className={cx("join-btn")}>
 					<JoinCourseModel />
 				</div>
 			</div>
-			<div className={cx('content', 'container')}>
+			<div className={cx("content", "container")}>
 				<Row gutter={[24, 24]}>
-					<Col className={cx('tabs')} span={6}>
+					<Col className={cx("tabs")} span={6}>
 						<ul>
-							<li className={cx('active')}>Tất cả lớp học</li>
+							<li className={cx("active")}>Tất cả lớp học</li>
 							<li>Đang học </li>
 							<li>Lớp đã lưu</li>
 							<li>Đã hoàn thành</li>
 						</ul>
 					</Col>
 					<Col span={18}>
-						{allCourses?.data?.length > 0 &&
-							allCourses.data.map((courseAttempt: any) => {
-								return (
-									<Col span={8} key={courseAttempt.id}>
-										<ClassBlock
-											mode={COURSE_VIEW_MODE.ENROLLED}
-											data={courseAttempt?.course}
-										/>
-									</Col>
-								);
-							})}
+						<Row gutter={24}>
+							{allCourses?.data?.length > 0 &&
+								allCourses.data.map((courseAttempt: any) => {
+									return (
+										<Col span={8} key={courseAttempt.id}>
+											<ClassBlock
+												mode={COURSE_VIEW_MODE.ENROLLED}
+												data={courseAttempt?.course}
+											/>
+										</Col>
+									);
+								})}
+						</Row>
 					</Col>
 				</Row>
 			</div>

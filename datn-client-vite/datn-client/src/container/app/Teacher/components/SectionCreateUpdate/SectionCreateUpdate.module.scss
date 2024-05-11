@@ -2,6 +2,10 @@
 
 .curriculum {
 	&__section {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+
 		margin-bottom: 8px;
 		.inputs {
 			@include card-wrapper;
@@ -17,24 +21,6 @@
 					&__name {
 						flex: 1;
 					}
-				}
-			}
-		}
-
-		&__name {
-			margin-top: 4px;
-			display: flex;
-			align-items: start;
-			justify-content: space-between;
-			gap: 12px;
-
-			.form {
-				flex: 1;
-
-				.btns {
-					display: flex;
-					justify-content: end;
-					gap: 12px;
 				}
 			}
 		}

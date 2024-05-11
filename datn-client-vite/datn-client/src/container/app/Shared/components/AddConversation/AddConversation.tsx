@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from "classnames/bind";
 
-import styles from "./AddConversation.module.scss";
-import { Avatar, Button, Form } from "antd";
-import { AVATAR } from "@/shared/constants";
+import { conversationApi } from "@/app-data/service/conversation.service";
+import { courseApi } from "@/app-data/service/course.service";
 import { SimpleEditor } from "@/components/Tiptap";
+import { AVATAR } from "@/shared/constants";
+import { Avatar, Button, Form } from "antd";
 import { File, Image, Plus, SendIcon, X } from "lucide-react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { conversationApi } from "@/app-data/service/conversation.service";
 import toast from "react-hot-toast";
-import { courseApi } from "@/app-data/service/course.service";
+import { useParams } from "react-router-dom";
+import styles from "./AddConversation.module.scss";
 const cx = classNames.bind(styles);
 
 export default function AddConversation() {
@@ -20,7 +20,7 @@ export default function AddConversation() {
 
 	const [form] = Form.useForm();
 
-	const [addConversation] =
+	const [addConversation, { isLoading: isAddingConversation }] =
 		conversationApi.endpoints.createConversation.useMutation();
 	const [getCourse] = courseApi.endpoints.getCourseById.useLazyQuery();
 
@@ -97,6 +97,7 @@ export default function AddConversation() {
 								htmlType="submit"
 								type="primary"
 								icon={<SendIcon size={18} />}
+								loading={isAddingConversation}
 							>
 								Tạo bài viết
 							</Button>

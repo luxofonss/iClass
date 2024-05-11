@@ -1,6 +1,9 @@
 import { RootState } from "@/app-data";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 // Define a type for the slice state
 interface AuthState {
@@ -51,6 +54,8 @@ export const authSlice = createSlice({
 			state.isLoggedIn = true;
 		},
 		logout: (state) => {
+			cookies.remove("access_token");
+			cookies.remove("refresh_token");
 			state.isLoggedIn = false;
 			state.user = initialState.user;
 		},

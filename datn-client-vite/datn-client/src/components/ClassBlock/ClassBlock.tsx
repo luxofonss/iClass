@@ -23,31 +23,36 @@ export default function ClassBlock(props: IClassBlockProps) {
 				<img
 					src={
 						data?.thumbnail ??
-						"https://er.educause.edu/-/media/images/blogs/2020/8/er20_3206_706x394_blog.jpg"
+						"https://blogassets.leverageedu.com/blog/wp-content/uploads/2020/02/12184157/MS-in-Education.jpg"
 					}
 					alt="thumbnail"
 				/>
 			</div>
 			<div className={cx("info")}>
 				<div className={cx("tags")}>
-					<Typography.Text className={cx('item')}>
+					<Typography.Text className={cx("item")}>
 						{data?.teacher?.lastName +
 							" " +
 							data?.teacher?.firstName}
 					</Typography.Text>
-					<Typography.Text className={cx('item')} >{data?.subject?.name}</Typography.Text>
-
+					<Typography.Text className={cx("item")}>
+						{data?.subject?.name}
+					</Typography.Text>
 				</div>
 				<Link
 					to={
 						mode.toUpperCase() === COURSE_VIEW_MODE.TEACHER
 							? `/teacher/courses/${data?.id}/home`
 							: mode.toUpperCase() === COURSE_VIEW_MODE.ENROLLED
-								? `/courses/${data?.id}/home`
-								: `/courses/${data?.id}`
+							? `/courses/${data?.id}/home`
+							: `/courses/${data?.id}`
 					}
 				>
-					<Typography.Title ellipsis={{ rows: 2 }} level={5} className={cx("name")}>
+					<Typography.Title
+						ellipsis={{ rows: 2 }}
+						level={5}
+						className={cx("name")}
+					>
 						{data?.name}
 					</Typography.Title>
 				</Link>

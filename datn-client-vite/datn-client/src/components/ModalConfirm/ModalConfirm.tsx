@@ -47,7 +47,7 @@ const ModalConfirm = forwardRef<ModalConfirmHandle, ModalConfirmProps>(
 					</Button>
 				)}
 				<Modal
-					title="Confirm"
+					title="Xác nhận"
 					visible={open}
 					// confirmLoading={props.isSubmitting}
 					onOk={() => {

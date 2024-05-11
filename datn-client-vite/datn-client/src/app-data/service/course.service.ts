@@ -172,10 +172,39 @@ export const courseApi = createApi({
 				body: { sections: [body.data] },
 			}),
 		}),
+
+		updateSection: build.mutation<any, any>({
+			query: (body) => ({
+				url: `/courses/${body.courseId}/sections`,
+				method: "PUT",
+				body: { sections: [body.data] },
+			}),
+		}),
+		deleteSection: build.mutation<any, any>({
+			query: (body) => ({
+				url: `/courses/${body.courseId}/sections`,
+				method: "DELETE",
+				body: { sections: [body.data] },
+			}),
+		}),
 		addLesson: build.mutation<any, any>({
 			query: (body) => ({
 				url: `/courses/${body.courseId}/sections/${body.sectionId}/lessons`,
 				method: "POST",
+				body: { lessons: [body.data] },
+			}),
+		}),
+		updateLesson: build.mutation<any, any>({
+			query: (body) => ({
+				url: `/courses/${body.courseId}/sections/${body.sectionId}/lessons`,
+				method: "PUT",
+				body: { lessons: [body.data] },
+			}),
+		}),
+		deleteLesson: build.mutation<any, any>({
+			query: (body) => ({
+				url: `/courses/${body.courseId}/sections/${body.sectionId}/lessons`,
+				method: "DELETE",
 				body: { lessons: [body.data] },
 			}),
 		}),

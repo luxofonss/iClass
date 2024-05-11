@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from "classnames/bind";
 
-import styles from "./ViewAssignmentAttemptsInLesson.module.scss";
-import { BookIcon, ChevronRight, EyeIcon } from "lucide-react";
+import { assignmentApi } from "@/app-data/service/assignment.service";
 import { AssignmentViewSchema } from "@/shared/schema/assignment.schema";
+import { AssignmentAttemptSchema } from "@/shared/schema/assignmentAttempt.schema";
 import {
 	Button,
 	Collapse,
@@ -12,10 +12,10 @@ import {
 	Table,
 	TableColumnsType,
 } from "antd";
-import { AssignmentAttemptSchema } from "@/shared/schema/assignmentAttempt.schema";
+import { BookIcon, ChevronRight, EyeIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { assignmentApi } from "@/app-data/service/assignment.service";
+import styles from "./ViewAssignmentAttemptsInLesson.module.scss";
 const cx = classNames.bind(styles);
 
 interface IViewAssignmentAttemptsInLessonProps {
@@ -66,7 +66,11 @@ export default function ViewAssignmentAttemptsInLesson(
 				}
 			},
 		},
-		{ title: "Điểm", dataIndex: "totalMark", key: "totalMark" },
+		{
+			title: "Điểm",
+			dataIndex: "totalMark",
+			key: "totalMark",
+		},
 		{
 			title: "Lời phê",
 			dataIndex: "teacherComment",
@@ -120,6 +124,7 @@ export default function ViewAssignmentAttemptsInLesson(
 				<div className={cx("right")}>
 					<Button
 						onClick={() => {
+							console.log("assignment:: ", assignment);
 							handleAttemptAssignment(assignment?.id);
 						}}
 						type="primary"

@@ -1,25 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import classNames from "classnames/bind";
-
-import styles from "./LectureCreateUpdate.module.scss";
-import {
-	Button,
-	Card,
-	Form,
-	Input,
-	Space,
-	Typography,
-	Upload,
-	UploadProps,
-} from "antd";
-import { Fragment, useEffect, useState } from "react";
-import { SectionSchema } from "@/shared/schema/course.schema";
 import { courseApi } from "@/app-data/service/course.service";
-import toast from "react-hot-toast";
-import { Link, useParams } from "react-router-dom";
 import { uploadApi } from "@/app-data/service/upload.service";
-import ReactPlayer from "react-player";
-import { Plus, UploadCloud, Video } from "lucide-react";
+import { SectionSchema } from "@/shared/schema/course.schema";
+import { Button, Card, Form, Input, Space } from "antd";
+import classNames from "classnames/bind";
+import { Video } from "lucide-react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import LectureCreateUpdateItem from "../LectureCreateUpdateItem";
+import styles from "./LectureCreateUpdate.module.scss";
 const cx = classNames.bind(styles);
 
 interface ILectureCreateUpdate {
@@ -30,13 +20,11 @@ export default function LectureCreateUpdate({
 	sectionData,
 }: ILectureCreateUpdate) {
 	const [addingLesson, setAddingLesson] = useState<string | null>(null);
-	const [editingLesson, setEdittingLesson] = useState(null);
 
 	const { courseId } = useParams();
 	const [addLesson, { isLoading: isAddingLesson }] =
 		courseApi.endpoints.addLesson.useMutation();
-	const [getCourse, { isLoading: isGettingCourse }] =
-		courseApi.endpoints.getCourseById.useLazyQuery();
+	const [getCourse] = courseApi.endpoints.getCourseById.useLazyQuery();
 	const [uploadFile] = uploadApi.endpoints.uploadFile.useMutation();
 
 	const [lessonForm] = Form.useForm();
@@ -67,7 +55,7 @@ export default function LectureCreateUpdate({
 			toast.success("Add lesson successfully!");
 			getCourse({ id: courseId as string });
 			lessonFormCreate.resetFields();
-			setAddingLesson(false);
+			setAddingLesson(null);
 		} catch (error) {
 			toast.error("Something went wrong!");
 			console.log(error);
@@ -92,173 +80,18 @@ export default function LectureCreateUpdate({
 			}
 	}
 
-	const uploadProps: UploadProps = {
-		action: "//jsonplaceholder.typicode.com/posts/",
-		listType: "picture",
-		previewFile(file) {
-			console.log("Your upload file:", file);
-			// Your process logic. Here we just mock to the same file
-			return fetch(
-				"https://next.json-generator.com/api/json/get/4ytyBoLK8",
-				{
-					method: "POST",
-					body: file,
-				}
-			)
-				.then((res) => res.json())
-				.then(({ thumbnail }) => thumbnail);
-		},
-	};
-
 	return (
 		<div className={cx("wrapper")}>
-			<Form layout="vertical" form={lessonForm}>
-				<Form.List name={"lessons"}>
-					{(fields, { add, remove }) => (
-						<div className={cx("list-items")}>
-							{fields.map((field, index) => (
-								<Card
-									className={cx("list-items__item")}
-									key={field.key}
-								>
-									<div className={cx("heading")}>
-										<div>Bài giảng {index + 1}</div>
-										<Space>
-											{sectionData.lessons[field.name]
-												.type === "VIDEO" &&
-												sectionData.lessons[field.name]
-													.resource === null && (
-													<>
-														{editingLesson ===
-														index ? (
-															<Button
-																onClick={() => {
-																	setEdittingLesson(
-																		null
-																	);
-																}}
-															>
-																Huỷ thêm nội
-																dung
-															</Button>
-														) : (
-															<Button
-																icon={
-																	<Plus
-																		size={
-																			16
-																		}
-																	/>
-																}
-																onClick={() => {
-																	setEdittingLesson(
-																		index
-																	);
-																}}
-															>
-																Thêm nội dung
-															</Button>
-														)}
-													</>
-												)}
-
-											{sectionData.lessons[field.name]
-												.type === "ASSIGNMENT" && (
-												<Fragment>
-													{sectionData.lessons[
-														field.name
-													].assignment === null ? (
-														<Link
-															about="blank"
-															to={`/teacher/courses/${courseId}/lectures/${
-																sectionData
-																	.lessons[
-																	field.name
-																].id
-															}/assignment`}
-														>
-															<Button
-																icon={
-																	<Plus
-																		size={
-																			16
-																		}
-																	/>
-																}
-															>
-																Thêm bài tập
-															</Button>
-														</Link>
-													) : (
-														<Link
-															about="blank"
-															to={`/teacher/courses/${courseId}/lectures/${
-																sectionData
-																	.lessons[
-																	field.name
-																].id
-															}/assignment/${
-																sectionData
-																	.lessons[
-																	field.name
-																].assignment?.id
-															}`}
-														>
-															<Button>
-																View assignment
-															</Button>
-														</Link>
-													)}
-												</Fragment>
-											)}
-											<Button
-												onClick={() => {
-													remove(field.key);
-												}}
-												danger
-											>
-												Delete
-											</Button>
-										</Space>
-									</div>
-									<Form.Item
-										className={cx("input")}
-										name={[field.name, "name"]}
-										noStyle
-									>
-										<Input />
-									</Form.Item>
-									{sectionData.lessons[field.name].type ===
-										"VIDEO" &&
-									sectionData.lessons[field.name].resource ? (
-										<Fragment>
-											<ReactPlayer
-												width="320px"
-												height="240px"
-												controls
-												url={
-													sectionData.lessons[
-														field.name
-													]?.resource?.url
-												}
-											/>
-										</Fragment>
-									) : editingLesson === index ? (
-										<Upload
-											className={cx("adding-video")}
-											{...uploadProps}
-										>
-											<Button icon={<UploadCloud />}>
-												Thêm video bài giảng
-											</Button>
-										</Upload>
-									) : null}
-								</Card>
-							))}
-						</div>
-					)}
-				</Form.List>
-			</Form>
+			{sectionData?.lessons?.map((lesson, index) => {
+				return (
+					<LectureCreateUpdateItem
+						sectionId={sectionData.id}
+						key={lesson?.id}
+						lesson={lesson}
+						index={index}
+					/>
+				);
+			})}
 			{addingLesson ? (
 				<Card className={cx("lesson-form")}>
 					<Form
