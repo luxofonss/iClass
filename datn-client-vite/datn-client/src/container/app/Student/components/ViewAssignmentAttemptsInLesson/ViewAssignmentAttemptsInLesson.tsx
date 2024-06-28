@@ -13,8 +13,9 @@ import {
 	TableColumnsType,
 } from "antd";
 import { BookIcon, ChevronRight, EyeIcon } from "lucide-react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styles from "./ViewAssignmentAttemptsInLesson.module.scss";
 const cx = classNames.bind(styles);
 
@@ -28,8 +29,16 @@ export default function ViewAssignmentAttemptsInLesson(
 	const { assignment } = props;
 	const navigate = useNavigate();
 
+	const { courseId } = useParams();
+
 	const [attemptAssignment] =
 		assignmentApi.endpoints.attemptAssignment.useMutation();
+	const [getAttemptsByAssignmentId, { data: attempts }] =
+		assignmentApi.endpoints.getAttemptsByAssignmentId.useLazyQuery();
+	const [getOneById, { data: assignmentData }] =
+		assignmentApi.endpoints.getOneById.useLazyQuery();
+
+	console.log("attempts:: ", attempts);
 
 	const columns: TableColumnsType<AssignmentAttemptSchema> = [
 		{
@@ -52,9 +61,13 @@ export default function ViewAssignmentAttemptsInLesson(
 			title: "Thời gian làm bài (min)",
 			dataIndex: "duration",
 			render: (_, attempt) => {
-				if (checkIfAttemptEnd(attempt.endTime)) {
+				console.log("attempt:: ", attempt, assignment);
+				if (
+					checkIfAttemptEnd(attempt?.endTime) ||
+					attempt?.submittedAt === null
+				) {
 					if (attempt.submittedAt === null) {
-						return assignment?.duration / 1000;
+						return attempt?.assignment?.duration;
 					} else {
 						return (
 							new Date(attempt.submittedAt).getMinutes() -
@@ -82,11 +95,22 @@ export default function ViewAssignmentAttemptsInLesson(
 			render: (_, attempt) => {
 				if (checkIfAttemptEnd(attempt.endTime)) {
 					return (
-						<Space>
-							Review <EyeIcon size={18} />
-						</Space>
+						<Link
+							to={`/courses/${courseId}/assignments/attempt-review/${attempt?.id}`}
+						>
+							<Space>
+								Review <EyeIcon size={18} />
+							</Space>
+						</Link>
 					);
-				} else return "Làm tiếp";
+				} else
+					return (
+						<Link
+							to={`/courses/assignments/${assignment?.id}/${attempt?.id}`}
+						>
+							Làm tiếp
+						</Link>
+					);
 			},
 		},
 	];
@@ -102,14 +126,18 @@ export default function ViewAssignmentAttemptsInLesson(
 	}
 
 	function checkIfAttemptEnd(endTime: string): boolean {
-		if (
-			new Date().getMilliseconds() - new Date(endTime).getMilliseconds() >
-			0
-		) {
-			return true;
-		} else {
-			return false;
-		}
+		return new Date().getTime() > new Date(endTime).getTime();
+	}
+
+	useEffect(() => {
+		getAttemptsByAssignmentId({ assignmentId: assignment?.id });
+		getOneById(assignment?.id);
+	}, [assignment?.id]);
+
+	function getMaxTotalMark(attempts: any) {
+		return attempts?.data?.reduce((max: any, attempt: any) => {
+			return attempt.totalMark > max ? attempt.totalMark : max;
+		}, 0); // 0 is the initial value for max
 	}
 
 	return (
@@ -128,6 +156,11 @@ export default function ViewAssignmentAttemptsInLesson(
 							handleAttemptAssignment(assignment?.id);
 						}}
 						type="primary"
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+						}}
 						icon={<ChevronRight />}
 					>
 						Làm bài
@@ -136,23 +169,35 @@ export default function ViewAssignmentAttemptsInLesson(
 			</div>
 			<div className={cx("attempt-info")}>
 				<div className={cx("attempt-info__item")}>
+					<div className={cx("title")}> Loại bài tập </div>
+					<div className={cx("value")}>
+						{" "}
+						{assignmentData?.data?.assignmentType}
+					</div>
+				</div>
+				<Divider type="vertical" style={{ height: "48px", width: 2 }} />
+				<div className={cx("attempt-info__item")}>
 					<div className={cx("title")}> Số lần thực hiện </div>
 					<div className={cx("value")}>
 						{" "}
-						{assignment?.attempts?.length}
+						{attempts?.data?.length}/
+						{assignmentData?.data?.maxAttemptTimes}
 					</div>
 				</div>
 				<Divider type="vertical" style={{ height: "48px", width: 2 }} />
 				<div className={cx("attempt-info__item")}>
 					<div className={cx("title")}>Điểm cao nhất</div>
-					<div className={cx("value")}>80/100</div>
+					<div className={cx("value")}>
+						{getMaxTotalMark(attempts)}/
+						{assignmentData?.data?.totalMark}
+					</div>
 				</div>
 			</div>
-			<Collapse>
+			<Collapse defaultActiveKey={1}>
 				<Collapse.Panel key={1} header="Lịch sử làm bài">
 					<Table
 						columns={columns}
-						dataSource={assignment?.attempts}
+						dataSource={attempts?.data}
 						size="small"
 					/>
 				</Collapse.Panel>

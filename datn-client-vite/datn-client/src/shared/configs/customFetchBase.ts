@@ -18,11 +18,13 @@ const baseQuery = fetchBaseQuery({
 		headers.set("Access-Control-Allow-Credentials", "true");
 		const token = cookies.get("access_token");
 		console.log("token:: ", token);
-		if (token && token !== undefined)
+		if (token && token !== undefined && token !== "undefined") {
+			console.log("set token");
 			headers.set(
 				"Authorization",
 				"Bearer " + cookies.get("access_token")
 			);
+		}
 		return headers;
 	},
 });

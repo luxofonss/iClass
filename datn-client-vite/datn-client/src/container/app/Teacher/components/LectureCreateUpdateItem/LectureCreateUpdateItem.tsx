@@ -32,6 +32,8 @@ export default function LectureCreateUpdateItem({
 	const [updateLesson, { isLoading: isUpdatingLesson }] =
 		courseApi.endpoints.updateLesson.useMutation();
 	const [getCourse] = courseApi.endpoints.getCourseById.useLazyQuery();
+	const [getResourceById] =
+		uploadApi.endpoints.getResourceById.useLazyQuery();
 
 	const { courseId } = useParams();
 	const [form] = Form.useForm();
@@ -40,9 +42,23 @@ export default function LectureCreateUpdateItem({
 		form.setFieldsValue(lesson);
 
 		if (lesson.type === "VIDEO") {
+			handleGetResource();
 			setResource(lesson?.resource);
 		}
 	}, [lesson]);
+
+	async function handleGetResource() {
+		try {
+			const response = await getResourceById(
+				lesson?.resource?.id
+			).unwrap();
+
+			setResource(response?.data);
+			console.log("response?.data:: ", response?.data);
+		} catch (error) {
+			// toast.error("Something went wrong while getting resource");
+		}
+	}
 
 	async function handleUploadFile(e: React.ChangeEvent<HTMLInputElement>) {
 		if (e.target?.files && e.target?.files?.length > 0)

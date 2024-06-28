@@ -27,7 +27,7 @@ export default function QuestionAnswer({
 }: {
 	type: TypeQuestion;
 	field: QuestionField | FormListFieldData;
-	 ?: number;
+	questionKey?: number;
 }) {
 	const name =
 		questionKey !== undefined
@@ -56,7 +56,7 @@ export default function QuestionAnswer({
 									<Col span={12} key={field.key}>
 										<div className={cx("item")}>
 											{type ===
-												QUESTION_TYPE_ENUM.SINGLE_CHOICE ? (
+											QUESTION_TYPE_ENUM.SINGLE_CHOICE ? (
 												<Form.Item
 													valuePropName="checked"
 													name={[
@@ -75,7 +75,7 @@ export default function QuestionAnswer({
 													/>
 												</Form.Item>
 											) : type ===
-												QUESTION_TYPE_ENUM.MULTI_CHOICE ? (
+											  QUESTION_TYPE_ENUM.MULTI_CHOICE ? (
 												<Form.Item
 													valuePropName="checked"
 													name={[
@@ -158,19 +158,19 @@ export default function QuestionAnswer({
 			</Form.List>
 			{(type === QUESTION_TYPE_ENUM.MULTI_CHOICE ||
 				type === QUESTION_TYPE_ENUM.SINGLE_CHOICE) && (
-					<div hidden className={cx("answer")}>
-						<Form.Item
-							name={
-								questionKey !== undefined
-									? [field.name, "answers"]
-									: [field.name, field.key, "answers"]
-							}
-							label="Key"
-						>
-							<Input />
-						</Form.Item>
-					</div>
-				)}
+				<div hidden className={cx("answer")}>
+					<Form.Item
+						name={
+							questionKey !== undefined
+								? [field.name, "answers"]
+								: [field.name, field.key, "answers"]
+						}
+						label="Key"
+					>
+						<Input />
+					</Form.Item>
+				</div>
+			)}
 		</div>
 	);
 }

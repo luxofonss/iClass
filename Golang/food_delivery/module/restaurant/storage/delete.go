@@ -2,18 +2,18 @@ package restaurantstorage
 
 import (
 	"context"
+	"food_delivery/common"
 	restaurantmodel "food_delivery/module/restaurant/model"
 )
 
-func (s *sqlStore) FindDataWithCondition(
-	context context.Context,
-	condition map[string]interface{},
-	moreKeys ...string) (*restaurantmodel.Restaurant, error) {
-	var data restaurantmodel.Restaurant
-
-	if err := s.db.Where(condition).First(&data); err != nil {
-		return nil, err
+func (s *sqlStore) Delete(context context.Context, id int) error {
+	if err := s.db.Table(restaurantmodel.Restaurant{}.TableName()).
+		Where("id=?", id).
+		Updates(map[string]interface{}{
+			"status": 0,
+		}).Error; err != nil {
+		return common.ErrDB(err)
 	}
 
-	return &data, nil
+	return nil
 }

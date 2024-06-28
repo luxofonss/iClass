@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
 
 import classNames from "classnames/bind";
 
-import CommentReply from "@/components/CommentReply";
 import ConversationInfo from "@/components/ConversationInfo";
-import EmojiPicker from "@/components/EmojiPicker";
 import { AVATAR_2 } from "@/shared/constants";
-import { Avatar, Popover, Typography } from "antd";
-import { SmilePlus } from "lucide-react";
-import styles from "./Comment.module.scss";
 import { CommentSchema } from "@/shared/schema/comment.schema";
+import { Avatar } from "antd";
+import styles from "./Comment.module.scss";
 const cx = classNames.bind(styles);
 
 interface ICommentProps {

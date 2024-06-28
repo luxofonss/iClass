@@ -1,30 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import classNames from "classnames/bind";
 
-import styles from "./CourseLesson.module.scss";
-import { Button, Checkbox, Col, Collapse, Modal, Row, Typography } from "antd";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { conversationApi } from "@/app-data/service/conversation.service";
 import { courseApi } from "@/app-data/service/course.service";
-import { Fragment, useEffect, useState } from "react";
-import ReactPlayer from "react-player";
-import {
-	Book,
-	ChevronLeft,
-	MoveLeft,
-	MoveRight,
-	PenLineIcon,
-	Play,
-	Video,
-} from "lucide-react";
+import { uploadApi } from "@/app-data/service/upload.service";
+import Conversation from "@/components/Conversation";
+import AddConversation from "@/container/app/Shared/components/AddConversation";
 import {
 	CourseViewSchema,
 	LectureSchema,
 	SectionSchema,
 } from "@/shared/schema/course.schema";
+import { Button, Col, Collapse, Modal, Row, Typography } from "antd";
+import { MoveLeft, MoveRight, PenLineIcon, Play } from "lucide-react";
+import { Fragment, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { SimpleEditor } from "@/components/Tiptap";
-import Conversation from "@/components/Conversation";
+import ReactPlayer from "react-player";
+import { Link, useParams } from "react-router-dom";
 import ViewAssignmentAttemptsInLesson from "../../components/ViewAssignmentAttemptsInLesson";
+import styles from "./CourseLesson.module.scss";
 const cx = classNames.bind(styles);
 
 export default function CourseLesson() {
@@ -39,6 +33,8 @@ export default function CourseLesson() {
 	const [addStudyStatus] = courseApi.endpoints.addStudyStatus.useMutation();
 	const [updateStudyStatus] =
 		courseApi.endpoints.addStudyStatus.useMutation();
+	const [getResourceById, { data: resource }] =
+		uploadApi.endpoints.getResourceById.useLazyQuery();
 
 	async function handleGetCourse() {
 		if (courseId) {
@@ -77,6 +73,13 @@ export default function CourseLesson() {
 			});
 		});
 	}, [lessonId, course]);
+
+	useEffect(() => {
+		console.log("currentLesson", currentLesson);
+		if (currentLesson?.resource?.id) {
+			getResourceById(currentLesson?.resource.id);
+		}
+	}, [currentLesson]);
 
 	function getCurrentSection() {
 		course?.data?.sections?.forEach((section) => {
@@ -227,6 +230,45 @@ export default function CourseLesson() {
 	const handleCancel = () => {
 		setIsModalOpen(false);
 	};
+
+	// conversation
+	const [conversationDisplayedData, setConversationDisplayedData] = useState<
+		CourseViewSchema[]
+	>([]);
+
+	const [getConversationByParentId, { data: conversationData }] =
+		conversationApi.endpoints.getConversationByParentId.useLazyQuery();
+
+	async function handleGetConversations() {
+		try {
+			const response = await getConversationByParentId({
+				parentId: currentLesson?.id,
+			}).unwrap();
+			setConversationDisplayedData(
+				response.data?.toSorted((a, b) => {
+					return new Date(b.createdAt) - new Date(a.createdAt);
+				})
+			);
+		} catch (error: any) {
+			toast.error(error?.data?.message || "Get course fail");
+		}
+	}
+
+	useEffect(() => {
+		setConversationDisplayedData(
+			conversationData?.data?.toSorted((a, b) => {
+				return new Date(b.createdAt) - new Date(a.createdAt);
+			})
+		);
+	}, [conversationData]);
+
+	useEffect(() => {
+		if (courseId && currentLesson?.id) {
+			handleGetConversations();
+		}
+	}, [courseId, currentLesson?.id]);
+
+	console.log("conversationDisplayedData:: ", conversationDisplayedData);
 
 	return (
 		<div className={cx("wrapper")}>
@@ -412,7 +454,8 @@ export default function CourseLesson() {
 								width={"100%"}
 								height={"auto"}
 								controls
-								url={currentLesson?.resource?.url}
+								// url={currentLesson?.resource?.url}
+								url={resource?.data?.url}
 							/>
 							<Typography.Title level={3}>
 								{currentLesson?.name}
@@ -423,9 +466,21 @@ export default function CourseLesson() {
 
 							<div className={cx("comments")}>
 								{/* <TextEditor /> */}
-								<SimpleEditor onValueChange={() => {}} />
-
-								<Conversation />
+								<AddConversation
+									courseId={courseId as string}
+									lessonId={currentLesson?.id}
+								/>
+								<div className={cx("conversations")}>
+									{conversationDisplayedData?.map(
+										(conversation) => {
+											return (
+												<Conversation
+													data={conversation}
+												/>
+											);
+										}
+									)}
+								</div>
 							</div>
 						</Fragment>
 					)}

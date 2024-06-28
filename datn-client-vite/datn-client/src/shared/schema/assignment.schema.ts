@@ -6,6 +6,7 @@ export type AssignmentCreateSchema = {
 	duration: number;
 	assignmentType: string;
 	lessonId: string;
+	courseId: string;
 	multipleAttempts: boolean;
 	title: string;
 	description: string;

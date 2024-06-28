@@ -3,9 +3,13 @@ import classNames from "classnames/bind";
 
 import { courseApi } from "@/app-data/service/course.service";
 import { uploadApi } from "@/app-data/service/upload.service";
-import AppSelect from "@/components/AppSelect";
 import ColorPrefix from "@/components/ColorPrefix";
 import { COLOR, COURSE_LEVEL_OPS } from "@/shared/constants";
+import {
+	CourseInfoSchema,
+	CourseUpdateSchema,
+	CourseViewSchema,
+} from "@/shared/schema/course.schema";
 import {
 	Button,
 	Col,
@@ -22,6 +26,7 @@ import {
 	Typography,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import dayjs from "dayjs";
 import {
 	GitBranch,
 	LucideAppWindow,
@@ -30,17 +35,11 @@ import {
 	School,
 	Trash,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import styles from "./NewClass.module.scss";
-import dayjs from "dayjs";
-import {
-	CourseInfoSchema,
-	CourseUpdateSchema,
-	CourseViewSchema,
-} from "@/shared/schema/course.schema";
 import SectionCreateUpdate from "../../components/SectionCreateUpdate";
+import styles from "./NewClass.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -201,7 +200,7 @@ export default function NewClass() {
 								type="primary"
 								htmlType="submit"
 							>
-								Submit for Review
+								Lưu
 							</Button>
 						</div>
 					}
@@ -255,7 +254,7 @@ export default function NewClass() {
 								<TextArea placeholder="VD: Lớp luyện IELTS cho người mới " />
 							</Form.Item>
 							<Row gutter={24}>
-								<Col span={6}>
+								{/* <Col span={6}>
 									<Form.Item
 										name="subjectId"
 										className={cx("label")}
@@ -274,8 +273,8 @@ export default function NewClass() {
 											valueField="id"
 										/>
 									</Form.Item>
-								</Col>
-								<Col span={6}>
+								</Col> */}
+								{/* <Col span={6}>
 									<Form.Item
 										name="grade"
 										className={cx("label")}
@@ -293,7 +292,7 @@ export default function NewClass() {
 											</Select.Option>
 										</Select>
 									</Form.Item>
-								</Col>
+								</Col> */}
 								<Col span={6}>
 									<Form.Item
 										name="level"

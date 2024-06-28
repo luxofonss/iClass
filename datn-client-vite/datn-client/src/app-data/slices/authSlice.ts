@@ -1,4 +1,4 @@
-import { RootState } from "@/app-data";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "universal-cookie";
@@ -66,6 +66,6 @@ export const { login, setUser, logout } = authSlice.actions;
 
 // // Other code such as selectors can use the imported `RootState` type
 // export const selectCount = (state: RootState) => state.auth.value
-export const userRole = (state: RootState) => state.user.role;
+export const userRole = (state: any) => state?.user?.role;
 
 export default authSlice.reducer;

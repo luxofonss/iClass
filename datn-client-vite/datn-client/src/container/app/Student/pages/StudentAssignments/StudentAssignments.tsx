@@ -3,12 +3,13 @@ import { assignmentApi } from "@/app-data/service/assignment.service";
 import { courseApi } from "@/app-data/service/course.service";
 import { AssignmentViewSchema } from "@/shared/schema/assignment.schema";
 import { LectureSchema, SectionSchema } from "@/shared/schema/course.schema";
-import { Button, Space, TableColumnsType } from "antd";
+import { formatTimestamp } from "@/shared/utils/formatTimeString";
+import { Button, TableColumnsType } from "antd";
 import Table from "antd/es/table";
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styles from "./StudentAssignments.module.scss";
 
 const cx = classNames.bind(styles);
@@ -36,6 +37,8 @@ export default function StudentAssignments({ mode }: IAssignmentsProps) {
 	const [getCourse] = courseApi.endpoints.getCourseById.useLazyQuery();
 	const [attemptAssignment] =
 		assignmentApi.endpoints.attemptAssignment.useMutation();
+	const [getAllByCourseId] =
+		assignmentApi.endpoints.getAllByCourseId.useLazyQuery();
 
 	const { courseId } = useParams();
 	const navigate = useNavigate();
@@ -43,12 +46,24 @@ export default function StudentAssignments({ mode }: IAssignmentsProps) {
 	async function handleGetCourse() {
 		if (courseId) {
 			const response = await getCourse({ id: courseId }).unwrap();
+			const assignmentData = await getAllByCourseId({
+				courseId: courseId as string,
+			}).unwrap();
 
 			const data: LectureSchema[] = [];
 			response?.data?.sections?.forEach((section: SectionSchema) => {
 				section?.lessons?.forEach((lesson: LectureSchema) => {
+					console.log("lessons:: ", lesson);
 					if (lesson?.type === "ASSIGNMENT") {
-						data.push(lesson);
+						let lessonAssignment = null;
+						assignmentData?.data?.forEach((assignment) => {
+							console.log("assignment:: ", assignment);
+							if (assignment.lessonId === lesson?.id) {
+								lessonAssignment = assignment;
+							}
+						});
+
+						data.push({ ...lesson, assignment: lessonAssignment });
 					}
 				});
 			});
@@ -56,6 +71,8 @@ export default function StudentAssignments({ mode }: IAssignmentsProps) {
 			setLessonData(data);
 		}
 	}
+
+	console.log("lesson data:: ", lessonData);
 
 	useEffect(() => {
 		handleGetCourse();
@@ -70,25 +87,36 @@ export default function StudentAssignments({ mode }: IAssignmentsProps) {
 				key: "stt	",
 				render: (_, _attempt, index) => index + 1,
 			},
-			{ title: "Bắt đầu", dataIndex: "startTime", key: "startTime" },
+			{
+				title: "Bắt đầu",
+				dataIndex: "startTime",
+				key: "startTime",
+				render: (_, record) => formatTimestamp(record?.startTime),
+			},
+			{
+				title: "Kết thúc",
+				dataIndex: "endTime",
+				key: "endTime",
+				render: (_, record) => {
+					return record?.submittedAt
+						? formatTimestamp(record?.submittedAt)
+						: formatTimestamp(record?.endTime);
+				},
+			},
 			{
 				title: "Tổng điểm",
 				key: "totalMark",
 				dataIndex: "totalMark",
 			},
 			{
-				title: "Upgrade Status",
-				dataIndex: "upgradeNum",
-				key: "upgradeNum",
-			},
-			{
 				title: "Action",
 				key: "operation",
-				render: () => (
-					<Space size="middle">
-						<a>Pause</a>
-						<a>Stop</a>
-					</Space>
+				render: (_, attempt) => (
+					<Link
+						to={`/courses/${courseId}/assignments/attempt-review/${attempt?.id}`}
+					>
+						<Button>Xem chi tiết</Button>
+					</Link>
 				),
 			},
 		];
@@ -124,9 +152,7 @@ export default function StudentAssignments({ mode }: IAssignmentsProps) {
 			dataIndex: "assignment",
 			key: "duration",
 			render: (assignment) =>
-				assignment?.duration
-					? assignment?.duration / 1000 + "m"
-					: "NaN",
+				assignment?.duration ? assignment?.duration + " (phút)" : "NaN",
 		},
 		{
 			title: "Số lần làm bài",

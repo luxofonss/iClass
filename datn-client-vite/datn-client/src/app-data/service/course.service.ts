@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createApi } from "@reduxjs/toolkit/query/react";
 import customFetchBase from "@/shared/configs/customFetchBase";
 import {
 	CourseCreateSchema,
@@ -7,6 +6,7 @@ import {
 	CourseViewSchema,
 } from "@/shared/schema/course.schema";
 import { ErrorResponse } from "@/types/index";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const courseApi = createApi({
 	reducerPath: "courseApi",
@@ -16,10 +16,9 @@ export const courseApi = createApi({
 		createCourse: build.mutation<any, CourseCreateSchema>({
 			query: (body) => {
 				return {
-					url: "/courses",
+					url: "/courses/",
 					method: "POST",
 					body: body,
-					credentials: "include",
 					headers: {
 						"content-type": "application/json",
 					},
@@ -32,7 +31,6 @@ export const courseApi = createApi({
 					url: `/courses/${body.id}`,
 					method: "PUT",
 					body: body,
-					credentials: "include",
 					headers: {
 						"content-type": "application/json",
 					},
@@ -47,7 +45,6 @@ export const courseApi = createApi({
 				return {
 					url: `/courses/${id}`,
 					method: "GET",
-					credentials: "include",
 				};
 			},
 		}),
@@ -56,7 +53,6 @@ export const courseApi = createApi({
 				return {
 					url: "/subjects",
 					method: "GET",
-					credentials: "include",
 				};
 			},
 		}),
@@ -65,7 +61,6 @@ export const courseApi = createApi({
 				return {
 					url: "/courses/my-courses",
 					method: "GET",
-					credentials: "include",
 				};
 			},
 		}),
@@ -74,7 +69,6 @@ export const courseApi = createApi({
 				return {
 					url: `/courses/${id}/sections`,
 					method: "GET",
-					credentials: "include",
 				};
 			},
 		}),
@@ -83,7 +77,6 @@ export const courseApi = createApi({
 				return {
 					url: "/courses/active",
 					method: "GET",
-					credentials: "include",
 				};
 			},
 		}),
@@ -93,7 +86,6 @@ export const courseApi = createApi({
 					url: `/courses/register-with-code`,
 					method: "POST",
 					body: body,
-					credentials: "include",
 				};
 			},
 		}),
@@ -102,7 +94,6 @@ export const courseApi = createApi({
 				return {
 					url: "/courses/my-registered-courses",
 					method: "GET",
-					credentials: "include",
 				};
 			},
 		}),
@@ -111,7 +102,6 @@ export const courseApi = createApi({
 				return {
 					url: `http://localhost:8080/v1/courses/${id}/assignments`,
 					method: "GET",
-					credentials: "include",
 				};
 			},
 		}),
@@ -122,7 +112,6 @@ export const courseApi = createApi({
 				return {
 					url: `/courses/${id}/students`,
 					method: "GET",
-					credentials: "include",
 				};
 			},
 		}),
@@ -131,7 +120,6 @@ export const courseApi = createApi({
 				return {
 					url: `/courses/enrolls`,
 					method: "PUT",
-					credentials: "include",
 					body: {
 						...body,
 						status: "INACTIVE",
@@ -144,7 +132,6 @@ export const courseApi = createApi({
 				return {
 					url: `/courses/enrolls`,
 					method: "PUT",
-					credentials: "include",
 					body: {
 						...body,
 						status: "ACTIVE",
@@ -160,7 +147,6 @@ export const courseApi = createApi({
 				return {
 					url: `/courses/${body.id}/students/add-many`,
 					method: "POST",
-					credentials: "include",
 					body: body.body,
 				};
 			},

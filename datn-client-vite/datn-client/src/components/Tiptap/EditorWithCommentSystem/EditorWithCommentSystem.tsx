@@ -4,9 +4,11 @@
 import classNames from "classnames/bind";
 import { useCallback, useEffect, useRef, useState } from "react";
 // => Tiptap packages
+import { RootState } from "@/app-data";
 import { assignmentApi } from "@/app-data/service/assignment.service";
 import CommentInfo from "@/components/CommentInfo";
 import ModalUploadImage from "@/components/ModalUploadImage";
+import formatTimeString from "@/shared/utils/formatTimeString";
 import { Comment } from "@sereneinserenade/tiptap-comment-extension";
 import Bold from "@tiptap/extension-bold";
 import Code from "@tiptap/extension-code";
@@ -32,7 +34,6 @@ import * as Icons from "../Icons";
 import { LinkModal } from "../LinkModal";
 import { FontSize } from "../extensions/font-size";
 import styles from "./EditorWithCommentSystem.module.scss";
-import { RootState } from "@/app-data";
 // Custom
 
 const cx = classNames.bind(styles);
@@ -63,7 +64,7 @@ interface Comment {
 const getNewComment = (content: string, type: string): Comment => {
 	return {
 		id: `a${crypto.randomUUID()}a`,
-		content,
+		content: content as string,
 		replies: [],
 		createdAt: new Date(),
 		type,
@@ -92,10 +93,12 @@ export function EditorWithCommentSystem({
 
 	const commentsSectionRef = useRef<HTMLDivElement | null>(null);
 
-	const [addFeedbackLongAnswer] =
-		assignmentApi.endpoints.addFeedbackLongAnswer.useMutation();
+	const [addFeedbackAnswer] =
+		assignmentApi.endpoints.addFeedbackAnswer.useMutation();
 	const [feedbackEditAnswerContent] =
 		assignmentApi.endpoints.feedbackEditAnswerContent.useMutation();
+	const [deleteFeedbackAnswer] =
+		assignmentApi.endpoints.deleteFeedbackAnswer.useMutation();
 
 	const focusCommentWithActiveId = (id: string) => {
 		if (!commentsSectionRef.current) return;
@@ -134,15 +137,33 @@ export function EditorWithCommentSystem({
 			replies: [],
 			createdAt: new Date(),
 			type: type,
-			user: {
-				first_name: user?.first_name,
-				last_name: user?.last_name,
+			creator: {
+				firstName: user?.firstName,
+				lastName: user?.lastName,
 			},
 		};
 	};
 
-	const deleteComment = (id: string) => {
-		setComments(comments.filter((comment) => comment.id !== id));
+	const deleteComment = async (id: string) => {
+		try {
+			await deleteFeedbackAnswer({
+				answerId: answerId,
+				attemptId: assignmentAttemptId,
+				feedbackId: id,
+			}).unwrap();
+
+			feedbackEditAnswerContent({
+				attemptId: assignmentAttemptId ?? "",
+				answerId: answerId as string,
+				data: {
+					content: content,
+				},
+			}).unwrap();
+
+			setComments(comments.filter((comment) => comment.id !== id));
+		} catch (error) {
+			toast.error("Error when deleting comment");
+		}
 	};
 
 	async function submitFeedback(comment: {
@@ -151,10 +172,10 @@ export function EditorWithCommentSystem({
 		type: string;
 	}) {
 		try {
-			await addFeedbackLongAnswer({
-				assignment_attempt_id: assignmentAttemptId ?? "",
-				answer_id: answerId ?? "",
-				body: {
+			await addFeedbackAnswer({
+				attemptId: assignmentAttemptId ?? "",
+				answerId: answerId ?? "",
+				data: {
 					id: comment.id,
 					message: comment.message ?? "",
 					type: comment.type,
@@ -176,9 +197,9 @@ export function EditorWithCommentSystem({
 				message: newComment.message,
 				type: type,
 			});
-			// await addFeedbackLongAnswer({
-			//   assignment_attempt_id: assignmentAttemptId ?? '',
-			//   answer_id: answerId,
+			// await addFeedbackAnswer({
+			//   attemptId: assignmentAttemptId ?? '',
+			//   answerId: answerId,
 			//   body: {
 			//     id: newComment.id,
 			//     message: newComment.message,
@@ -194,13 +215,11 @@ export function EditorWithCommentSystem({
 
 			// setTimeout(focusCommentWithActiveId, [300])
 
-			feedbackEditAnswerContent({
-				assignment_attempt_id: assignmentAttemptId ?? "",
-				question_id: questionId ?? "",
-				answer: {
-					id: answerId,
-					selected_option_id: undefined,
-					text_answer: content,
+			await feedbackEditAnswerContent({
+				attemptId: assignmentAttemptId ?? "",
+				answerId: answerId as string,
+				data: {
+					content: editor.getHTML(),
 				},
 			}).unwrap();
 		} catch (error) {
@@ -534,145 +553,162 @@ export function EditorWithCommentSystem({
 							ref={commentsSectionRef}
 						>
 							{comments.length ? (
-								comments.map((comment) => (
-									<Card
-										className={cx("comment-item")}
-										key={comment.id}
-										style={
-											comment.id === activeCommentId
-												? comment.type === "GOOD"
+								comments.map((comment) => {
+									return (
+										<Card
+											className={cx("comment-item")}
+											key={comment.id}
+											style={
+												comment.id === activeCommentId
+													? comment.type === "GOOD"
+														? {
+																backgroundColor:
+																	"#edf0f5",
+																border: "2px solid #a0d911",
+																boxShadow:
+																	"-11px -10px 38px -5px rgba(160,217,17,0.75)",
+														  }
+														: {
+																backgroundColor:
+																	"#edf0f5",
+																border: "2px solid #ff4d4f",
+																boxShadow:
+																	"-11px -10px 38px -5px rgba(255,77,79,0.75)",
+														  }
+													: comment.type === "GOOD"
 													? {
 															backgroundColor:
 																"#edf0f5",
-															border: "2px solid #a0d911",
-															boxShadow:
-																"-11px -10px 38px -5px rgba(160,217,17,0.75)",
+															border: "1px solid #a0d911",
 													  }
 													: {
 															backgroundColor:
 																"#edf0f5",
-															border: "2px solid #ff4d4f",
-															boxShadow:
-																"-11px -10px 38px -5px rgba(255,77,79,0.75)",
+															border: "1px solid #ff4d4f",
 													  }
-												: comment.type === "GOOD"
-												? {
-														backgroundColor:
-															"#edf0f5",
-														border: "1px solid #a0d911",
-												  }
-												: {
-														backgroundColor:
-															"#edf0f5",
-														border: "1px solid #ff4d4f",
-												  }
-										}
-									>
-										<div className="flex items-end gap-2">
-											<CommentInfo
-												name={
-													comment?.user?.first_name +
-													" " +
-													comment?.user?.last_name
-												}
-												time={comment?.created_at}
-											/>
-										</div>
+											}
+										>
+											<div className="flex items-end gap-2">
+												<CommentInfo
+													name={
+														comment?.creator
+															?.firstName +
+														" " +
+														comment?.creator
+															?.lastName
+													}
+													time={formatTimeString(
+														comment?.createdAt
+													)}
+												/>
+											</div>
 
-										{canComment ? (
-											<Input
-												defaultValue={
-													comment.message || ""
-												}
-												disabled={
-													comment.id !==
-													activeCommentId
-												}
-												style={
-													comment.id ===
-													activeCommentId
-														? {}
-														: {
-																backgroundColor:
-																	"#edf0f5",
-														  }
-												}
-												className={cx("comment-input")}
-												id={"f" + comment.id}
-												onChange={(event) => {
-													const value = (
-														event.target as HTMLInputElement
-													).value;
+											{canComment ? (
+												<Input
+													defaultValue={
+														comment.message || ""
+													}
+													disabled={
+														comment.id !==
+														activeCommentId
+													}
+													style={
+														comment.id ===
+														activeCommentId
+															? {}
+															: {
+																	backgroundColor:
+																		"#edf0f5",
+															  }
+													}
+													className={cx(
+														"comment-input"
+													)}
+													id={"f" + comment.id}
+													onChange={(event) => {
+														const value = (
+															event.target as HTMLInputElement
+														).value;
 
-													setComments(
-														comments.map(
-															(comment) => {
-																if (
-																	comment.id ===
-																	activeCommentId
-																) {
-																	return {
-																		...comment,
-																		message:
-																			value,
-																	};
+														setComments(
+															comments.map(
+																(comment) => {
+																	if (
+																		comment.id ===
+																		activeCommentId
+																	) {
+																		return {
+																			...comment,
+																			message:
+																				value,
+																		};
+																	}
+
+																	return comment;
 																}
-
-																return comment;
-															}
+															)
+														);
+													}}
+													onKeyDown={(event) => {
+														if (
+															event.key !==
+															"Enter"
 														)
-													);
-												}}
-												onKeyDown={(event) => {
-													if (event.key !== "Enter")
-														return;
+															return;
 
-													setActiveCommentId(null);
-												}}
-											/>
-										) : (
-											<Typography.Paragraph>
-												{comment?.message || ""}
-											</Typography.Paragraph>
-										)}
-
-										{comment.id === activeCommentId &&
-											canComment && (
-												<div
-													className={cx("submit-cmt")}
-												>
-													<Button
-														onClick={() => {
-															editor?.commands.unsetComment(
-																comment.id
-															);
-															deleteComment(
-																comment.id
-															);
-														}}
-													>
-														Remove
-													</Button>
-													<Button
-														type="primary"
-														onClick={() => {
-															handleFeedback({
-																id: comment.id,
-																message:
-																	comment.message,
-																type: comment.type,
-															});
-														}}
-														icon={
-															<Send size={16} />
-														}
-													>
-														Send
-													</Button>
-												</div>
+														setActiveCommentId(
+															null
+														);
+													}}
+												/>
+											) : (
+												<Typography.Paragraph>
+													{comment?.message || ""}
+												</Typography.Paragraph>
 											)}
-									</Card>
-								))
+
+											{comment.id === activeCommentId &&
+												canComment && (
+													<div
+														className={cx(
+															"submit-cmt"
+														)}
+													>
+														<Button
+															onClick={() => {
+																editor?.commands.unsetComment(
+																	comment.id
+																);
+																deleteComment(
+																	comment.id
+																);
+															}}
+														>
+															Remove
+														</Button>
+														<Button
+															type="primary"
+															onClick={() => {
+																handleFeedback({
+																	id: comment.id,
+																	message:
+																		comment.message,
+																	type: comment.type,
+																});
+															}}
+															icon={
+																<Send
+																	size={16}
+																/>
+															}
+														>
+															Send
+														</Button>
+													</div>
+												)}
+										</Card>
+									);
+								})
 							) : (
 								<span className="pt-8 text-center text-slate-400">
 									No comments yet

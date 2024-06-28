@@ -2,7 +2,7 @@
 
 .sider {
 	padding: 12px;
-	height: 100%;
+	height: calc(100vh - 144px - 62px);
 	width: 100%;
 
 	.menu-collapse {

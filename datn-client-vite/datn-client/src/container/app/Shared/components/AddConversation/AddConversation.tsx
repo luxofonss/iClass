@@ -2,27 +2,30 @@
 import classNames from "classnames/bind";
 
 import { conversationApi } from "@/app-data/service/conversation.service";
-import { courseApi } from "@/app-data/service/course.service";
 import { SimpleEditor } from "@/components/Tiptap";
 import { AVATAR } from "@/shared/constants";
 import { Avatar, Button, Form } from "antd";
 import { File, Image, Plus, SendIcon, X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
 import styles from "./AddConversation.module.scss";
 const cx = classNames.bind(styles);
 
-export default function AddConversation() {
+export default function AddConversation({
+	lessonId,
+	courseId,
+}: {
+	lessonId?: string;
+	courseId: string;
+}) {
 	const [isAdding, setIsAdding] = useState(false);
-
-	const { courseId } = useParams();
 
 	const [form] = Form.useForm();
 
 	const [addConversation, { isLoading: isAddingConversation }] =
 		conversationApi.endpoints.createConversation.useMutation();
-	const [getCourse] = courseApi.endpoints.getCourseById.useLazyQuery();
+	const [getConversationByParentId] =
+		conversationApi.endpoints.getConversationByParentId.useLazyQuery();
 
 	function onValueChange(value: any) {
 		form.setFieldValue("content", value);
@@ -33,11 +36,13 @@ export default function AddConversation() {
 			const data = {
 				content: values.content,
 				type: "ANNOUNCEMENT",
-				courseId: courseId as string,
+				targetPlacementId: (lessonId as string) ?? (courseId as string),
 			};
 
 			await addConversation(data).unwrap();
-			getCourse({ id: courseId });
+			getConversationByParentId({
+				parentId: (lessonId as string) ?? (courseId as string),
+			});
 			form.resetFields();
 			setIsAdding(false);
 		} catch (error: any) {
@@ -55,7 +60,7 @@ export default function AddConversation() {
 						setIsAdding(true);
 					}}
 				>
-					Tạo bài viết
+					Thêm đoạn trao đổi
 				</Button>
 			)}
 			<div
@@ -99,7 +104,7 @@ export default function AddConversation() {
 								icon={<SendIcon size={18} />}
 								loading={isAddingConversation}
 							>
-								Tạo bài viết
+								Thêm đoạn trao đổi
 							</Button>
 						</div>
 					</div>

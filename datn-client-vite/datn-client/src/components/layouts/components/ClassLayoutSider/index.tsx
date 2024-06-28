@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 
 import { ROLE } from "@/shared/constants";
 import { SimpleCourseView } from "@/shared/schema/course.schema";
-import { Divider, Menu, Typography } from "antd";
+import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
 import {
 	BookCheck,
@@ -29,7 +29,7 @@ export default function ClassLayoutSider({
 }: IClassLayoutSiderProps) {
 	const navigate = useNavigate();
 
-	console.log("mode:: ", mode);
+	console.log("mode:: ", mode, data);
 	const { courseId } = useParams();
 
 	const menuItems = [

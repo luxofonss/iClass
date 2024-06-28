@@ -1,14 +1,15 @@
-import classNames from "classnames/bind";
-import { Header } from "antd/es/layout/layout";
+import { logout } from "@/app-data/slices/authSlice";
+import AppButton from "@/components/AppButton";
+import NotificationItem from "@/components/NotificationItem";
 import { LogoutOutlined } from "@ant-design/icons";
 import { Avatar, Badge, Button, Popover, Typography, theme } from "antd";
+import { Header } from "antd/es/layout/layout";
+import classNames from "classnames/bind";
 import { Bell, SearchIcon } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { RootState } from "../../../../app-data";
 import styles from "./AppHeader.module.scss";
-import { logout } from "@/app-data/slices/authSlice";
-import { useDispatch } from "react-redux";
 
 const cx = classNames.bind(styles);
 
@@ -20,10 +21,10 @@ export default function AppHeader() {
 	} = theme.useToken();
 
 	const messagesBox = (
-		<div>
-			<div>message 1</div>
-			<div>message 2</div>
-			<div>message 3</div>
+		<div className={cx("noti-box")}>
+			<NotificationItem />
+			<NotificationItem />
+			<NotificationItem />
 		</div>
 	);
 
@@ -90,6 +91,7 @@ export default function AppHeader() {
 							content={messagesBox}
 							title="Notifications"
 							trigger="click"
+							placement="bottomRight"
 						>
 							<Badge
 								className={cx("item")}
@@ -115,10 +117,22 @@ export default function AppHeader() {
 				) : (
 					<div className={cx("auth-btns")}>
 						<Link to="/auth/sign-in">
-							<Button type="default">Đăng nhập</Button>
+							{/* <Button type="default">Đăng nhập</Button> */}
+							<AppButton
+								title="Đăng nhập"
+								size={"small"}
+								type={"outlined"}
+								background={"blue"}
+							/>
 						</Link>
 						<Link to="/auth/sign-up">
-							<Button type="primary">Đăng ký</Button>
+							{/* <Button type="primary">Đăng ký</Button> */}
+							<AppButton
+								title="Đăng ký"
+								size={"small"}
+								type={"primary"}
+								background={"blue"}
+							/>
 						</Link>
 					</div>
 				)}

@@ -53,13 +53,20 @@ export default function Question({ field, dragHandler }: IQuestion) {
 							}
 						/>
 					</Form.Item>
-					<Form.Item name={[field.name, field.key, "level"]}>
+					<Form.Item
+						style={{ margin: 0, width: 100 }}
+						name={[field.name, field.key, "level"]}
+					>
 						<Select
 							options={Object.values(QUESTION_LEVEL)}
 							placeholder="Level"
 						/>
 					</Form.Item>
-					<Form.Item name={[field.name, field.key, "mark"]}>
+					<Form.Item
+						style={{ margin: 0 }}
+						name={[field.name, field.key, "mark"]}
+						initialValue={1}
+					>
 						<Input
 							type="number"
 							placeholder="Enter question's point "

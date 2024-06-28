@@ -5,7 +5,6 @@ import { Layout } from "antd";
 import classNames from "classnames/bind";
 
 import AppHeader from "../components/AppHeader";
-import AppSider from "../components/AppSider";
 import styles from "./AppLayout.module.scss";
 
 const cx = classNames.bind(styles);
@@ -16,10 +15,11 @@ const AppLayout = ({
 	collapsed = true,
 	mode,
 }: {
-	padding?: number;
-	collapsed?: boolean;
-	mode?: string;
+	padding: any;
+	collapsed: any;
+	mode: any;
 }) => {
+	console.log(mode, collapsed, padding);
 	return (
 		<Layout className={cx("app-layout")}>
 			<AppHeader />

@@ -1,6 +1,13 @@
 @import "@/shared/styles/mixins";
 
 .classrooms {
+	.header {
+		padding: 12px 0;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 32px;
+	}
 	.add-btn {
 		display: flex;
 		justify-content: center;

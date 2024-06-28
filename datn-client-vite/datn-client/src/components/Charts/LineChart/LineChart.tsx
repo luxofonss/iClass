@@ -5,7 +5,6 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import styles from "./LineChart.module.scss";
-const cx = classNames.bind(styles);
 
 Chart.register(ArcElement, Colors, Tooltip, Title, Legend);
 
@@ -68,7 +67,7 @@ export default function LineChart({
 	};
 
 	return (
-		<div className={cx("pie-chart")}>
+		<div className={cx("wrapper")}>
 			{data && <Line data={chartData} options={options} />}
 		</div>
 	);

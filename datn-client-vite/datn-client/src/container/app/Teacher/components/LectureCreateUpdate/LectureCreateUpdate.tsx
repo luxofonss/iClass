@@ -82,16 +82,18 @@ export default function LectureCreateUpdate({
 
 	return (
 		<div className={cx("wrapper")}>
-			{sectionData?.lessons?.map((lesson, index) => {
-				return (
-					<LectureCreateUpdateItem
-						sectionId={sectionData.id}
-						key={lesson?.id}
-						lesson={lesson}
-						index={index}
-					/>
-				);
-			})}
+			{sectionData?.lessons
+				?.map((lesson, index) => {
+					return (
+						<LectureCreateUpdateItem
+							sectionId={sectionData.id}
+							key={lesson?.id}
+							lesson={lesson}
+							index={sectionData?.lessons?.length - index - 1}
+						/>
+					);
+				})
+				.reverse()}
 			{addingLesson ? (
 				<Card className={cx("lesson-form")}>
 					<Form
@@ -105,7 +107,7 @@ export default function LectureCreateUpdate({
 						<Form.Item label="Mô tả về bài học" name="description">
 							<Input placeholder="VD: Ở bài học này, các bạn sẽ hiểu rõ cấu trúc thì hiện tại đơn và cách sử dụng." />
 						</Form.Item>
-						{addingLesson === "VIDEO" ? (
+						{/* {addingLesson === "VIDEO" ? (
 							<div>
 								<Form.Item label="Video">
 									<Input
@@ -126,7 +128,7 @@ export default function LectureCreateUpdate({
 									<Input />
 								</Form.Item>
 							</div>
-						) : null}
+						) : null} */}
 						<Space align="end">
 							<Button
 								onClick={() => {

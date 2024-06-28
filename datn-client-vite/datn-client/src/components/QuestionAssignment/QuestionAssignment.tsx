@@ -66,7 +66,7 @@ export default function QuestionAssignment({
 			setSubmittedAnswer(true);
 			toast.success("Cập nhật câu trả lời thành công");
 			// TODO: use state
-			getAssignmentAttempt(attemptId);
+			getAssignmentAttempt(attemptId as string);
 		} catch (error: any) {
 			console.log("error:: ", error);
 			toast.error(error?.data?.message || "Something went wrong!");
@@ -76,45 +76,55 @@ export default function QuestionAssignment({
 	function checkAnswer() {
 		if (
 			data?.type === "MULTIPLE_CHOICES" ||
-			data?.type === "SINGLE_CHOICE"
+			(data?.type === "SINGLE_CHOICE" && data?.answer)
 		) {
-			// return data?.answer[0]?.selectedOptions === form.getFieldValue('answer')
-			const isRight =
-				data?.choices?.find((choice: any) => choice?.is_correct)?.id ===
-				data?.answer[0]?.selectedOptions;
+			console.log("data?.choices:: ", data?.choices);
+			console.log(
+				"data?.answer?.selectedOptions:: ",
+				data?.answer?.selectedOptions
+			);
+			const totalCorrectAnswer = data?.choices?.filter(
+				(choice) => choice?.isCorrect
+			)?.length;
+			const totalCorrectSelectedAnswer =
+				data?.answer?.selectedOptions?.filter(
+					(option) => option?.isCorrect
+				)?.length;
+
+			const isRight = totalCorrectAnswer === totalCorrectSelectedAnswer;
 
 			if (isRight) {
-				return data?.point;
+				return data?.mark;
 			} else {
 				return 0;
 			}
 		}
 
-		if (data?.type === "SHORT_ANSWER") {
+		if (data?.type === "SHORT_ANSWER" && data?.answer) {
 			// return data?.answer[0]?.textAnswer === form.getFieldValue('answer')
 			const isRight = data?.choices?.find(
-				(choice: any) => choice?.content === data?.answer[0]?.textAnswer
+				(choice: any) => choice?.content === data?.answer?.textAnswer
 			);
 			if (isRight) {
-				return data?.point;
+				return data?.mark;
 			} else {
 				return 0;
 			}
 		}
 
-		if (data?.type === "LONG_ANSWER") {
-			return data?.answer[0]?.score || 0;
+		if (data?.type === "LONG_ANSWER" && data?.answer) {
+			return data?.answer?.score || 0;
 		}
 
 		return 0;
 	}
 
 	async function handleScoreLongAnswer() {
-		if (data?.answer?.length > 0)
+		if (data?.answer)
 			try {
 				await scoreLongAnswer({
-					assignment_attempt_id: attemptId as string,
-					answer_id: data.answer[0]?.id,
+					attemptId: attemptId as string,
+					questionId: data?.id,
 					score: form.getFieldValue("score"),
 				}).unwrap();
 
@@ -127,6 +137,11 @@ export default function QuestionAssignment({
 		}
 	}
 
+	console.log(
+		"data?.answer?.selectedOptions:: ",
+		data?.answer?.selectedOptions
+	);
+
 	return (
 		<div className={cx("wrapper")}>
 			<Form form={form} onFinish={handleSubmitAnswer}>
@@ -134,16 +149,20 @@ export default function QuestionAssignment({
 					<strong>Câu {order + 1}:</strong>{" "}
 					{(mode === "RESULT" || mode === "TEACHER") && (
 						<Tag color={checkAnswer() === 0 ? "red" : "green"}>
-							{checkAnswer()}/{data?.point}
+							{checkAnswer()}/{data?.mark}
 						</Tag>
 					)}
 					<div dangerouslySetInnerHTML={{ __html: data?.title }} />
 				</Typography.Text>
-				{data?.image?.url && (
-					<Image src={data?.image?.url} alt="question" />
+				{data?.image && (
+					<Image
+						style={{ maxHeight: 400, alignContent: "center" }}
+						src={data?.image}
+						alt="question"
+					/>
 				)}
-				{data?.audio_url && (
-					<audio src={data?.audio_url} controls>
+				{data?.audio && (
+					<audio src={data?.audio} controls>
 						<track kind="captions" />
 					</audio>
 				)}
@@ -163,6 +182,13 @@ export default function QuestionAssignment({
 										className={cx("choice-item")}
 										value={choice?.id}
 										key={index}
+										style={
+											choice?.isCorrect &&
+											(mode === "TEACHER" ||
+												mode === "RESULT")
+												? { backgroundColor: "#e4ffdf" }
+												: {}
+										}
 									>
 										<div
 											dangerouslySetInnerHTML={{
@@ -191,7 +217,9 @@ export default function QuestionAssignment({
 								(choice: any, index: number) => (
 									<Radio
 										style={
-											choice?.is_correct
+											choice?.isCorrect &&
+											(mode === "TEACHER" ||
+												mode === "RESULT")
 												? { backgroundColor: "#e4ffdf" }
 												: {}
 										}
@@ -220,13 +248,11 @@ export default function QuestionAssignment({
 								: data?.answer?.textAnswer
 						}
 					>
-						{data?.answer?.length > 0 ? (
+						{data?.answer?.textAnswer && (
 							<div>
 								<div>
-									Submitted answer:{" "}
-									<strong>
-										{data?.answer[0].textAnswer}
-									</strong>
+									Your answer:{" "}
+									<strong>{data?.answer?.textAnswer}</strong>
 								</div>
 								<div>
 									Correct answers:{" "}
@@ -239,13 +265,6 @@ export default function QuestionAssignment({
 									</ul>
 								</div>
 							</div>
-						) : (
-							data?.answer?.textAnswer && (
-								<div>
-									Your answer:{" "}
-									<strong>{data?.answer?.textAnswer}</strong>
-								</div>
-							)
 						)}
 						{mode === "ATTEMPT" && <Input />}
 					</Form.Item>
@@ -256,7 +275,7 @@ export default function QuestionAssignment({
 							<div>
 								<Form.Item
 									name="score"
-									initialValue={data?.point}
+									initialValue={data?.answer?.score}
 									normalize={(v) => parseInt(v)}
 								>
 									<Input type="number" />
@@ -276,33 +295,24 @@ export default function QuestionAssignment({
 							rules={[{ required: true }]}
 							name={["answer", "textAnswer"]}
 							initialValue={
-								data?.answer?.length > 0
-									? data?.answer[0].textAnswer
+								data?.answer?.teacherFixedTextAnswer
+									? data?.answer?.teacherFixedTextAnswer
 									: data?.answer?.textAnswer
 							}
 						>
 							<EditorWithCommentSystem
 								onValueChange={(v) => {
-									console.log("v:: ", v);
 									form.setFieldValue("answer", v);
 								}}
 								value={
-									data?.answer?.length > 0
-										? data?.answer[0].textAnswer
+									data?.answer?.teacherFixedTextAnswer
+										? data?.answer?.teacherFixedTextAnswer
 										: data?.answer?.textAnswer
 								}
 								comment={mode === "ATTEMPT" ? false : true}
-								answerId={
-									data?.answer?.length > 0
-										? data?.answer[0].id
-										: null
-								}
+								answerId={data?.answer?.id}
 								assignmentAttemptId={attemptId}
-								feedbacks={
-									data?.answer?.length > 0
-										? data?.answer[0].feedback
-										: null
-								}
+								feedbacks={data?.answer?.feedbacks}
 								questionId={data?.id}
 								canComment={mode === "TEACHER" ? true : false}
 							/>

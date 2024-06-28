@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { assignmentApi } from "@/app-data/service/assignment.service";
 import ModalConfirm from "@/components/ModalConfirm";
-import { Col, Divider, Row, Typography } from "antd";
+import { Col, Divider, Row, Statistic, Typography } from "antd";
 import classNames from "classnames/bind";
 import { ChevronLeft } from "lucide-react";
 import { useEffect } from "react";
-import Countdown from "react-countdown";
+// import Countdown from "react-countdown";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import QuestionAssignment from "../../../../../components/QuestionAssignment";
 import styles from "./AttemptAssignment.module.scss";
 
 const cx = classNames.bind(styles);
+const { Countdown } = Statistic;
 
 export default function AttemptAssignment() {
 	const [getAssignmentAttempt, { data: assignmentAttempt }] =
@@ -19,6 +20,8 @@ export default function AttemptAssignment() {
 	const { attemptId } = useParams();
 	const [submitAssignment, { isLoading: isSubmitting }] =
 		assignmentApi.endpoints.submitAssignment.useMutation();
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (attemptId) {
@@ -34,6 +37,7 @@ export default function AttemptAssignment() {
 			}).unwrap();
 
 			toast.success("Assignment submitted successfully!");
+			navigate(-1);
 		} catch (error: any) {
 			toast.error(error?.data?.message || "Something went wrong!");
 		}
@@ -46,7 +50,7 @@ export default function AttemptAssignment() {
 
 		console.log(start, end, now);
 		if (end.getTime() < now.getTime()) return 0;
-		else return now.getTime() - start.getTime();
+		else return end.getTime() - now.getTime();
 	}
 
 	console.log("getRemainTime()::", getRemainTime());
@@ -74,14 +78,8 @@ export default function AttemptAssignment() {
 								<div>Thời gian làm bài</div>
 
 								<Countdown
-									renderer={(props) => (
-										<div style={{ fontSize: 24 }}>
-											{props.formatted.hours} :{" "}
-											{props.formatted.minutes} :{" "}
-											{props.formatted.seconds}
-										</div>
-									)}
-									date={Date.now() + (getRemainTime() ?? 0)}
+									value={Date.now() + (getRemainTime() ?? 0)}
+									format="HH:mm:ss"
 								/>
 							</div>
 							<div className={cx("notes")}>

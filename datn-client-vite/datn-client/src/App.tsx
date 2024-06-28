@@ -4,7 +4,7 @@ import { login, logout, setUser } from "@/app-data/slices/authSlice";
 import LoadingPage from "@/container/common/LoadingPage";
 import { ConfigProvider } from "antd";
 import { FC, useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import appRoutes from "./routes/appRoutes";
@@ -24,9 +24,6 @@ const App: FC = () => {
 			dispatch(setUser(profile.data));
 		} catch (error: any) {
 			dispatch(logout());
-			toast.error(
-				error?.data?.message || error?.message || "Something went wrong"
-			);
 		}
 		setIsLoading(false);
 	}
@@ -54,7 +51,7 @@ const App: FC = () => {
 			<ConfigProvider
 				theme={{
 					token: {
-						fontFamily: "SF Pro Text",
+						fontFamily: "Roboto",
 						fontSize: 14,
 						colorPrimary: "#9B16F3",
 					},

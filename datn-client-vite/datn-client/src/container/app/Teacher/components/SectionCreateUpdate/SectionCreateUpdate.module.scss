@@ -1,5 +1,11 @@
 @import "@/shared/styles/mixins";
 
+.wrapper {
+	background: white;
+	border-radius: 6px;
+	@include card-wrapper;
+}
+
 .curriculum {
 	&__section {
 		display: flex;

@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 
 import { COURSE_VIEW_MODE } from "@/shared/constants";
 import { CourseViewSchema } from "@/shared/schema/course.schema";
-import { Button, Divider, Tag, Typography } from "antd";
+import { Typography } from "antd";
 import { Link } from "react-router-dom";
 import styles from "./ClassBlock.module.scss";
 const cx = classNames.bind(styles);

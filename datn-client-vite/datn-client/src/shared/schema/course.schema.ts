@@ -51,8 +51,8 @@ export type CourseViewSchema = {
 		name: string;
 	};
 	teacher: {
-		first_name: string;
-		last_name: string;
+		firstName: string;
+		lastName: string;
 		avatar?: string;
 	};
 	grade: number | string;

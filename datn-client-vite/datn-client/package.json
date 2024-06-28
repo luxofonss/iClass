@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc && vite build",
+		"build:prod": "vite build",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"preview": "vite preview"
 	},
@@ -29,12 +29,12 @@
 		"array-move": "^4.0.0",
 		"async-mutex": "^0.4.0",
 		"chart.js": "^4.4.2",
+		"class-variance-authority": "^0.7.0",
 		"classnames": "^2.3.2",
 		"dayjs": "^1.11.10",
 		"lucide-react": "^0.292.0",
 		"react": "^18.2.0",
 		"react-chartjs-2": "^5.2.0",
-		"react-countdown": "^2.3.5",
 		"react-dom": "^18.2.0",
 		"react-hot-toast": "^2.4.1",
 		"react-modal": "^3.16.1",

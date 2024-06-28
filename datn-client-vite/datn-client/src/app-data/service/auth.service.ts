@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createApi } from "@reduxjs/toolkit/query/react";
 import customFetchBase from "@/shared/configs/customFetchBase";
 import { LoginSchema, RegisterSchema } from "@/shared/schema/auth.schema";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
@@ -14,10 +14,9 @@ export const authApi = createApi({
 		login: build.mutation<{ success: boolean; data: LoginSchema }, any>({
 			query: (body) => {
 				return {
-					url: "http://localhost:8080/api/v1/auth/login",
+					url: "/users/auth/login",
 					method: "POST",
 					body: body,
-					credentials: "include",
 					headers: {
 						"content-type": "application/json",
 					},
@@ -49,10 +48,9 @@ export const authApi = createApi({
 		>({
 			query: (body) => {
 				return {
-					url: "http://localhost:8080/api/v1/auth/register",
+					url: "/users/auth/register",
 					method: "POST",
 					body: body,
-					credentials: "include",
 					headers: {
 						"content-type": "application/json",
 					},
@@ -62,9 +60,8 @@ export const authApi = createApi({
 		getProfile: build.query<any, any>({
 			query: () => {
 				return {
-					url: "http://localhost:8080/api/v1/auth/who-am-i",
+					url: "/users/auth/who-am-i",
 					method: "GET",
-					credentials: "include",
 					headers: {
 						"content-type": "application/json",
 					},

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createApi } from "@reduxjs/toolkit/query/react";
 import customFetchBase from "@/shared/configs/customFetchBase";
 import { AssignmentCreateSchema } from "@/shared/schema/assignment.schema";
+import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const assignmentApi = createApi({
 	reducerPath: "assignmentApi",
@@ -14,10 +14,9 @@ export const assignmentApi = createApi({
 		>({
 			query: (body) => {
 				return {
-					url: "http://localhost:8080/api/v1/assignments",
+					url: "/assignments/",
 					method: "POST",
 					body: body,
-					credentials: "include",
 				};
 			},
 		}),
@@ -26,7 +25,15 @@ export const assignmentApi = createApi({
 				return {
 					url: `/assignments/${id}`,
 					method: "GET",
-					credentials: "include",
+				};
+			},
+		}),
+		getAllByCourseId: build.query<any, { courseId: string }>({
+			query: (params) => {
+				return {
+					url: `/assignments/`,
+					method: "GET",
+					params,
 				};
 			},
 		}),
@@ -35,7 +42,6 @@ export const assignmentApi = createApi({
 				return {
 					url: `/assignments/${id}/attempts`,
 					method: "POST",
-					credentials: "include",
 				};
 			},
 		}),
@@ -44,10 +50,20 @@ export const assignmentApi = createApi({
 				return {
 					url: `/assignments/attempts/${id}`,
 					method: "GET",
-					credentials: "include",
 				};
 			},
 		}),
+
+		getAttemptsByAssignmentId: build.query<any, { assignmentId: string }>({
+			query: (params) => {
+				return {
+					url: `/assignments/attempts`,
+					method: "GET",
+					params,
+				};
+			},
+		}),
+
 		submitAnswer: build.mutation<
 			any,
 			{
@@ -64,7 +80,6 @@ export const assignmentApi = createApi({
 					url: `/assignments/attempts/${body.attemptId}/questions/${body.questionId}`,
 					method: "POST",
 					body: body.answer,
-					credentials: "include",
 				};
 			},
 		}),
@@ -77,7 +92,6 @@ export const assignmentApi = createApi({
 					url: `/teacher/assignments/attempt/get-all-attempts`,
 					method: "GET",
 					params: params,
-					credentials: "include",
 				};
 			},
 		}),
@@ -89,45 +103,71 @@ export const assignmentApi = createApi({
 				return {
 					url: `/assignments/attempt-result/${params.assignment_attempt_id}`,
 					method: "GET",
-					credentials: "include",
 				};
 			},
 		}),
-		addFeedbackLongAnswer: build.mutation<
+		addFeedbackAnswer: build.mutation<
 			any,
 			{
-				assignment_attempt_id: string;
-				answer_id: string;
-				body: { id: string; message: string; type: string };
+				answerId: string;
+				attemptId: string;
+				data: { id: string; message: string; type: string };
 			}
 		>({
 			query: (body) => {
 				return {
-					url: `/assignment-attempt/${body.assignment_attempt_id}/answer/${body.answer_id}/feedback`,
+					url: `/assignments/attempts/${body.attemptId}/answers/${body.answerId}/feedbacks`,
 					method: "POST",
-					body: body.body,
-					credentials: "include",
+					body: body.data,
+				};
+			},
+		}),
+		updateFeedbackAnswer: build.mutation<
+			any,
+			{
+				answerId: string;
+				attemptId: string;
+				data: { id: string; message: string; type: string };
+			}
+		>({
+			query: (body) => {
+				return {
+					url: `/assignments/attempts/${body.attemptId}/answers/${body.answerId}/feedbacks/${body.data.id}`,
+					method: "PUT",
+					body: body.data,
+				};
+			},
+		}),
+		deleteFeedbackAnswer: build.mutation<
+			any,
+			{
+				answerId: string;
+				attemptId: string;
+				feedbackId: string;
+			}
+		>({
+			query: (body) => {
+				return {
+					url: `/assignments/attempts/${body.attemptId}/answers/${body.answerId}/feedbacks/${body.feedbackId}`,
+					method: "DELETE",
 				};
 			},
 		}),
 		feedbackEditAnswerContent: build.mutation<
 			any,
 			{
-				assignment_attempt_id: string;
-				question_id: string;
-				answer: {
-					id: string;
-					selected_option_id?: string;
-					text_answer?: string;
+				attemptId: string;
+				answerId: string;
+				data: {
+					content: string;
 				};
 			}
 		>({
 			query: (body) => {
 				return {
-					url: `/assignment-attempt/${body.assignment_attempt_id}/question/${body.question_id}/answer`,
+					url: `/assignments/attempts/${body.attemptId}/answers/${body.answerId}/fix-answer`,
 					method: "PUT",
-					body: body.answer,
-					credentials: "include",
+					body: body.data,
 				};
 			},
 		}),
@@ -136,20 +176,18 @@ export const assignmentApi = createApi({
 				return {
 					url: `/assignments/attempts/${params.attemptId}/submit`,
 					method: "POST",
-					credentials: "include",
 				};
 			},
 		}),
 		scoreLongAnswer: build.mutation<
 			any,
-			{ assignment_attempt_id: string; answer_id: string; score: number }
+			{ attemptId: string; questionId: string; score: number }
 		>({
 			query: (params) => {
 				return {
-					url: `http://localhost:8080/v1/assignment-attempt/${params.assignment_attempt_id}/answer/${params.answer_id}/score`,
-					method: "PUT",
-					body: { point: params.score },
-					credentials: "include",
+					url: `/assignments/attempts/${params.attemptId}/questions/${params.questionId}/score`,
+					method: "POST",
+					body: { score: params.score },
 				};
 			},
 		}),
@@ -161,7 +199,6 @@ export const assignmentApi = createApi({
 				return {
 					url: `http://localhost:8080/v1/courses/${params.course_id}/assignment-attempts`,
 					method: "GET",
-					credentials: "include",
 				};
 			},
 		}),

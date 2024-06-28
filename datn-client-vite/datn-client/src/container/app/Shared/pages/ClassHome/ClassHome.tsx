@@ -2,30 +2,30 @@
 import classNames from "classnames/bind";
 
 // import greeting from '@/assets/images/greeting.png'
+import { conversationApi } from "@/app-data/service/conversation.service";
 import Conversation from "@/components/Conversation";
-import styles from "./ClassHome.module.scss";
-import AddConversation from "../../components/AddConversation";
-import { courseApi } from "@/app-data/service/course.service";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { CourseViewSchema } from "@/shared/schema/course.schema";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import AddConversation from "../../components/AddConversation";
+import styles from "./ClassHome.module.scss";
 
 const cx = classNames.bind(styles);
 
 export default function ClassHome() {
 	const [displayData, setDisplayData] = useState<CourseViewSchema[]>([]);
 	const { courseId } = useParams<any>();
-	const [getCourse, { data: course }] =
-		courseApi.endpoints.getCourseById.useLazyQuery();
+	const [getConversationByParentId, { data: conversationData }] =
+		conversationApi.endpoints.getConversationByParentId.useLazyQuery();
 
-	async function handleGetCourse() {
+	async function handleGetConversations() {
 		try {
-			const response = await getCourse({
-				id: courseId as string,
+			const response = await getConversationByParentId({
+				parentId: courseId as string,
 			}).unwrap();
 			setDisplayData(
-				response.data?.conversations?.toSorted((a, b) => {
+				response.data?.toSorted((a, b) => {
 					return new Date(b.createdAt) - new Date(a.createdAt);
 				})
 			);
@@ -36,22 +36,22 @@ export default function ClassHome() {
 
 	useEffect(() => {
 		setDisplayData(
-			course?.data?.conversations?.toSorted((a, b) => {
+			conversationData?.data?.toSorted((a, b) => {
 				return new Date(b.createdAt) - new Date(a.createdAt);
 			})
 		);
-	}, [course]);
+	}, [conversationData]);
 
 	useEffect(() => {
 		if (courseId) {
-			handleGetCourse();
+			handleGetConversations();
 		}
 	}, [courseId]);
 
-	console.log(course);
+	console.log(conversationData);
 	return (
 		<div className={cx("class-home")}>
-			<AddConversation />
+			<AddConversation courseId={courseId as string} />
 			<div className={cx("conversations")}>
 				{displayData?.map((conversation) => {
 					return <Conversation data={conversation} />;

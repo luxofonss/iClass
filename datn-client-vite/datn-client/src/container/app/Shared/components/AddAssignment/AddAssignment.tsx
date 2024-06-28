@@ -32,7 +32,7 @@ import { Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ReactPlayer from "react-player";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styles from "./AddAssignment.module.scss";
 
 const cx = classNames.bind(styles);
@@ -44,13 +44,15 @@ export default function AddAssignment() {
 	const { assignmentId } = useParams();
 
 	const [form] = Form.useForm();
-	const { lessonId } = useParams();
+	const { lessonId, courseId } = useParams();
 
 	const [getAssignmentById] =
 		assignmentApi.endpoints.getOneById.useLazyQuery();
 	const [createAssignment] =
 		assignmentApi.endpoints.createAssignment.useMutation();
 	const [uploadFile] = uploadApi.endpoints.uploadFile.useMutation();
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (assignmentId) {
@@ -93,6 +95,7 @@ export default function AddAssignment() {
 				title: data.title,
 				description: data.description,
 				lessonId: lessonId as string,
+				courseId: courseId as string,
 				subjectId: "39d6e7e7-1536-4bf3-aabe-194e57843324",
 				questions: data.questions?.map(
 					(question: any, index: number) => {
@@ -121,6 +124,7 @@ export default function AddAssignment() {
 			await createAssignment(body).unwrap();
 
 			toast.success("Create assignment successfully!");
+			navigate(-1);
 		} catch (error: any) {
 			console.log("error:: ", error);
 			toast.error(error?.data?.message || "Something went wrong");

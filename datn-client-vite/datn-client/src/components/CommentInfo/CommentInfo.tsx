@@ -23,8 +23,7 @@ export default function CommentInfo({
 				<div className={cx("name")}>{name ? name : "Nguyễn Văn A"}</div>
 				<div className={cx("time")}>
 					<Typography.Text type="secondary">
-						{" "}
-						{time ? time : "10/11/2022 6:40 AM"}
+						{time ? time : ""}
 					</Typography.Text>
 				</div>
 			</div>

@@ -3,11 +3,11 @@ import { Content } from "antd/es/layout/layout";
 import { Outlet, useParams } from "react-router-dom";
 
 import { courseApi } from "@/app-data/service/course.service";
+import { Col, Row } from "antd";
 import classNames from "classnames/bind";
 import { useEffect } from "react";
 import ClassLayoutSider from "../components/ClassLayoutSider";
 import styles from "./ClassLayout.module.scss";
-import { Col, Row } from "antd";
 
 const cx = classNames.bind(styles);
 
@@ -33,16 +33,22 @@ function ClassLayout(props: IClassLayout) {
 		<div className={cx("class-layout")}>
 			<div
 				style={{
-					backgroundImage: course?.data?.backgroundImage ? `linear-gradient(
+					backgroundImage: course?.data?.backgroundImage
+						? `linear-gradient(
 						90deg,
 						#9b16f3 32.4%,
 						rgba(155, 22, 243, 0.2) 100%
-					) , url(${course?.data?.backgroundImage})` : `linear-gradient(
+					) , url(${course?.data?.backgroundImage})`
+						: `linear-gradient(
 					90deg,
 					#9b16f3 32.4%,
 					rgba(155, 22, 243, 0.2) 100%
-				) , url("https://codeop.tech/wp-content/uploads/2023/11/florian-olivo-4hbJ-eymZ1o-unsplash-scaled.jpg")` }}
-				className={cx('banner')}>{course?.data?.name}</div>
+				) , url("https://codeop.tech/wp-content/uploads/2023/11/florian-olivo-4hbJ-eymZ1o-unsplash-scaled.jpg")`,
+				}}
+				className={cx("banner")}
+			>
+				{course?.data?.name}
+			</div>
 			<Row gutter={24}>
 				<Col span={4}>
 					<ClassLayoutSider

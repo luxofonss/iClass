@@ -1,6 +1,7 @@
 package ginuser
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"learn/common"
 	"learn/component/appctx"
@@ -21,9 +22,13 @@ func GetProfile(ctx appctx.AppContext) gin.HandlerFunc {
 
 		user, err := biz.GetProfile(c.Request.Context(), u.GetUserId())
 
+		fmt.Println(user)
+
 		if err != nil {
 			panic(err)
 		}
+
+		user.Mask(false)
 
 		c.JSON(http.StatusOK, common.SimpleSuccessResponse(user))
 	}

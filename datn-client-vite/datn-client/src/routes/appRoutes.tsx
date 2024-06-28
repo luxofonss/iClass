@@ -7,28 +7,28 @@ import Files from "@/container/app/Teacher/pages/Files";
 
 import ClassLayout from "@/components/layouts/ClassLayout";
 import GeneralLayout from "@/components/layouts/GeneralLayout";
+import LessonLearningLayout from "@/components/layouts/LessonLearningLayout";
+import AddAssignment from "@/container/app/Shared/components/AddAssignment";
+import CourseAbout from "@/container/app/Shared/components/CourseAbout/CourseAbout";
 import ClassFiles from "@/container/app/Shared/pages/ClassFiles";
 import CourseDetailIntro from "@/container/app/Shared/pages/CourseDetailIntro";
 import CourseHome from "@/container/app/Shared/pages/CourseHome";
 import LectureDetail from "@/container/app/Shared/pages/LectureDetail";
 import Lectures from "@/container/app/Shared/pages/Lectures";
 import AttemptAssignment from "@/container/app/Student/pages/AttemptAssignment";
+import CourseLesson from "@/container/app/Student/pages/CourseLesson";
+import CourseLessonView from "@/container/app/Student/pages/CourseLessonView";
 import MyEnrolledCourses from "@/container/app/Student/pages/MyEnrolledCourses";
 import StudentAssignments from "@/container/app/Student/pages/StudentAssignments";
 import AllAssignmentAttempt from "@/container/app/Teacher/pages/AllAssignmentAttempt";
 import AssignmentDetail from "@/container/app/Teacher/pages/AssignmentDetail";
 import ClassSettings from "@/container/app/Teacher/pages/ClassSettings";
 import NewClass from "@/container/app/Teacher/pages/NewClass";
+import NewClassDraft from "@/container/app/Teacher/pages/NewClassDraft";
 import ViewAssignmentAttempt from "@/container/app/Teacher/pages/ViewAssignmentAttempt";
 import { ROLE } from "@/shared/constants";
 import type { RouteObject } from "react-router-dom";
 import ProtectedRoutes from "./protectedRoutes";
-import NewClassDraft from "@/container/app/Teacher/pages/NewClassDraft";
-import AddAssignment from "@/container/app/Shared/components/AddAssignment";
-import CourseLesson from "@/container/app/Student/pages/CourseLesson";
-import LessonLearningLayout from "@/components/layouts/LessonLearningLayout";
-import CourseLessonView from "@/container/app/Student/pages/CourseLessonView";
-import CourseAbout from "@/container/app/Shared/components/CourseAbout/CourseAbout";
 
 const appRoutes: RouteObject[] = [
 	// TEACHER ROUTES
@@ -117,15 +117,15 @@ const appRoutes: RouteObject[] = [
 						element: <Assignments mode={ROLE.TEACHER} />,
 					},
 					{
-						path: "/teacher/courses/:id/assignments/:assignmentId",
+						path: "/teacher/courses/:courseId/assignments/:assignmentId",
 						element: <AssignmentDetail />,
 					},
 					{
-						path: "/teacher/courses/:id/assignments/:assignmentId/attempts",
+						path: "/teacher/courses/:courseId/assignments/:assignmentId/attempts",
 						element: <AllAssignmentAttempt />,
 					},
 					{
-						path: "/teacher/courses/:id/assignments/:assignmentId/attempts/:attemptId",
+						path: "/teacher/courses/:courseId/assignments/:assignmentId/attempts/:attemptId",
 						element: <ViewAssignmentAttempt mode="TEACHER" />,
 					},
 				],
@@ -214,7 +214,7 @@ const appRoutes: RouteObject[] = [
 				element: <AttemptAssignment />,
 			},
 			{
-				path: "/courses/:id/assignments/attempt-review/:attemptId",
+				path: "/courses/:courseId/assignments/attempt-review/:attemptId",
 				element: <ViewAssignmentAttempt mode="RESULT" />,
 			},
 		],

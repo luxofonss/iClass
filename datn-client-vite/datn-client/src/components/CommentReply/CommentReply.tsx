@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import classNames from "classnames/bind";
+import { conversationApi } from "@/app-data/service/conversation.service";
 import { AVATAR_2 } from "@/shared/constants";
 import { Avatar, Button, Form } from "antd";
-import { Send } from "lucide-react";
-import styles from "./CommentReply.module.scss";
-import { conversationApi } from "@/app-data/service/conversation.service";
 import TextArea from "antd/es/input/TextArea";
+import classNames from "classnames/bind";
+import { Send } from "lucide-react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { courseApi } from "@/app-data/service/course.service";
+import styles from "./CommentReply.module.scss";
 const cx = classNames.bind(styles);
 
 export default function CommentReply({
@@ -17,10 +16,11 @@ export default function CommentReply({
 	conversationId: string;
 }) {
 	const { courseId } = useParams<any>();
+	const [getConversationByParentId] =
+		conversationApi.endpoints.getConversationByParentId.useLazyQuery();
 
 	const [createComment] =
 		conversationApi.endpoints.createComment.useMutation();
-	const [getCourse] = courseApi.endpoints.getCourseById.useLazyQuery();
 
 	const [form] = Form.useForm();
 
@@ -32,7 +32,7 @@ export default function CommentReply({
 			};
 
 			await createComment(data).unwrap();
-			getCourse({ id: courseId as string });
+			getConversationByParentId({ parentId: courseId as string });
 			form.resetFields();
 		} catch (error: any) {
 			toast.error(error?.data?.message || "Something went wrong!");

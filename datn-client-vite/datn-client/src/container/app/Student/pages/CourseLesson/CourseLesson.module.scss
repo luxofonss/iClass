@@ -2,6 +2,8 @@
 
 .wrapper {
 	background-color: #f4f5f5;
+	height: 100%;
+
 	.heading {
 		@include flex-between;
 		padding: 16px 80px;
@@ -58,6 +60,16 @@
 			.assignment.active {
 				background-color: #f7ecfe;
 				border-top: 1px solid #e4e6e7;
+			}
+		}
+
+		.comments {
+			.conversations {
+				margin-top: 24px;
+				margin-bottom: 24px;
+				display: flex;
+				flex-direction: column;
+				gap: 24px;
 			}
 		}
 	}

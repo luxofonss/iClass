@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Avatar, Button, Popover, Tag, Typography } from "antd";
+import { Avatar, Button } from "antd";
 
 import Comment from "@/components/Comment";
 import CommentReply from "@/components/CommentReply";
 import ConversationInfo from "@/components/ConversationInfo";
-import EmojiPicker from "@/components/EmojiPicker";
 import { AVATAR } from "@/shared/constants";
-import classNames from "classnames/bind";
-import { MessageCircleIcon, SmilePlus, ThumbsUp } from "lucide-react";
-import styles from "./Conversation.module.scss";
 import { ConversationSchema } from "@/shared/schema/conversation.schema";
+import classNames from "classnames/bind";
+import { MessageCircleIcon, ThumbsUp } from "lucide-react";
+import styles from "./Conversation.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -19,6 +18,7 @@ interface IConversationProps {
 
 export default function Conversation(props: IConversationProps) {
 	const { data } = props;
+	console.log("data:: ", data);
 	return (
 		<div className={cx("conversation")}>
 			<div>
@@ -32,13 +32,15 @@ export default function Conversation(props: IConversationProps) {
 			<div className={cx("content-wrapper")}>
 				<div className={cx("header")}>
 					<ConversationInfo data={data} />
-					<Tag color="orange">{data?.type}</Tag>
+					{/* <Tag color="orange">{data?.type}</Tag> */}
 				</div>
 				<div className={cx("content")}>
 					<div
 						className={cx("text")}
+						style={{ color: "black" }}
 						dangerouslySetInnerHTML={{ __html: data?.content }}
 					/>
+
 					<div className={cx("reaction")}>
 						<Button
 							icon={<ThumbsUp color="green" size={18} />}

@@ -1,36 +1,51 @@
 package ginrestaurant
 
 import (
+	"fmt"
 	"food_delivery/common"
 	"food_delivery/component/appctx"
 	restaurantbiz "food_delivery/module/restaurant/biz"
 	restaurantmodel "food_delivery/module/restaurant/model"
 	restaurantstorage "food_delivery/module/restaurant/storage"
+	restaurantlikesstore "food_delivery/module/restaurantlike/store"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-func CreateRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
+func ListRestaurant(appCtx appctx.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := appCtx.GetMainDBConnection()
 
-		var data restaurantmodel.RestaurantCreate
+		var pagingData common.Paging
 
-		if err := c.ShouldBind(&data); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		if err := c.ShouldBind(&pagingData); err != nil {
+			panic(common.ErrInvalidRequest(err))
+		}
 
-			return
+		pagingData.Fulfill()
+
+		var filter restaurantmodel.Filter
+
+		if err := c.ShouldBind(&filter); err != nil {
+			panic(common.ErrInvalidRequest(err))
 		}
 
 		store := restaurantstorage.NewSQLStore(db)
-		biz := restaurantbiz.NewCreateRestaurantBiz(store)
+		likeStore := restaurantlikesstore.NewSQLStore(db)
+		biz := restaurantbiz.NewListRestaurantBiz(store, likeStore)
 
-		if err := biz.CreateRestaurant(c.Request.Context(), &data); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		result, err := biz.ListRestaurant(c.Request.Context(), &filter, &pagingData)
 
-			return
+		if err != nil {
+			panic(err)
 		}
+		//
+		//for i := range result {
+		//	result[i].Mask(false)
+		//}
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data.Id))
+		fmt.Println(result)
+
+		c.JSON(http.StatusOK, common.NewSuccessResponse(result, pagingData, filter))
 	}
 }
