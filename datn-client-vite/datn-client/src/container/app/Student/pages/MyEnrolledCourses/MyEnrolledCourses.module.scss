@@ -3,13 +3,6 @@
 .join-course-wrapper {
 	.banner {
 		@include banner;
-
-		.join-btn {
-			position: absolute;
-			max-width: 200px;
-			bottom: 12px;
-			right: 0;
-		}
 	}
 
 	.content {

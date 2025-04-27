@@ -69,7 +69,7 @@ export default function ClassLayoutSider({
 		mode === ROLE.TEACHER && {
 			key: `/teacher/courses/${courseId}/settings`,
 			icon: <Settings size={16} />,
-			label: "Cài đặt",
+			label: "Quản lý lớp học",
 		},
 	];
 

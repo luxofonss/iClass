@@ -153,6 +153,7 @@ export default function LectureCreateUpdate({
 			) : (
 				<Space>
 					<Button
+						primary
 						htmlType="button"
 						style={{
 							marginTop: 12,
@@ -165,6 +166,7 @@ export default function LectureCreateUpdate({
 						Thêm bài giảng
 					</Button>
 					<Button
+						primary
 						htmlType="button"
 						style={{
 							marginTop: 12,

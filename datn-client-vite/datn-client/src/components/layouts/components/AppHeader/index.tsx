@@ -1,3 +1,4 @@
+import { notificationApi } from "@/app-data/service/notification.service";
 import { logout } from "@/app-data/slices/authSlice";
 import AppButton from "@/components/AppButton";
 import NotificationItem from "@/components/NotificationItem";
@@ -6,6 +7,7 @@ import { Avatar, Badge, Button, Popover, Typography, theme } from "antd";
 import { Header } from "antd/es/layout/layout";
 import classNames from "classnames/bind";
 import { Bell, SearchIcon } from "lucide-react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { RootState } from "../../../../app-data";
@@ -20,13 +22,12 @@ export default function AppHeader() {
 		token: { colorBorderSecondary },
 	} = theme.useToken();
 
-	const messagesBox = (
-		<div className={cx("noti-box")}>
-			<NotificationItem />
-			<NotificationItem />
-			<NotificationItem />
-		</div>
-	);
+	const [getAllNotifications, { data: allNotifications }] =
+		notificationApi.endpoints.getAllNotifications.useLazyQuery();
+
+	useEffect(() => {
+		getAllNotifications({ userId: user?.id }, false);
+	}, []);
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -35,6 +36,8 @@ export default function AppHeader() {
 		dispatch(logout());
 		navigate("/auth/sign-in");
 	};
+
+	console.log("allNotifications:: ", allNotifications);
 
 	const userBox = (
 		<div className={cx("user-dropdown")}>
@@ -63,14 +66,14 @@ export default function AppHeader() {
 			style={{ borderBottom: `1px solid ${colorBorderSecondary}` }}
 		>
 			<div className={cx("left")}>
-				<div className={cx("logo")}>
+				<Link className={cx("logo")} to="/">
 					<img
 						alt="logo"
 						src={
 							"https://www.learnify.com/wp-content/uploads/2019/02/xLearnify-Primary-2x.png.pagespeed.ic.k2waHY-min.png"
 						}
 					/>
-				</div>
+				</Link>
 				<div className={cx("search")}>
 					<input placeholder="Bạn muốn học gì? " />
 					<SearchIcon size={24} className={cx("icon")} />
@@ -80,23 +83,60 @@ export default function AppHeader() {
 			<div className={cx("right")}>
 				{isLoggedIn ? (
 					<div className={cx("user")}>
-						<Link to="/teacher/courses">
-							<Button type="text">Giáo viên</Button>
-						</Link>
-						<Link to="/courses/my-enrolled-courses">
-							<Button type="text">Lớp học</Button>
-						</Link>
+						{user?.role === "ADMIN" && (
+							<Link to="/admin/users">
+								<AppButton
+									title="Admin"
+									size={"small"}
+									type={"primary"}
+									background={"blue"}
+								/>
+							</Link>
+						)}
+						{user?.role === "TEACHER" && (
+							<Link to="/teacher/courses">
+								<AppButton
+									title="Giáo viên"
+									size={"small"}
+									type={"primary"}
+									background={"blue"}
+								/>
+							</Link>
+						)}
+						{(user?.role === "TEACHER" ||
+							user?.role === "USER") && (
+							<Link to="/courses/my-enrolled-courses">
+								<AppButton
+									title="Lớp học"
+									size={"small"}
+									type={"primary"}
+									background={"pink"}
+								/>
+							</Link>
+						)}
 						<Popover
 							arrow
-							content={messagesBox}
-							title="Notifications"
+							content={
+								<div className={cx("noti-box")}>
+									{allNotifications?.data?.map(
+										(notification) => {
+											return (
+												<NotificationItem
+													data={notification}
+												/>
+											);
+										}
+									)}
+								</div>
+							}
+							title="Thông báo"
 							trigger="click"
 							placement="bottomRight"
 						>
 							<Badge
 								className={cx("item")}
 								size="small"
-								count={10}
+								count={allNotifications?.data?.length}
 							>
 								<Bell
 									color={"#CACCCE"}

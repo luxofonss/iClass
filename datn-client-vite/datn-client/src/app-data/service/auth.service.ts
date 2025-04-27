@@ -14,7 +14,7 @@ export const authApi = createApi({
 		login: build.mutation<{ success: boolean; data: LoginSchema }, any>({
 			query: (body) => {
 				return {
-					url: "/users/auth/login",
+					url: "/auth/login",
 					method: "POST",
 					body: body,
 					headers: {
@@ -48,7 +48,7 @@ export const authApi = createApi({
 		>({
 			query: (body) => {
 				return {
-					url: "/users/auth/register",
+					url: "/auth/register",
 					method: "POST",
 					body: body,
 					headers: {
@@ -60,7 +60,7 @@ export const authApi = createApi({
 		getProfile: build.query<any, any>({
 			query: () => {
 				return {
-					url: "/users/auth/who-am-i",
+					url: "/auth/whoami",
 					method: "GET",
 					headers: {
 						"content-type": "application/json",

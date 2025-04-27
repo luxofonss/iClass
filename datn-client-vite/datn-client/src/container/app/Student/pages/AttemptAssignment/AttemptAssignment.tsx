@@ -53,7 +53,18 @@ export default function AttemptAssignment() {
 		else return end.getTime() - now.getTime();
 	}
 
-	console.log("getRemainTime()::", getRemainTime());
+	function checkIfAnswerSend(questionId: string): boolean {
+		if (!assignmentAttempt?.data?.answers) return false;
+
+		for (let i = 0; i < assignmentAttempt.data.answers.length; i++) {
+			const answer = assignmentAttempt.data.answers[i];
+			if (answer?.question?.id === questionId) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	return (
 		<div className={cx("wrapper")}>
@@ -89,7 +100,9 @@ export default function AttemptAssignment() {
 											key={question?.id}
 											className={cx(
 												"item",
-												question?.answer ? "active" : ""
+												checkIfAnswerSend(question?.id)
+													? "active"
+													: ""
 											)}
 										>
 											{index + 1}

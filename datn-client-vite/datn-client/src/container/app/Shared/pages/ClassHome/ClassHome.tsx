@@ -6,7 +6,6 @@ import { conversationApi } from "@/app-data/service/conversation.service";
 import Conversation from "@/components/Conversation";
 import { CourseViewSchema } from "@/shared/schema/course.schema";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import AddConversation from "../../components/AddConversation";
 import styles from "./ClassHome.module.scss";
@@ -30,7 +29,7 @@ export default function ClassHome() {
 				})
 			);
 		} catch (error: any) {
-			toast.error(error?.data?.message || "Get course fail");
+			// toast.error(error?.data?.message || "Get course fail");
 		}
 	}
 

@@ -1,0 +1,13 @@
+@import "@/shared/styles/mixins";
+
+.admin-layout {
+	min-height: 100vh;
+	position: relative;
+	width: 100%;
+
+	.sider {
+		width: 100%;
+		margin-top: 24px;
+		min-height: 100vh;
+	}
+}

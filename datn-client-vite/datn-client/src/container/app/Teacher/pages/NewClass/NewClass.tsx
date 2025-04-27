@@ -187,7 +187,7 @@ export default function NewClass() {
 	console.log(courseData?.data);
 
 	return (
-		<div className={cx("new-class")}>
+		<div className={cx("new-class", "container")}>
 			<Form form={form} onFinish={onSubmit} layout="vertical">
 				<Tabs
 					className={cx("content")}
@@ -297,7 +297,7 @@ export default function NewClass() {
 									<Form.Item
 										name="level"
 										className={cx("label")}
-										label="Level"
+										label="Trình độ (level)"
 									>
 										<Select
 											placeholder="Level"
@@ -307,6 +307,8 @@ export default function NewClass() {
 								</Col>
 								<Col span={6}>
 									<Form.Item
+										hidden
+										initialValue={0}
 										name="price"
 										className={cx("label")}
 										label="Price"
@@ -324,7 +326,7 @@ export default function NewClass() {
 									<Form.Item
 										name="startDate"
 										className={cx("label")}
-										label="Start time"
+										label="Thời gian lớp học bắt đầu"
 									>
 										<DatePicker />
 									</Form.Item>
@@ -333,7 +335,7 @@ export default function NewClass() {
 									<Form.Item
 										name="endDate"
 										className={cx("label")}
-										label="End time"
+										label="Thời gian lớp học kết thúc"
 									>
 										<DatePicker />
 									</Form.Item>
@@ -346,23 +348,20 @@ export default function NewClass() {
 									<Typography.Paragraph
 										className={cx("detail-info")}
 									>
-										Upload your course image here. It must
-										meet our course image quality standards
-										to be accepted. Important guidelines:
-										750x422 pixels; .jpg, .jpeg,. gif, or
-										.png. no text on the image.
+										Tải lên ảnh thumbnmail cho lớp học của
+										bạn ở đây!
 									</Typography.Paragraph>
 									<Form.Item
 										name="thumbnail"
 										hidden
 										className={cx("label")}
-										label="Course thumbnail"
+										label="Thumbnail lớp học"
 									>
 										<Input size="middle" />
 									</Form.Item>
 									<Form.Item
 										className={cx("label")}
-										label="Course thumbnail"
+										label="Thumbnail lớp học"
 									>
 										<Input
 											size="middle"
@@ -396,23 +395,20 @@ export default function NewClass() {
 									<Typography.Paragraph
 										className={cx("detail-info")}
 									>
-										Upload your course image here. It must
-										meet our course image quality standards
-										to be accepted. Important guidelines:
-										750x422 pixels; .jpg, .jpeg,. gif, or
-										.png. no text on the image.
+										Tải lên ảnh background cho lớp học của
+										bạn ở đây!
 									</Typography.Paragraph>
 									<Form.Item
 										name="backgroundImage"
 										hidden
 										className={cx("label")}
-										label="Course background"
+										label="Ảnh nền lớp học"
 									>
 										<Input size="middle" />
 									</Form.Item>
 									<Form.Item
 										className={cx("label")}
-										label="Course background"
+										label="Ảnh nền lớp học"
 									>
 										<Input
 											size="middle"
@@ -748,54 +744,6 @@ export default function NewClass() {
 								}
 								handleGetCourse={handleGetCourse}
 							/>
-						</div>
-					</Tabs.TabPane>
-					<Tabs.TabPane
-						key={4}
-						tabKey="4"
-						icon={
-							<Space>
-								<MessageCircle size={14} />
-								Course message
-							</Space>
-						}
-					>
-						<div id="course-message" className={cx("section")}>
-							<div className={cx("section__heading")}>
-								<div className={cx("title")}>
-									<ColorPrefix
-										color={COLOR.SECONDARY.ORANGE}
-									/>
-									<Typography.Title level={4}>
-										Course message
-									</Typography.Title>
-								</div>
-								<p className={cx("description")}>
-									Write messages to your students (optional)
-									that will be sent automatically when they
-									join or complete your course to encourage
-									students to engage with course content. If
-									you do not wish to send a welcome or
-									congratulations message, leave the text box
-									blank.
-								</p>
-							</div>
-							<Divider />
-
-							<Form.Item
-								name="welcome_msg"
-								className={cx("label")}
-								label="Welcome message"
-							>
-								<TextArea />
-							</Form.Item>
-							<Form.Item
-								name="congrat_msg"
-								className={cx("label")}
-								label="Congratulations message"
-							>
-								<TextArea />
-							</Form.Item>
 						</div>
 					</Tabs.TabPane>
 				</Tabs>

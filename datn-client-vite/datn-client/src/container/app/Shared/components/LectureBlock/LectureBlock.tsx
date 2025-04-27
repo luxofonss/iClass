@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { LectureSchema } from "@/shared/schema/course.schema";
-import { Divider, Typography } from "antd";
+import { Typography } from "antd";
 import classNames from "classnames/bind";
-import { BookOpenCheck, BookText, Video } from "lucide-react";
-import styles from "./LectureBlock.module.scss";
+import { BookText, Video } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
+import styles from "./LectureBlock.module.scss";
 const cx = classNames.bind(styles);
 
 interface ILectureBlock {
@@ -33,17 +33,15 @@ export default function LectureBlock(props: ILectureBlock) {
 				</Typography.Text>
 			</div>
 			<div className={cx("info")}>
-				<div className={cx("item")}>
-					<Video color={"#8C72FA"} size={14} /> <div>1</div>
-				</div>
-				<Divider type="vertical" />
-				<div className={cx("item")}>
-					<BookText color="#9BDAF5" size={14} /> <div>1</div>
-				</div>
-				<Divider type="vertical" />
-				<div className={cx("item")}>
-					<BookOpenCheck color="#C5B9FD" size={14} /> <div>5</div>
-				</div>
+				{data?.type === "VIDEO" ? (
+					<div className={cx("item")}>
+						<Video color={"#8C72FA"} size={14} />
+					</div>
+				) : (
+					<div className={cx("item")}>
+						<BookText color="#9BDAF5" size={14} />
+					</div>
+				)}
 			</div>
 		</div>
 	);

@@ -15,9 +15,9 @@ const AppLayout = ({
 	collapsed = true,
 	mode,
 }: {
-	padding: any;
-	collapsed: any;
-	mode: any;
+	padding?: any;
+	collapsed?: any;
+	mode?: any;
 }) => {
 	console.log(mode, collapsed, padding);
 	return (

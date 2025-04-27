@@ -5,7 +5,7 @@ import QuestionAssignment from "@/components/QuestionAssignment";
 import formatTimeString from "@/shared/utils/formatTimeString";
 import { Divider, Statistic, Typography } from "antd";
 import classNames from "classnames/bind";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./ViewAssignmentAttempt.module.scss";
 
@@ -24,13 +24,27 @@ export default function ViewAssignmentAttempt({ mode }: { mode: string }) {
 	}, [attemptId]);
 
 	return (
-		<div className={cx("attempt-assignment")}>
+		<div className={cx("attempt-assignment", "container")}>
 			<Typography.Title level={3}>
 				{assignmentAttempt?.data?.assignment?.title}
 			</Typography.Title>
 			<Typography.Paragraph>
 				{assignmentAttempt?.data?.assignment?.description}
 			</Typography.Paragraph>
+			{mode === "RESULT" && (
+				<Fragment>
+					<Typography.Title level={4}>
+						Điểm:{" "}
+						{assignmentAttempt?.data?.totalMark +
+							"/" +
+							assignmentAttempt?.data?.assignment?.totalMark}
+					</Typography.Title>
+					{/* <div>
+						Nhận xét của giáo viên:{" "}
+						{assignmentAttempt?.data?.teacherComment}
+					</div> */}
+				</Fragment>
+			)}
 			{mode === "TEACHER" && (
 				<div>
 					<CommentInfo

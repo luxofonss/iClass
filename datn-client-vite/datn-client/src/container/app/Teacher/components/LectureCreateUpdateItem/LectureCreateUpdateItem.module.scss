@@ -1,6 +1,8 @@
 @import "@/shared/styles/mixins";
 
 .wrapper {
+	margin-bottom: 4px;
+
 	.list-items {
 		&__item {
 			.heading {

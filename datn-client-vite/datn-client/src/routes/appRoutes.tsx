@@ -5,9 +5,11 @@ import Calendar from "@/container/app/Teacher/pages/Calendar";
 import Classrooms from "@/container/app/Teacher/pages/Classrooms";
 import Files from "@/container/app/Teacher/pages/Files";
 
+import AdminLayout from "@/components/layouts/AdminLayout";
 import ClassLayout from "@/components/layouts/ClassLayout";
 import GeneralLayout from "@/components/layouts/GeneralLayout";
 import LessonLearningLayout from "@/components/layouts/LessonLearningLayout";
+import UserManagement from "@/container/app/Admin/pages/UserManagement";
 import AddAssignment from "@/container/app/Shared/components/AddAssignment";
 import CourseAbout from "@/container/app/Shared/components/CourseAbout/CourseAbout";
 import ClassFiles from "@/container/app/Shared/pages/ClassFiles";
@@ -24,7 +26,7 @@ import AllAssignmentAttempt from "@/container/app/Teacher/pages/AllAssignmentAtt
 import AssignmentDetail from "@/container/app/Teacher/pages/AssignmentDetail";
 import ClassSettings from "@/container/app/Teacher/pages/ClassSettings";
 import NewClass from "@/container/app/Teacher/pages/NewClass";
-import NewClassDraft from "@/container/app/Teacher/pages/NewClassDraft";
+import NewCourseDraft from "@/container/app/Teacher/pages/NewClassDraft";
 import ViewAssignmentAttempt from "@/container/app/Teacher/pages/ViewAssignmentAttempt";
 import { ROLE } from "@/shared/constants";
 import type { RouteObject } from "react-router-dom";
@@ -50,7 +52,7 @@ const appRoutes: RouteObject[] = [
 			},
 			{
 				path: "/teacher/courses/draft",
-				element: <NewClassDraft />,
+				element: <NewCourseDraft />,
 			},
 			{
 				path: "/teacher/courses/assignments",
@@ -192,7 +194,7 @@ const appRoutes: RouteObject[] = [
 		element: <GeneralLayout />,
 		children: [
 			{
-				path: "/courses/:id",
+				path: "/courses/preview/:id",
 				element: <CourseDetailIntro />,
 			},
 			{
@@ -210,12 +212,32 @@ const appRoutes: RouteObject[] = [
 		element: <AppLayout mode={ROLE.STUDENT} />,
 		children: [
 			{
-				path: "/courses/assignments/:id/:attemptId",
+				path: "/courses/assignments/:assignmentId/:attemptId",
 				element: <AttemptAssignment />,
 			},
 			{
 				path: "/courses/:courseId/assignments/attempt-review/:attemptId",
 				element: <ViewAssignmentAttempt mode="RESULT" />,
+			},
+		],
+	},
+	{
+		path: "/",
+		element: (
+			<ProtectedRoutes requiredRoles={[ROLE.ADMIN]}>
+				<AppLayout />
+			</ProtectedRoutes>
+		),
+		children: [
+			{
+				path: "/admin",
+				element: <AdminLayout />,
+				children: [
+					{
+						path: "/admin/users",
+						element: <UserManagement />,
+					},
+				],
 			},
 		],
 	},

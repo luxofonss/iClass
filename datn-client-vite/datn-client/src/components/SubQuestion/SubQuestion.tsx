@@ -62,7 +62,7 @@ export default function SubQuestion({
 				/>
 			</div>
 			<div className={cx("options")}>
-				<Form.Item name={[field.name, "point"]} label="Point">
+				<Form.Item name={[field.name, "point"]} label="Điểm">
 					<Input />
 				</Form.Item>
 				<Form.Item name={[field.name, "image"]} label="Image">

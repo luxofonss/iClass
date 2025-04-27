@@ -37,7 +37,7 @@ export default function StudentAssignments({ mode }: IAssignmentsProps) {
 	const [getCourse] = courseApi.endpoints.getCourseById.useLazyQuery();
 	const [attemptAssignment] =
 		assignmentApi.endpoints.attemptAssignment.useMutation();
-	const [getAllByCourseId] =
+	const [getAllByCourseId, { isLoading: isGettingAssignments }] =
 		assignmentApi.endpoints.getAllByCourseId.useLazyQuery();
 
 	const { courseId } = useParams();
@@ -158,13 +158,23 @@ export default function StudentAssignments({ mode }: IAssignmentsProps) {
 			title: "Số lần làm bài",
 			dataIndex: "assignment",
 			key: "maxAttemptTimes",
-			render: (assignment) => assignment?.maxAttemptTimes,
+			render: (assignment) =>
+				assignment?.attempts?.length +
+				"/" +
+				assignment?.maxAttemptTimes,
 		},
 		{
 			title: "Điểm tối đa",
 			dataIndex: "assignment",
 			key: "totalMark",
-			render: (assignment) => assignment?.totalMark,
+			render: (assignment) =>
+				Math.max(
+					...(assignment?.attempts?.map(
+						(attempt) => attempt.totalMark
+					) || [0])
+				) +
+				"/" +
+				assignment?.totalMark,
 		},
 		{
 			title: "Dạng bài tập",
@@ -206,6 +216,7 @@ export default function StudentAssignments({ mode }: IAssignmentsProps) {
 				}}
 				dataSource={lessonData}
 				rowKey={(row) => row?.id}
+				loading={isGettingAssignments}
 			/>
 		</div>
 	);

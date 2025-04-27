@@ -7,12 +7,14 @@ export const HEADER = {
 export const ROLE = {
 	STUDENT: "USER",
 	TEACHER: "TEACHER",
+	ADMIN: "ADMIN",
 };
 
 export const COURSE_VIEW_MODE = {
 	TEACHER: "TEACHER",
 	NOT_ENROLLED: "NOT_ENROLLED",
 	ENROLLED: "ENROLLED",
+	INACTIVE: "INACTIVE",
 };
 
 export const IMAGE =
@@ -50,30 +52,30 @@ export const QUESTION_TYPE_ENUM = {
 export const QUESTION_TYPE = [
 	{
 		value: QUESTION_TYPE_ENUM.SINGLE_CHOICE,
-		label: "Single choice",
+		label: "Chọn 1 đáp án",
 	},
 	{
 		value: QUESTION_TYPE_ENUM.MULTI_CHOICE,
-		label: "Multi choice",
+		label: "Chọn nhiều đáp án",
 	},
 	{
 		value: QUESTION_TYPE_ENUM.SHORT_ANSWER,
-		label: "Short answer",
+		label: "Điền từ",
 	},
 	{
 		value: QUESTION_TYPE_ENUM.LONG_ANSWER,
-		label: "Long answer",
+		label: "Viết đoạn văn",
 	},
 ];
 
 export const TIME_OPTIONS = [
 	{
 		value: "free",
-		label: "Free",
+		label: "Không giới hạn",
 	},
 	{
 		value: "custom",
-		label: "Custom",
+		label: "Tùy chỉnh",
 	},
 ];
 
@@ -99,52 +101,83 @@ export const QUESTION_INDEX = [
 	"T",
 ];
 
+export const SUBJECT_OPTIONS = [
+	{
+		value: "39d6e7e7-1536-4bf3-aabe-194e57843324",
+		label: "Tiếng Anh",
+	},
+	{
+		value: "93f4e7d3-e340-406e-9ea5-b3481a5a75e1",
+		label: "Tiếng Nhật",
+	},
+	{
+		value: "6523ef2a-a0bd-47b1-8d53-4e1ae2049780",
+		label: "Tiếng Hàn",
+	},
+	{
+		value: "2e4653e2-3499-48ab-8c7b-b2cf0056ea54",
+		label: "Tiếng Pháp",
+	},
+	{
+		value: "f777a198-94ad-44dd-86bf-b1cd20950d3b",
+		label: "IELTS",
+	},
+	{
+		value: "624b9c61-4149-42cc-a226-69644606e925",
+		label: "TOEIC",
+	},
+	{
+		value: "d87bf7ca-f6ce-4822-8ad3-303b6a1b3b06",
+		label: "Khác",
+	},
+];
+
 export const COURSE_LEVEL_OPS = [
 	{
 		value: "BEGINNER",
-		label: "Beginner",
+		label: "Người mới bắt đầu",
 	},
 	{
 		value: "ELEMENTARY",
-		label: "Elementary",
+		label: "Tiểu học",
 	},
 	{
 		value: "INTERMEDIATE",
-		label: "Intermediate",
+		label: "Trung học",
 	},
 	{
 		value: "UPPER_INTERMEDIATE",
-		label: "Upper intermediate",
+		label: "Trung học phổ thông",
 	},
 	{
 		value: "ADVANCED",
-		label: "Advanced",
+		label: "Nâng cao",
 	},
 	{
 		value: "PROFICIENCY",
-		label: "Proficiency",
+		label: "Chuyên gia",
 	},
 ];
 
 export const COURSE_INFO_TYPES = {
 	INTEND: {
-		type: "intend",
+		type: "INTEND",
 		label: "Intend",
 	},
 	REQUIREMENT: {
-		type: "requirement",
+		type: "REQUIREMENT",
 		label: "Requirement",
 	},
 	WHO: {
-		type: "who",
+		type: "WHO",
 		label: "Who is this course for?",
 	},
 	WELCOME_MSG: {
-		type: "welcome_msg",
+		type: "WELCOME_MSG",
 		label: "Welcome message",
 	},
 	CONGRAT_MSG: {
-		type: "congrat_msg",
+		type: "CONGRAT_MSG",
 		label: "Congratulation message",
 	},
 };
@@ -152,19 +185,19 @@ export const COURSE_INFO_TYPES = {
 export const ASSIGNMENT_TYPE = {
 	MID: {
 		value: "mid",
-		label: "Middle exam",
+		label: "Kiểm tra giữa khóa",
 	},
 	FINAL: {
 		value: "final",
-		label: "Final exam",
+		label: "Kiểm tra cuối khóa",
 	},
 	HOME_WORK: {
 		value: "home-work",
-		label: "Home work",
+		label: "Bài tập",
 	},
 	OTHER: {
 		value: "other",
-		label: "Other",
+		label: "Khác",
 	},
 };
 
@@ -182,14 +215,14 @@ export const ASSIGNMENT_ATTEMPT_TYPE = {
 export const QUESTION_LEVEL = {
 	EASY: {
 		value: "EASY",
-		label: "Easy",
+		label: "Dễ",
 	},
 	MEDIUM: {
 		value: "MEDIUM",
-		label: "Medium",
+		label: "Trung bình",
 	},
 	HARD: {
 		value: "HARD",
-		label: "Hard",
+		label: "Khó",
 	},
 };

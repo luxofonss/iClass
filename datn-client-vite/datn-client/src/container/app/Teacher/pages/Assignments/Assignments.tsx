@@ -35,18 +35,19 @@ export default function Assignments({ mode }: IAssignmentsProps) {
 		],
 	});
 	const [getCourse] = courseApi.endpoints.getCourseById.useLazyQuery();
-	const [getAllByCourseId] =
-		assignmentApi.endpoints.getAllByCourseId.useLazyQuery();
+	const [getAllByCourseIdTeacher] =
+		assignmentApi.endpoints.getAllByCourseIdTeacher.useLazyQuery();
 
 	const { courseId } = useParams();
 
 	async function handleGetCourse() {
 		if (courseId) {
 			const response = await getCourse({ id: courseId }).unwrap();
-			const assignmentData = await getAllByCourseId({
+			const assignmentData = await getAllByCourseIdTeacher({
 				courseId: courseId as string,
 			}).unwrap();
 			const data: LectureSchema[] = [];
+			console.log("response?.data:: ", response?.data);
 			response?.data?.sections?.forEach((section: SectionSchema) => {
 				section?.lessons?.forEach((lesson: LectureSchema) => {
 					console.log("lessons:: ", lesson);
@@ -84,6 +85,8 @@ export default function Assignments({ mode }: IAssignmentsProps) {
 			backgroundColor: "#fa3f07",
 		};
 
+		console.log("lessonData:: ", lessonData);
+
 		lessonData.forEach((lesson) => {
 			if (lesson?.type === "ASSIGNMENT") {
 				const students: string[] = [];
@@ -92,11 +95,10 @@ export default function Assignments({ mode }: IAssignmentsProps) {
 				labels.push(lesson?.name);
 
 				lesson?.assignment?.attempts?.forEach((attempt) => {
-					if (
-						students?.includes(attempt?.student?.id) !== null &&
-						!students?.includes(attempt?.student?.id)
-					) {
-						students.push(attempt.student.id);
+					console.log("attempt:: ", attempt);
+					const studentId = attempt?.student?.id;
+					if (studentId && !students?.includes(studentId)) {
+						students.push(studentId);
 					}
 				});
 
@@ -193,6 +195,8 @@ export default function Assignments({ mode }: IAssignmentsProps) {
 			),
 		},
 	];
+
+	console.log("dataset:: ", dataset);
 
 	return (
 		<div className={cx("assignments")}>

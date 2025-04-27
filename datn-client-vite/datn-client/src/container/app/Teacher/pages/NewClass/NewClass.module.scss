@@ -6,6 +6,7 @@
 	background: white;
 	min-height: 85vh;
 	border-radius: 6px;
+	margin-top: 32px;
 	@include card-wrapper;
 
 	.content {
@@ -39,6 +40,7 @@
 			.description {
 				font-size: 14px;
 				color: #4e5255;
+				font-style: italic !important;
 			}
 		}
 

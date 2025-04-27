@@ -42,7 +42,7 @@ export default function Question({ field, dragHandler }: IQuestion) {
 					</Tag>
 					<Form.Item
 						initialValue={QUESTION_TYPE_ENUM.SINGLE_CHOICE}
-						style={{ margin: 0 }}
+						style={{ margin: 0, width: 150 }}
 						name={[field.name, field.key, "type"]}
 					>
 						<Select
@@ -70,7 +70,7 @@ export default function Question({ field, dragHandler }: IQuestion) {
 						<Input
 							type="number"
 							placeholder="Enter question's point "
-							addonAfter="Point"
+							addonAfter="Điểm"
 						/>
 					</Form.Item>
 					<Form.Item

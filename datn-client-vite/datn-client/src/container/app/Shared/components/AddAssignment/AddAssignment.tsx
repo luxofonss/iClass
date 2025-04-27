@@ -48,8 +48,10 @@ export default function AddAssignment() {
 
 	const [getAssignmentById] =
 		assignmentApi.endpoints.getOneById.useLazyQuery();
-	const [createAssignment] =
+	const [createAssignment, { isLoading: isCreatingAssignment }] =
 		assignmentApi.endpoints.createAssignment.useMutation();
+	const [updateAssignment, { isLoading: isUpdatingAssignment }] =
+		assignmentApi.endpoints.updateAssignment.useMutation();
 	const [uploadFile] = uploadApi.endpoints.uploadFile.useMutation();
 
 	const navigate = useNavigate();
@@ -87,6 +89,7 @@ export default function AddAssignment() {
 			}
 
 			const body: AssignmentCreateSchema = {
+				id: assignmentId,
 				startTime: data.startTime,
 				endTime: data.endTime,
 				maxAttemptTimes: data.maxAttemptTimes,
@@ -100,6 +103,7 @@ export default function AddAssignment() {
 				questions: data.questions?.map(
 					(question: any, index: number) => {
 						const questionData: QuestionSchema = {
+							id: question?.id,
 							title: question.title,
 							image: question?.image,
 							audio: question?.audio,
@@ -110,6 +114,7 @@ export default function AddAssignment() {
 							mark: parseInt(question.mark, 10),
 							choices: question.choices?.map((choice: any) => {
 								return {
+									id: choice?.id,
 									content: choice.content,
 									order: choice.order,
 									isCorrect: choice.isCorrect,
@@ -121,10 +126,15 @@ export default function AddAssignment() {
 					}
 				),
 			};
-			await createAssignment(body).unwrap();
+
+			if (!assignmentId) {
+				await createAssignment(body).unwrap();
+				navigate(-1);
+			} else {
+				await updateAssignment(body).unwrap();
+			}
 
 			toast.success("Create assignment successfully!");
-			navigate(-1);
 		} catch (error: any) {
 			console.log("error:: ", error);
 			toast.error(error?.data?.message || "Something went wrong");
@@ -142,6 +152,7 @@ export default function AddAssignment() {
 
 			form.setFieldValue(["questions", name, type], res?.data?.url);
 			form.validateFields();
+			form.setFieldsValue({ renderTrigger: Math.random() });
 		} catch (error: any) {
 			toast.error(error?.data?.message || "Something went wrong!");
 		}
@@ -155,7 +166,7 @@ export default function AddAssignment() {
 						style={{ marginBottom: "0px !important" }}
 						className={cx("title")}
 						name={"title"}
-						label="Title"
+						label="Tên bài tập"
 					>
 						<Input
 							style={{ fontWeight: 500 }}
@@ -167,7 +178,7 @@ export default function AddAssignment() {
 						style={{ marginBottom: "0px !important" }}
 						className={cx("description")}
 						name={"description"}
-						label="Description"
+						label="Mô tả"
 					>
 						<TextArea placeholder="Enter assignment description" />
 					</Form.Item>
@@ -175,7 +186,7 @@ export default function AddAssignment() {
 						<Col span={6}>
 							<Form.Item
 								name="time"
-								label="Time"
+								label="Thời hạn làm bài"
 								initialValue={timeType}
 							>
 								<Select
@@ -188,21 +199,24 @@ export default function AddAssignment() {
 						<Form.Item
 							hidden={timeType === "free"}
 							name="customTime"
-							label="Custom time"
+							label="Giới hạn thời gian"
 						>
 							<RangePicker showTime />
 						</Form.Item>
 
 						<Col span={6}>
-							<Form.Item name="duration" label="Duration">
-								<Input type="number" suffix="minutes" />
+							<Form.Item
+								name="duration"
+								label="Thời gian làm bài"
+							>
+								<Input type="number" suffix="Phút" />
 							</Form.Item>
 						</Col>
 
 						<Col span={6}>
 							<Form.Item
 								name="assignmentType"
-								label="Assignment type"
+								label="Loại bài tập"
 							>
 								<Select
 									options={Object.values(ASSIGNMENT_TYPE)}
@@ -214,7 +228,7 @@ export default function AddAssignment() {
 							<Form.Item
 								name="maxAttemptTimes"
 								initialValue={1}
-								label="Times of attempts"
+								label="Số lần làm bài tối đa"
 							>
 								<Input type="number" />
 							</Form.Item>
@@ -253,7 +267,10 @@ export default function AddAssignment() {
 													options={QUESTION_TYPE}
 												/>
 											</Form.Item>
-											<Form.Item name={[name, "level"]}>
+											<Form.Item
+												style={{ margin: 0 }}
+												name={[name, "level"]}
+											>
 												<Select
 													options={Object.values(
 														QUESTION_LEVEL
@@ -261,11 +278,14 @@ export default function AddAssignment() {
 													placeholder="Level"
 												/>
 											</Form.Item>
-											<Form.Item name={[name, "mark"]}>
+											<Form.Item
+												style={{ margin: 0 }}
+												name={[name, "mark"]}
+											>
 												<Input
 													type="number"
 													placeholder="Enter question's point "
-													addonAfter="Point"
+													addonAfter="Điểm"
 												/>
 											</Form.Item>
 											<Form.Item
@@ -306,16 +326,19 @@ export default function AddAssignment() {
 									</Form.Item>
 									<div className={cx("options")}>
 										<Space direction="vertical">
-											<Input
-												onChange={(e) => {
-													handleUpload(
-														e,
-														name,
-														"image"
-													);
-												}}
-												type="file"
-											/>
+											<div>
+												<div>Chọn hình ảnh</div>
+												<Input
+													onChange={(e) => {
+														handleUpload(
+															e,
+															name,
+															"image"
+														);
+													}}
+													type="file"
+												/>
+											</div>
 											<Form.Item
 												name={[name, "image"]}
 												hidden
@@ -327,28 +350,50 @@ export default function AddAssignment() {
 												key,
 												"image",
 											]) && (
-												<Image
-													height={300}
-													src={form.getFieldValue([
-														"questions",
-														key,
-														"image",
-													])}
-													alt="img"
-												/>
+												<Space>
+													<Image
+														height={300}
+														src={form.getFieldValue(
+															[
+																"questions",
+																key,
+																"image",
+															]
+														)}
+														alt="img"
+													/>
+													<Button
+														danger
+														onClick={() => {
+															form.setFieldValue(
+																[
+																	"questions",
+																	key,
+																	"image",
+																],
+																null
+															);
+														}}
+													>
+														Xóa
+													</Button>
+												</Space>
 											)}
 										</Space>
 										<Space direction="vertical">
-											<Input
-												onChange={(e) => {
-													handleUpload(
-														e,
-														name,
-														"audio"
-													);
-												}}
-												type="file"
-											/>
+											<div>
+												<div>Chọn audio</div>
+												<Input
+													onChange={(e) => {
+														handleUpload(
+															e,
+															name,
+															"audio"
+														);
+													}}
+													type="file"
+												/>
+											</div>
 											<Form.Item
 												name={[name, "audio"]}
 												hidden
@@ -361,14 +406,34 @@ export default function AddAssignment() {
 												key,
 												"audio",
 											]) && (
-												<ReactPlayer
-													url={form.getFieldValue([
-														"questions",
-														key,
-														"audio",
-													])}
-													controls
-												/>
+												<Space>
+													<ReactPlayer
+														url={form.getFieldValue(
+															[
+																"questions",
+																key,
+																"audio",
+															]
+														)}
+														height={100}
+														controls
+													/>
+													<Button
+														danger
+														onClick={() => {
+															form.setFieldValue(
+																[
+																	"questions",
+																	key,
+																	"audio",
+																],
+																null
+															);
+														}}
+													>
+														Xóa
+													</Button>
+												</Space>
 											)}
 										</Space>
 										<Form.Item
@@ -537,7 +602,7 @@ export default function AddAssignment() {
 
 									<Form.Item
 										name={[name, "answerExplanation"]}
-										label="Explain the answer"
+										label="Giải thích câu trả lời"
 									>
 										{/* <SimpleEditor
 											onValueChange={(value) => {
@@ -558,7 +623,7 @@ export default function AddAssignment() {
 									onClick={() => add()}
 									icon={<Plus />}
 								>
-									Add question
+									Thêm câu hỏi
 								</Button>
 							</Form.Item>
 						</>
@@ -568,8 +633,9 @@ export default function AddAssignment() {
 					className={cx("btn-submit")}
 					htmlType="submit"
 					type="primary"
+					loading={isUpdatingAssignment || isCreatingAssignment}
 				>
-					Submit
+					{assignmentId ? "Lưu bài tập" : "Tạo bài tập"}
 				</Button>
 			</Form>
 		</div>

@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 
 import { COURSE_VIEW_MODE } from "@/shared/constants";
 import { CourseViewSchema } from "@/shared/schema/course.schema";
-import { Typography } from "antd";
+import { Tag, Typography } from "antd";
 import { Link } from "react-router-dom";
 import styles from "./ClassBlock.module.scss";
 const cx = classNames.bind(styles);
@@ -45,7 +45,7 @@ export default function ClassBlock(props: IClassBlockProps) {
 							? `/teacher/courses/${data?.id}/home`
 							: mode.toUpperCase() === COURSE_VIEW_MODE.ENROLLED
 							? `/courses/${data?.id}/home`
-							: `/courses/${data?.id}`
+							: `/courses/preview/${data?.id}`
 					}
 				>
 					<Typography.Title
@@ -73,6 +73,11 @@ export default function ClassBlock(props: IClassBlockProps) {
 					<Button type="primary">Enroll</Button>
 				)}
 			</div> */}
+			{mode.toUpperCase() === COURSE_VIEW_MODE.INACTIVE && (
+				<div className={cx("footer")}>
+					<Tag color="blue">Chưa được duyệt</Tag>
+				</div>
+			)}
 		</div>
 	);
 }

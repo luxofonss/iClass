@@ -1,0 +1,64 @@
+@import "@/shared/styles/mixins";
+
+.primary {
+}
+
+.outlined {
+	background: white !important;
+	color: black !important;
+	border: 1px solid #31e6ff;
+	// background: linear-gradient(180deg, #31e6ff 0%, #0c42f5 100%);
+	// background-clip: text;
+	// -webkit-background-clip: text;
+	// -webkit-text-fill-color: transparent;
+}
+
+.pink {
+	background: linear-gradient(90deg, #ff8d72 0%, #fd53a3 100%);
+	color: white;
+}
+
+.blue {
+	background: linear-gradient(180deg, #31e6ff 0%, #0c42f5 100%);
+	color: white;
+}
+
+.violet {
+	background: linear-gradient(90deg, #da5de9 0%, #8172f6 100%);
+	color: white;
+}
+
+.small {
+	font-size: 14px;
+	display: flex;
+	height: 40px;
+	padding: 8px 16px;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+	border-radius: 12px;
+}
+
+.medium {
+	display: flex;
+	height: 48px;
+	padding: 8px 16px;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+	font-size: 24px;
+	border-radius: 16px;
+}
+
+.large {
+	font-size: 40px;
+	font-style: normal;
+	font-weight: 600;
+	display: flex;
+	padding: 8px 16px;
+	height: 64px;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	border-radius: 20px;
+}

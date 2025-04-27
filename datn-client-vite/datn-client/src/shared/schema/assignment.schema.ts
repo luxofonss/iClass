@@ -1,6 +1,7 @@
 import { AssignmentAttemptSchema } from "./assignmentAttempt.schema";
 
 export type AssignmentCreateSchema = {
+	id?: string;
 	startTime?: string;
 	endTime?: string;
 	duration: number;

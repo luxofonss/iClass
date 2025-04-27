@@ -34,6 +34,8 @@ export default function LectureCreateUpdateItem({
 	const [getCourse] = courseApi.endpoints.getCourseById.useLazyQuery();
 	const [getResourceById] =
 		uploadApi.endpoints.getResourceById.useLazyQuery();
+	const [deleteLesson, { isLoading: isDeletingLesson }] =
+		courseApi.endpoints.deleteLesson.useMutation();
 
 	const { courseId } = useParams();
 	const [form] = Form.useForm();
@@ -108,6 +110,23 @@ export default function LectureCreateUpdateItem({
 		});
 
 		return length;
+	}
+
+	async function handleDeleteLesson(id: string) {
+		try {
+			const requestBody = {
+				courseId,
+				sectionId,
+				data: {
+					id,
+				},
+			};
+
+			await deleteLesson(requestBody).unwrap();
+			getCourse({ id: courseId });
+		} catch (error: any) {
+			toast.error(error?.data?.message || "Error when deleting lesson!");
+		}
 	}
 
 	return (
@@ -210,8 +229,14 @@ export default function LectureCreateUpdateItem({
 								)}
 							</Fragment>
 						)}
-						<Button onClick={() => {}} danger>
-							Delete
+						<Button
+							onClick={() => {
+								handleDeleteLesson(lesson?.id);
+							}}
+							danger
+							loding={isDeletingLesson}
+						>
+							Xóa
 						</Button>
 					</div>
 				</div>

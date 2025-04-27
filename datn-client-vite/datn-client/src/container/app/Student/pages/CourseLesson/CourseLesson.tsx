@@ -250,7 +250,7 @@ export default function CourseLesson() {
 				})
 			);
 		} catch (error: any) {
-			toast.error(error?.data?.message || "Get course fail");
+			// toast.error(error?.data?.message || "Get course fail");
 		}
 	}
 

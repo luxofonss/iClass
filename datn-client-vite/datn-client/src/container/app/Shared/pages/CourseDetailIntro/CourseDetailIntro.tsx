@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ShopFilled } from "@ant-design/icons";
-import { Avatar, Button, Col, Collapse, Divider, Row, Typography } from "antd";
+import { Avatar, Col, Collapse, Divider, Row, Typography } from "antd";
 import classNames from "classnames/bind";
-import { BookAIcon, BookCheck, Plus } from "lucide-react";
+import { BookAIcon, BookCheck } from "lucide-react";
 
 import { courseApi } from "@/app-data/service/course.service";
 import SectionBlock from "@/components/SectionBlock";
@@ -43,7 +42,7 @@ export default function CourseDetailIntro() {
 						<div
 							className={cx("banner")}
 							style={{
-								backgroundImage: `url("${course?.data?.background_img}")`,
+								backgroundImage: `url("${course?.data?.backgroundImage}")`,
 							}}
 						>
 							<Avatar
@@ -60,9 +59,9 @@ export default function CourseDetailIntro() {
 								Created by:{" "}
 								<Link to="/">
 									{" "}
-									{course?.data?.teacher?.first_name +
+									{course?.data?.teacher?.firstName +
 										" " +
-										course?.data?.teacher?.last_name}
+										course?.data?.teacher?.lastName}
 								</Link>
 							</Typography.Text>
 							<Typography.Title level={5}>
@@ -77,28 +76,32 @@ export default function CourseDetailIntro() {
 						<Typography.Title level={5} className={cx("title")}>
 							What you&apos;ll learn from this course
 						</Typography.Title>
-						{course?.data?.course_infos
-							?.filter(
-								(item: any) =>
-									item.type === COURSE_INFO_TYPES.INTEND.type
-							)
-							?.map((item: any) => (
-								<div key={item.content}>{item.content}</div>
-							))}
-
+						<ul>
+							{course?.data?.courseInfos
+								?.filter(
+									(item: any) =>
+										item.type ===
+										COURSE_INFO_TYPES.INTEND.type
+								)
+								?.map((item: any) => (
+									<li key={item.content}>{item.content}</li>
+								))}
+						</ul>
 						{/* Requirements  */}
 						<Typography.Title level={5} className={cx("title")}>
 							What are requirements of this course
 						</Typography.Title>
-						{course?.data?.course_infos
-							?.filter(
-								(item: any) =>
-									item.type ===
-									COURSE_INFO_TYPES.REQUIREMENT.type
-							)
-							?.map((item: any) => (
-								<div key={item.content}>{item.content}</div>
-							))}
+						<ul>
+							{course?.data?.courseInfos
+								?.filter(
+									(item: any) =>
+										item.type ===
+										COURSE_INFO_TYPES.REQUIREMENT.type
+								)
+								?.map((item: any) => (
+									<li key={item.content}>{item.content}</li>
+								))}
+						</ul>
 					</div>
 					<div className={cx("course-info")}>
 						<Typography.Title level={5} className={cx("title")}>
@@ -116,7 +119,7 @@ export default function CourseDetailIntro() {
 										}
 										key={section.id}
 									>
-										{section?.lectures?.map(
+										{section?.lessons?.map(
 											(lecture: any) => (
 												<LectureBlock
 													data={lecture}
@@ -157,9 +160,9 @@ export default function CourseDetailIntro() {
 									Teacher:
 								</Typography.Text>
 								<Typography.Text className={cx("value")}>
-									{course?.data?.teacher?.first_name +
+									{course?.data?.teacher?.firstName +
 										" " +
-										course?.data?.teacher?.last_name}
+										course?.data?.teacher?.lastName}
 								</Typography.Text>
 							</div>
 						</div>
@@ -169,7 +172,7 @@ export default function CourseDetailIntro() {
 								Who is this course for?
 							</Typography.Title>
 
-							{course?.data?.course_infos
+							{course?.data?.courseInfos
 								?.filter(
 									(item: any) =>
 										item.type === COURSE_INFO_TYPES.WHO.type
@@ -196,7 +199,7 @@ export default function CourseDetailIntro() {
 								</Typography.Text>
 							</div>
 						</div>
-						<Divider style={{ margin: 0 }} />
+						{/* <Divider style={{ margin: 0 }} />
 						<div className={cx("footer")}>
 							<Typography.Text className={cx("price")}>
 								{Intl.NumberFormat("en-US", {
@@ -222,7 +225,7 @@ export default function CourseDetailIntro() {
 									Enroll now
 								</Button>
 							</div>
-						</div>
+						</div> */}
 					</div>
 				</Col>
 			</Row>

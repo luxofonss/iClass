@@ -155,21 +155,27 @@ export default function QuestionAssignment({
 					<div dangerouslySetInnerHTML={{ __html: data?.title }} />
 				</Typography.Text>
 				{data?.image && (
-					<Image
-						style={{ maxHeight: 400, alignContent: "center" }}
-						src={data?.image}
-						alt="question"
-					/>
+					<div className={cx("center")}>
+						<Image
+							style={{ maxHeight: 400, alignContent: "center" }}
+							src={data?.image}
+							alt="question"
+						/>
+					</div>
 				)}
 				{data?.audio && (
-					<audio src={data?.audio} controls>
-						<track kind="captions" />
-					</audio>
+					<div className={cx("center")}>
+						<audio src={data?.audio} controls>
+							<track kind="captions" />
+						</audio>
+					</div>
 				)}
 				{data?.type === "MULTIPLE_CHOICES" && (
 					<Form.Item
 						rules={[{ required: true }]}
+						f
 						name="answer"
+						style={{ marginTop: "4px" }}
 						valuePropName="value"
 						initialValue={data?.answer?.selectedOptions?.map(
 							(o) => o?.id
@@ -206,6 +212,7 @@ export default function QuestionAssignment({
 						rules={[{ required: true }]}
 						name="answer"
 						valuePropName="value"
+						style={{ marginTop: "4px" }}
 						initialValue={
 							data?.answer?.selectedOptions?.length > 0
 								? data?.answer?.selectedOptions[0].id
@@ -242,6 +249,7 @@ export default function QuestionAssignment({
 					<Form.Item
 						rules={[{ required: true }]}
 						name={["answer", "textAnswer"]}
+						style={{ marginTop: "4px" }}
 						initialValue={
 							data?.answer?.length > 0
 								? data?.answer[0].textAnswer
@@ -254,7 +262,7 @@ export default function QuestionAssignment({
 									Your answer:{" "}
 									<strong>{data?.answer?.textAnswer}</strong>
 								</div>
-								<div>
+								{/* <div>
 									Correct answers:{" "}
 									<ul>
 										{data?.choices?.map((item: any) => (
@@ -263,7 +271,7 @@ export default function QuestionAssignment({
 											</li>
 										))}
 									</ul>
-								</div>
+								</div> */}
 							</div>
 						)}
 						{mode === "ATTEMPT" && <Input />}
@@ -274,6 +282,7 @@ export default function QuestionAssignment({
 						{mode === "TEACHER" && (
 							<div>
 								<Form.Item
+									style={{ marginTop: "4px" }}
 									name="score"
 									initialValue={data?.answer?.score}
 									normalize={(v) => parseInt(v)}
@@ -292,6 +301,7 @@ export default function QuestionAssignment({
 							</div>
 						)}
 						<Form.Item
+							style={{ marginTop: "4px" }}
 							rules={[{ required: true }]}
 							name={["answer", "textAnswer"]}
 							initialValue={

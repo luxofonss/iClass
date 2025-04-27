@@ -1,0 +1,27 @@
+version: "2"
+
+services:
+    user-service-db:
+        image: debezium/example-postgres
+        restart: always
+        environment:
+            - POSTGRES_DB=users
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        ports:
+            - "5436:5432"
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        command:
+            - "postgres"
+            - "-c"
+            - "wal_level=logical"
+
+    user-service:
+        image: quyennv0602/datn_user_service:0.0.2
+        depends_on:
+            - user-service-db
+        env_file:
+            - .env
+        ports:
+            - "8088:8088"

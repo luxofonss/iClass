@@ -13,7 +13,7 @@ export const courseApi = createApi({
 	baseQuery: customFetchBase,
 	endpoints: (build) => ({
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		createCourse: build.mutation<any, CourseCreateSchema>({
+		createCourse: build.mutation<any, Partial<CourseCreateSchema>>({
 			query: (body) => {
 				return {
 					url: "/courses/",
@@ -115,10 +115,13 @@ export const courseApi = createApi({
 				};
 			},
 		}),
-		deleteCourseEnrollment: build.mutation<any, { id: string }>({
+		deleteCourseEnrollment: build.mutation<
+			any,
+			{ studentId: string; courseId: string }
+		>({
 			query: (body) => {
 				return {
-					url: `/courses/enrolls`,
+					url: `/courses/${body.courseId}/students/${body.studentId}`,
 					method: "PUT",
 					body: {
 						...body,
@@ -127,10 +130,13 @@ export const courseApi = createApi({
 				};
 			},
 		}),
-		enableCourseEnrollment: build.mutation<any, { id: string }>({
+		enableCourseEnrollment: build.mutation<
+			any,
+			{ studentId: string; courseId: string }
+		>({
 			query: (body) => {
 				return {
-					url: `/courses/enrolls`,
+					url: `/courses/${body.courseId}/students/${body.studentId}`,
 					method: "PUT",
 					body: {
 						...body,

@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { courseApi } from "@/app-data/service/course.service";
-import { Button, Form, Input, Modal } from "antd";
+import { Form, Input, Modal } from "antd";
 import classNames from "classnames/bind";
 import toast from "react-hot-toast";
 import useModal from "../../../../../hooks/useModal";
 
+import AppButton from "@/components/AppButton";
 import styles from "./JoinCourseModel.module.scss";
 
 const cx = classNames.bind(styles);
@@ -44,9 +45,13 @@ const JoinCourseModel: React.FC = () => {
 
 	return (
 		<div className={cx("join-course-wrapper", "container")}>
-			<Button type="primary" onClick={openModal}>
-				Join by code
-			</Button>
+			<AppButton
+				onClick={openModal}
+				title="Vào lớp bằng mã Code"
+				size={"small"}
+				type={"primary"}
+				background={"violet"}
+			/>
 			<Modal
 				confirmLoading={isLoading}
 				title="Join course by code"

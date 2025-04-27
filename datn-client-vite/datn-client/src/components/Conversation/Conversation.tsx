@@ -7,7 +7,7 @@ import ConversationInfo from "@/components/ConversationInfo";
 import { AVATAR } from "@/shared/constants";
 import { ConversationSchema } from "@/shared/schema/conversation.schema";
 import classNames from "classnames/bind";
-import { MessageCircleIcon, ThumbsUp } from "lucide-react";
+import { MessageCircleIcon } from "lucide-react";
 import styles from "./Conversation.module.scss";
 
 const cx = classNames.bind(styles);
@@ -42,15 +42,16 @@ export default function Conversation(props: IConversationProps) {
 					/>
 
 					<div className={cx("reaction")}>
-						<Button
+						{/* <Button
 							icon={<ThumbsUp color="green" size={18} />}
 							type="text"
 						>
 							Thích
-						</Button>
+						</Button> */}
 						<Button
 							icon={<MessageCircleIcon color="blue" size={18} />}
 							type="text"
+							style={{display:'flex', justifyContent:"center", alignItems:"center"}}
 						>
 							Bình luận
 						</Button>

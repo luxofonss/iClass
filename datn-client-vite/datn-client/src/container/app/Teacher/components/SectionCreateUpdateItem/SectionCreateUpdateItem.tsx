@@ -24,6 +24,8 @@ export default function SectionCreateUpdateItem({
 
 	const [getCourse] = courseApi.endpoints.getCourseById.useLazyQuery();
 	const [updateSection] = courseApi.endpoints.updateSection.useMutation();
+	const [deleteSection, { isLoading: isDeletingSection }] =
+		courseApi.endpoints.deleteSection.useMutation();
 
 	const [form] = Form.useForm();
 
@@ -48,6 +50,20 @@ export default function SectionCreateUpdateItem({
 			setEditingLesson(false);
 		} catch (error: any) {
 			toast.error(error?.data?.message || "Something went wrong!");
+		}
+	}
+
+	async function handleDeleteSection(id: string) {
+		try {
+			const data = {
+				courseId: courseId,
+				data: { id: id, courseId: courseId },
+			};
+
+			await deleteSection(data).unwrap();
+			getCourse({ id: courseId as string });
+		} catch (error) {
+			console.log(error);
 		}
 	}
 
@@ -107,8 +123,9 @@ export default function SectionCreateUpdateItem({
 					)}
 					<Button
 						onClick={() => {
-							// remove(field.name);
+							handleDeleteSection(section.id);
 						}}
+						loading={isDeletingSection}
 						danger
 					>
 						Xóa

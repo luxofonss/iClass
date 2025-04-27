@@ -68,9 +68,9 @@ export default function ClassSettingMembers() {
 	function getCourseStudentHandler() {
 		if (courseId) getAllEnrolledStudents({ id: courseId });
 	}
-	async function handleDeleteEnrollment(id: string) {
+	async function handleDeleteEnrollment(studentId: string, courseId: string) {
 		try {
-			await deleteEnrollment({ id: id }).unwrap();
+			await deleteEnrollment({ studentId, courseId: courseId }).unwrap();
 			toast.success("Disable user successfully");
 			getCourseStudentHandler();
 		} catch (error) {
@@ -79,9 +79,12 @@ export default function ClassSettingMembers() {
 		}
 	}
 
-	async function handleEnableEnrollment(id: string) {
+	async function handleEnableEnrollment(studentId: string, courseId: string) {
 		try {
-			await enableEnrollment({ id: id }).unwrap();
+			await enableEnrollment({
+				studentId: studentId,
+				courseId: courseId,
+			}).unwrap();
 			toast.success("Enable user successfully");
 			getCourseStudentHandler();
 		} catch (error) {
@@ -178,7 +181,10 @@ export default function ClassSettingMembers() {
 							<Button
 								loading={isDisabling}
 								onClick={() => {
-									handleDeleteEnrollment(record?.id);
+									handleDeleteEnrollment(
+										record?.student?.id,
+										record?.course?.id
+									);
 								}}
 								danger
 							>
@@ -192,7 +198,10 @@ export default function ClassSettingMembers() {
 							<Button
 								loading={isEnabling}
 								onClick={() => {
-									handleEnableEnrollment(record?.id);
+									handleEnableEnrollment(
+										record?.student?.id,
+										record?.course?.id
+									);
 								}}
 							>
 								Enable

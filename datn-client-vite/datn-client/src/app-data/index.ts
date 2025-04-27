@@ -18,9 +18,11 @@ import {
 import persistStore from "redux-persist/es/persistStore";
 import { assignmentApi } from "./service/assignment.service";
 import { authApi } from "./service/auth.service";
-import { courseApi } from "./service/course.service";
-import { uploadApi } from "./service/upload.service";
 import { conversationApi } from "./service/conversation.service";
+import { courseApi } from "./service/course.service";
+import { notificationApi } from "./service/notification.service";
+import { uploadApi } from "./service/upload.service";
+import { userApi } from "./service/user.service";
 
 const allReducers = combineReducers({
 	counter: counterReducer,
@@ -30,6 +32,8 @@ const allReducers = combineReducers({
 	[uploadApi.reducerPath]: uploadApi.reducer,
 	[assignmentApi.reducerPath]: assignmentApi.reducer,
 	[conversationApi.reducerPath]: conversationApi.reducer,
+	[userApi.reducerPath]: userApi.reducer,
+	[notificationApi.reducerPath]: notificationApi.reducer,
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -77,6 +81,8 @@ export function configureAppStore(preloadedState: any) {
 				uploadApi.middleware,
 				assignmentApi.middleware,
 				conversationApi.middleware,
+				userApi.middleware,
+				notificationApi.middleware,
 			]),
 		reducer: persistedReducer,
 		preloadedState,

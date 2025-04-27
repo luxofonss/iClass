@@ -1,1 +1,1 @@
-export { default } from "./NewClassDraft";
+export { default } from "./NewCourseDraft.tsx";

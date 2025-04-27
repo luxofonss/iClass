@@ -14,7 +14,7 @@ const baseQuery = fetchBaseQuery({
 	baseUrl: import.meta.env.VITE_SERVER_BASE_URL,
 	credentials: "include",
 	prepareHeaders: (headers) => {
-		headers.set("Access-Control-Allow-Origin", "http://localhost:3000");
+		// headers.set("Access-Control-Allow-Origin", "http://localhost:3000");
 		headers.set("Access-Control-Allow-Credentials", "true");
 		const token = cookies.get("access_token");
 		console.log("token:: ", token);

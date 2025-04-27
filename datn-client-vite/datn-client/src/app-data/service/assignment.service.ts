@@ -20,6 +20,18 @@ export const assignmentApi = createApi({
 				};
 			},
 		}),
+		updateAssignment: build.mutation<
+			{ success: boolean; data: AssignmentCreateSchema },
+			any
+		>({
+			query: (body) => {
+				return {
+					url: `/assignments/${body?.id}`,
+					method: "PUT",
+					body: body,
+				};
+			},
+		}),
 		getOneById: build.query({
 			query: (id) => {
 				return {
@@ -32,6 +44,15 @@ export const assignmentApi = createApi({
 			query: (params) => {
 				return {
 					url: `/assignments/`,
+					method: "GET",
+					params,
+				};
+			},
+		}),
+		getAllByCourseIdTeacher: build.query<any, { courseId: string }>({
+			query: (params) => {
+				return {
+					url: `/assignments/teacher`,
 					method: "GET",
 					params,
 				};
